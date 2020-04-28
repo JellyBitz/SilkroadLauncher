@@ -55,10 +55,17 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Globals.cs" />
+    <Compile Include="Network\DownloadModule.cs" />
+    <Compile Include="Network\GatewayModule.cs" />
+    <Compile Include="Network\PacketHandler.cs" />
+    <Compile Include="Network\PacketManager.cs" />
+    <Compile Include="Network\Session.cs" />
     <Compile Include="Pk2ReaderAPI\Pk2File.cs" />
     <Compile Include="Pk2ReaderAPI\Pk2Folder.cs" />
     <Compile Include="Pk2ReaderAPI\Pk2Reader.cs" />
     <Compile Include="Pk2WriterAPI\Pk2Writer.cs" />
+    <Compile Include="SilkroadCommon\WebNotice.cs" />
     <Compile Include="SilkroadSecurityAPI\Blowfish.cs" />
     <Compile Include="SilkroadSecurityAPI\Packet.cs" />
     <Compile Include="SilkroadSecurityAPI\PacketReader.cs" />
@@ -68,7 +75,9 @@
     <Compile Include="SilkroadSecurityAPI\Utility.cs" />
     <Compile Include="Utility\ExpressionHelpers.cs" />
     <Compile Include="Utility\Pk2ReaderHelpers.cs" />
+    <Compile Include="Utility\SocketHelpers.cs" />
     <Compile Include="Utility\TaskHelpers.cs" />
+    <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
     <Compile Include="ViewModels\Base\RelayParameterizedCommand.cs" />

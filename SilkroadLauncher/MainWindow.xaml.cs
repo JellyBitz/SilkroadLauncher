@@ -10,17 +10,9 @@ namespace SilkroadLauncher
     {
         public MainWindow()
         {
-            try
-            {
-                // Set viewmodel
-                DataContext = new LauncherViewModel(this);
-            }
-            catch (Exception ex)
-            {
-                System.Diagnostics.Debug.WriteLine(ex);
-                Environment.Exit(0);
-            }
             InitializeComponent();
+            // Set viewmodel
+            DataContext = new LauncherViewModel(this);
         }
     }
 }

@@ -5,9 +5,22 @@
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:local="clr-namespace:SilkroadLauncher"
         mc:Ignorable="d"
-        WindowStyle="None"
-        Title="{Binding Title}" Height="450" Width="800">
+        WindowStyle="None" ResizeMode="NoResize"
+        WindowStartupLocation="CenterScreen"
+        Title="{Binding Title}" Height="400" Width="800">
     <Grid>
-        
+        <Grid.RowDefinitions>
+            <RowDefinition Height="1*"/>
+            <RowDefinition Height="1*"/>
+        </Grid.RowDefinitions>
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="1*"/>
+            <ColumnDefinition Width="1*"/>
+        </Grid.ColumnDefinitions>
+
+        <Button Content="CHECK UPDATES" Command="{Binding CommandCheckUpdates}"/>
+        <Button Content="START LAUNCHER" Grid.Column="1"
+                Command="{Binding CommandStartLauncher}"
+                Visibility="{Binding CanStartGame,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}"/>
     </Grid>
 </Window>
