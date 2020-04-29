@@ -7,20 +7,134 @@
         mc:Ignorable="d"
         WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
-        Title="{Binding Title}" Height="400" Width="800">
-    <Grid>
+        AllowsTransparency="True"
+        Title="{Binding Title}" Height="480" Width="640"
+        Background="Transparent">
+    <Grid MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow">
         <Grid.RowDefinitions>
-            <RowDefinition Height="1*"/>
-            <RowDefinition Height="1*"/>
+            <RowDefinition Height="40"/>
+            <RowDefinition Height="*"/>
+            <RowDefinition Height="30"/>
+            <RowDefinition Height="20"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
-            <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
+        
+        <!-- Window Toolbar -->
+        <Grid>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="4*"/>
+                <ColumnDefinition Width="1*"/>
+            </Grid.ColumnDefinitions>
+            <Grid Grid.Column="3" Margin="0,10,10,0">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="1"
+                        Style="{StaticResource ButtonTinyImageStyle}"
+                        Command="{Binding CommandMinimize}">
+                    <TextBlock Margin="0,0,0,13" Text="{StaticResource FAwesomeMinimize}"/>
+                </Button>
+                <Button Grid.Column="2"
+                        Style="{StaticResource ButtonTinyImageStyle}"
+                        Command="{Binding CommandClose}">
+                    <TextBlock Margin="0,0,0,3" Text="{StaticResource FAwesomeClose}"/>
+                </Button>
+            </Grid>
+        </Grid>
+        <!-- Background -->
+        <Border Background="{StaticResource BackgroundImageBrush}"
+                BorderThickness="2"
+                BorderBrush="{StaticResource HighlightMainBrush}"
+                CornerRadius="30,30,5,5"
+                Grid.RowSpan="3"
+                Panel.ZIndex="-1"/>
+        <!-- Body -->
+        <Grid Grid.Row="1" Margin="10,0">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="45*"/>
+                <ColumnDefinition Width="55*"/>
+            </Grid.ColumnDefinitions>
+            <!-- Notices -->
+            <Grid Margin="0,-15,0,5">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="30"/>
+                    <RowDefinition Height="2*"/>
+                </Grid.RowDefinitions>
+                <!--50% opacity-->
+                <Border BorderBrush="{StaticResource HighlightMainBrush}"
+                        BorderThickness="2"
+                        Background="#80000000"
+                        CornerRadius="6,6,0,0">
+                    <!-- Notice Subject -->
+                    <TextBlock Text="Notice Subject"
+                           FontFamily="{StaticResource AmaranteRegular}"
+                           Foreground="{StaticResource ForegroundMainBrush}"
+                           FontWeight="Bold"
+                           FontSize="{StaticResource FontSizeXLarge}"
+                           HorizontalAlignment="Center"
+                           VerticalAlignment="Center"/>
+                </Border>
+                <!--50% opacity-->
+                <Border Grid.Row="1"
+                        Background="#80000000"
+                        BorderBrush="{StaticResource HighlightMainBrush}"
+                        BorderThickness="2,0,2,2">
+                    <!-- Notice Message -->
+                    <TextBox Grid.Row="1" Margin="6"
+                             BorderThickness="0"
+                             Background="Transparent"
+                             Foreground="{StaticResource ForegroundMainBrush}"
+                             FontSize="{StaticResource FontSizeRegular}"
+                             IsReadOnly="True"
+                             Text="Notice Message"
+                             TextAlignment="Center"
+                             VerticalScrollBarVisibility="Auto"/>
+                </Border>
+            </Grid>
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="*"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!-- Image logo -->
+                <Border Margin="15,0,15,15" Background="{StaticResource LogoImageBrush}"></Border>
+            </Grid>
+        </Grid>
+        
+        <!-- Actions -->
+        <Grid Grid.Row="2" Grid.RowSpan="2">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="3*"/>
+                <ColumnDefinition Width="2*"/>
+            </Grid.ColumnDefinitions>
 
-        <Button Content="CHECK UPDATES" Command="{Binding CommandCheckUpdates}"/>
-        <Button Content="START LAUNCHER" Grid.Column="1"
-                Command="{Binding CommandStartLauncher}"
-                Visibility="{Binding CanStartGame,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}"/>
+            <Button Grid.Column="0"
+                    Margin="0,12,0,4"
+                    Style="{StaticResource ButtonBaseImageStyle}"
+                    FontSize="{StaticResource FontSizeXLarge}"
+                    Command="{Binding CommandGuideLink}">
+                Guide
+            </Button>
+            <Button Grid.Column="1"
+                    Style="{StaticResource ButtonBaseImageStyle}"
+                    FontSize="{StaticResource FontSizeXXLarge}"
+                    Command="{Binding CommandStartGame}"
+                    Visibility="{Binding CanStartGame,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}">
+                Start Game
+            </Button>
+            <Button Grid.Column="2"
+                    Margin="2,12,0,4"
+                    Style="{StaticResource ButtonBaseImageStyle}"
+                    FontSize="{StaticResource FontSizeXLarge}"
+                    Command="{Binding CommandRegisterLink}">
+                Register
+            </Button>
+        </Grid>
     </Grid>
 </Window>

@@ -1,0 +1,17 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:SilkroadLauncher">
+
+    <Color x:Key="BackgroundMain">#303841</Color>
+    <SolidColorBrush x:Key="BackgroundMainBrush" Color="{StaticResource BackgroundMain}"/>
+
+    <Color x:Key="BackgroundLighter">#3a4750</Color>
+    <SolidColorBrush x:Key="BackgroundLighterBrush" Color="{StaticResource BackgroundLighter}"/>
+
+    <Color x:Key="ForegroundMain">#eee</Color>
+    <SolidColorBrush x:Key="ForegroundMainBrush" Color="{StaticResource ForegroundMain}"/>
+
+    <Color x:Key="HighlightMain">#89b3ff</Color>
+    <SolidColorBrush x:Key="HighlightMainBrush" Color="{StaticResource HighlightMain}"/>
+
+</ResourceDictionary>

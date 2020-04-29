@@ -1,18 +1,28 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows;
+﻿using System.Windows;
+using System.Windows.Input;
+
 namespace SilkroadLauncher
 {
     public partial class MainWindow : Window
     {
+        /// <summary>
+        /// Default constructor
+        /// </summary>
         public MainWindow()
         {
             InitializeComponent();
-            // Set viewmodel
+            // Create viewmodel
             DataContext = new LauncherViewModel(this);
         }
+
+        #region Events about UI behavior only
+        /// <summary>
+        /// Drag the window when the control is click holding
+        /// </summary>
+        private void Control_MouseLeftButtonDown_DragWindow(object sender, MouseButtonEventArgs e)
+        {
+           this.DragMove();
+        }
+        #endregion
     }
 }

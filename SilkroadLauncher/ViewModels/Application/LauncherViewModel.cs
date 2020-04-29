@@ -1,8 +1,10 @@
 ﻿using Pk2ReaderAPI;
 using SilkroadLauncher.Network;
+using SilkroadLauncher.SilkroadCommon;
 using SilkroadLauncher.Utility;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -20,7 +22,7 @@ namespace SilkroadLauncher
         /// <summary>
         /// The title of the application
         /// </summary>
-        private string m_Title = "Launcher - Silkroad Latino";
+        private string m_Title = "Silkroad Online";
         /// <summary>
         /// The process logged in the application
         /// </summary>
@@ -57,6 +59,10 @@ namespace SilkroadLauncher
         /// Indicates if the launcher is checking for updates
         /// </summary>
         private bool m_IsCheckingUpdates;
+        /// <summary>
+        /// Indicates if cannot connect to server
+        /// </summary>
+        private bool m_IsUnderInspection = true;
         /// <summary>
         /// Indicates if the launcher is on updating process
         /// </summary>
@@ -157,6 +163,28 @@ namespace SilkroadLauncher
             }
         }
         /// <summary>
+        /// Check if cannot connect to server
+        /// </summary>
+        public bool IsUnderInspection
+        {
+            get { return m_IsUnderInspection; }
+            set
+            {
+                // set new value
+                m_IsUnderInspection = value;
+                // notify event
+                OnPropertyChanged(nameof(IsUnderInspection));
+            }
+        }
+        /// <summary>
+        /// Inspection predefined message
+        /// </summary>
+        public string InspectionMessage { get; } = "The server is undergoing inspection or updates.\nConnect to http://silkroadonline.net/ for more information.";
+        /// <summary>
+        /// All notices loaded after checking updates
+        /// </summary>
+        public ObservableCollection<WebNotice> WebNotices { get; set; }
+        /// <summary>
         /// Check if the launcher is updating the client
         /// </summary>
         public bool IsUpdating
@@ -200,13 +228,17 @@ namespace SilkroadLauncher
         /// </summary>
         public ICommand CommandClose { get; set; }
         /// <summary>
-        /// Check for updates
-        /// </summary>
-        public ICommand CommandCheckUpdates { get; set; }
-        /// <summary>
         /// Starts the client
         /// </summary>
         public ICommand CommandStartGame { get; set; }
+        /// <summary>
+        /// Run the register link website
+        /// </summary>
+        public ICommand CommandRegisterLink { get; set; }
+        /// <summary>
+        /// Run the guide link website
+        /// </summary>
+        public ICommand CommandGuideLink { get; set; }
         #endregion
 
         #region Constructor
@@ -227,8 +259,9 @@ namespace SilkroadLauncher
                 m_Window.WindowState = m_Window.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
             });
             CommandClose = new RelayCommand(m_Window.Close);
-            CommandCheckUpdates = new RelayCommand(async() => await CheckUpdates());
             CommandStartGame = new RelayCommand(StartGame);
+            CommandRegisterLink = new RelayCommand(() => RunLink("http://silkroadonline.net/"));
+            CommandGuideLink = new RelayCommand(() => RunLink("https://www.google.com/"));
             #endregion
 
             // Load Pk2 data 
@@ -240,6 +273,8 @@ namespace SilkroadLauncher
                 PacketManager.AddHandler(GatewayModule.Opcode.GLOBAL_IDENTIFICATION, new PacketHandler(GatewayModule.Server_GlobalIdentification));
                 PacketManager.AddHandler(GatewayModule.Opcode.SERVER_PATCH_RESPONSE, new PacketHandler(GatewayModule.Server_PatchResponse));
                 PacketManager.AddHandler(GatewayModule.Opcode.SERVER_WEB_NOTICE_RESPONSE, new PacketHandler(GatewayModule.Server_WebNoticeResponse));
+
+                CheckUpdatesAsync();
             }
 
             // Set global
@@ -276,37 +311,40 @@ namespace SilkroadLauncher
                 m_Pk2Reader?.Close();
             }
         }
-        private async Task CheckUpdates()
+        private async void CheckUpdatesAsync()
         {
-            // Check if the Pk2 data has been gathered to make this process
-            if(IsLoaded)
+            IsCheckingUpdates = true;
+
+            // Check all IP's and try to connect one at least
+            Session s = new Session();
+            bool connectionSolved = false;
+            // Save at the same time the connection arguments
+            int divIndex = 0, hostIndex = 0;
+            foreach (var division in m_DivisionInfo)
             {
-                await RunCommandAsync(() => IsCheckingUpdates, async () => {
-                    // Check all IP's and try to connect one at least
-                    Session s = new Session();
-                    bool connectionSolved = false;
-                    // Save at the same time the connection arguments
-                    int divIndex = 0, hostIndex = 0;
-                    foreach (var division in m_DivisionInfo)
+                for (int i = 0; i < division.Value.Count; i++)
+                {
+                    // Try to connect to the address
+                    connectionSolved = await Task.Run(() => s.StartSession(division.Value[i], m_Gateport, 5000));
+                    if (connectionSolved)
                     {
-                        for (int i = 0; i < division.Value.Count; i++)
-                        {
-                            // Try to connect to the address
-                            connectionSolved = await Task.Run(()=> s.StartSession(division.Value[i], m_Gateport, 5000));
-                            if (connectionSolved)
-                            {
-                                hostIndex = i;
-                                break;
-                            }
-                        }
-                        if (connectionSolved)
-                        {
-                            m_SRClientArguments = "0 \\" + m_Locale + " "+divIndex+" "+ hostIndex;
-                            break;
-                        }
-                        divIndex++;
+                        hostIndex = i;
+                        break;
                     }
-                });
+                }
+                if (connectionSolved)
+                {
+                    m_SRClientArguments = "0 \\" + m_Locale + " " + divIndex + " " + hostIndex;
+                    IsUnderInspection = false;
+                    break;
+                }
+                divIndex++;
+            }
+            IsCheckingUpdates = false;
+            // Display message box
+            if (IsUnderInspection)
+            {
+                MessageBox.Show(m_Window, InspectionMessage, Title, MessageBoxButton.OK);
             }
         }
         private void StartGame()
@@ -316,6 +354,11 @@ namespace SilkroadLauncher
                 System.Diagnostics.Process.Start(Globals.ClientFileName, m_SRClientArguments);
             }
         }
+        private void RunLink(string url)
+        {
+            System.Diagnostics.Process.Start(url);
+        }
+
         #endregion
     }
 }

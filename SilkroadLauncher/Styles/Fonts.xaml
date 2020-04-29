@@ -1,0 +1,28 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:SilkroadLauncher"
+                    xmlns:system="clr-namespace:System;assembly=mscorlib">
+
+    <!-- Font Awesome -->
+    <FontFamily x:Key="FontAwesomeRegular">/SilkroadLauncher;component/Resources/Fonts/#Font Awesome 5 Pro Regular</FontFamily>
+    <FontFamily x:Key="FontAwesomeLight">/SilkroadLauncher;component/Resources/Fonts/#Font Awesome 5 Pro Light</FontFamily>
+    <FontFamily x:Key="FontAwesomeSolid">/SilkroadLauncher;component/Resources/Fonts/#Font Awesome 5 Pro Solid</FontFamily>
+    <FontFamily x:Key="FontAwesomeDuotone">/SilkroadLauncher;component/Resources/Fonts/#Font Awesome 5 Duotone Solid</FontFamily>
+    <FontFamily x:Key="FontAwesomeBrands">/SilkroadLauncher;component/Resources/Fonts/#Font Awesome 5 Brands Regular</FontFamily>
+    <!-- Font Awesome references -->
+    <system:String x:Key="FAwesomeMinimize">&#xF2D1;</system:String>
+    <system:String x:Key="FAwesomeRestore">&#xF2D2;</system:String>
+    <system:String x:Key="FAwesomeClose">&#xF00D;</system:String>
+
+    <!-- Font Amarante -->
+    <FontFamily x:Key="AmaranteRegular">/SilkroadLauncher;component/Resources/Fonts/#Amarante Regular</FontFamily>
+    
+    <!-- Font sizes-->
+    <system:Double x:Key="FontSizeSmaller">10</system:Double>
+    <system:Double x:Key="FontSizeSmall">12</system:Double>
+    <system:Double x:Key="FontSizeRegular">14</system:Double>
+    <system:Double x:Key="FontSizeLarge">16</system:Double>
+    <system:Double x:Key="FontSizeXLarge">20</system:Double>
+    <system:Double x:Key="FontSizeXXLarge">32</system:Double>
+
+</ResourceDictionary>
