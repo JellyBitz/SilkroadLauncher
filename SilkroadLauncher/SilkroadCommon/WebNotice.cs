@@ -1,4 +1,4 @@
-﻿namespace SilkroadLauncher.SilkroadCommon
+﻿namespace SilkroadCommon
 {
     public class WebNotice
     {

@@ -3,14 +3,17 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:htmlrender="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
         xmlns:local="clr-namespace:SilkroadLauncher"
         mc:Ignorable="d"
-        WindowStyle="None" ResizeMode="NoResize"
         WindowStartupLocation="CenterScreen"
         AllowsTransparency="True"
+        WindowStyle="None" ResizeMode="NoResize"
         Title="{Binding Title}" Height="480" Width="640"
-        Background="Transparent">
-    <Grid MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow">
+        Background="Transparent"
+        Loaded="Window_Loaded">
+    <!-- Main layout -->
+    <Grid>
         <Grid.RowDefinitions>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
@@ -20,37 +23,53 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        
         <!-- Window Toolbar -->
         <Grid>
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="1*"/>
-                <ColumnDefinition Width="4*"/>
-                <ColumnDefinition Width="1*"/>
+                <ColumnDefinition Width="30*"/>
+                <ColumnDefinition Width="15*"/>
+                <ColumnDefinition Width="35*"/>
+                <ColumnDefinition Width="20*"/>
             </Grid.ColumnDefinitions>
-            <Grid Grid.Column="3" Margin="0,10,10,0">
+            <!-- Version -->
+            <StackPanel Grid.Column="2" Margin="15,0,0,0"
+                        Opacity="0.85"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Stretch"
+                        HorizontalAlignment="Left">
+                <TextBlock Text="Client Version"
+                           VerticalAlignment="Center"
+                           Foreground="{StaticResource ForegroundMainBrush}"/>
+                <TextBlock Text="{Binding Version}"  Margin="3,0,0,0"
+                           VerticalAlignment="Center"
+                           Foreground="{StaticResource HighlightMainBrush}"/>
+            </StackPanel>
+            <Grid Grid.Column="3" Margin="0,6,10,0">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="32"/>
+                    <ColumnDefinition Width="32"/>
                 </Grid.ColumnDefinitions>
+                <!-- Window buttons -->
                 <Button Grid.Column="1"
                         Style="{StaticResource ButtonTinyImageStyle}"
+                        FontFamily="{StaticResource FontAwesomeLight}"
                         Command="{Binding CommandMinimize}">
-                    <TextBlock Margin="0,0,0,13" Text="{StaticResource FAwesomeMinimize}"/>
+                    <TextBlock Margin="0,0,0,4" Text="{StaticResource fa-cog}"/>
                 </Button>
                 <Button Grid.Column="2"
                         Style="{StaticResource ButtonTinyImageStyle}"
                         Command="{Binding CommandClose}">
-                    <TextBlock Margin="0,0,0,3" Text="{StaticResource FAwesomeClose}"/>
+                    <TextBlock Margin="0,0,0,4" Text="{StaticResource fa-close}"/>
                 </Button>
             </Grid>
         </Grid>
         <!-- Background -->
-        <Border Background="{StaticResource BackgroundImageBrush}"
+        <Border MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow"
+                Background="{StaticResource BackgroundImageBrush}"
                 BorderThickness="2"
                 BorderBrush="{StaticResource HighlightMainBrush}"
-                CornerRadius="30,30,5,5"
+                CornerRadius="20,20,5,5"
                 Grid.RowSpan="3"
                 Panel.ZIndex="-1"/>
         <!-- Body -->
@@ -60,52 +79,53 @@
                 <ColumnDefinition Width="55*"/>
             </Grid.ColumnDefinitions>
             <!-- Notices -->
-            <Grid Margin="0,-15,0,5">
+            <Grid Grid.Column="0">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="*"/>
+                </Grid.RowDefinitions>
+                <!-- Image logo -->
+                <Border Margin="0,-30,0,0"
+                        Background="{StaticResource LogoImageBrush}"
+                        MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow">
+                </Border>
+                <!--50% opacity -->
+                <Border Grid.Row="1"
+                        BorderBrush="{StaticResource HighlightMainBrush}"
+                        BorderThickness="2"
+                        Background="#80000000"
+                        CornerRadius="6,6,0,0">
+                    <!-- Notice Subject -->
+                    <ListBox Style="{StaticResource NoticeListBox}"
+                             ItemsSource="{Binding WebNotices}"
+                             SelectedItem="{Binding SelectedWebNotice}"
+                             Background="Transparent"
+                             Foreground="{StaticResource ForegroundMainBrush}"
+                             ScrollViewer.VerticalScrollBarVisibility="Auto"
+                             ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                    </ListBox>
+                </Border>
+            </Grid>
+            <Grid Grid.Column="1" Margin="10,-30,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="30"/>
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
                 <!--50% opacity-->
-                <Border BorderBrush="{StaticResource HighlightMainBrush}"
-                        BorderThickness="2"
-                        Background="#80000000"
-                        CornerRadius="6,6,0,0">
-                    <!-- Notice Subject -->
-                    <TextBlock Text="Notice Subject"
-                           FontFamily="{StaticResource AmaranteRegular}"
-                           Foreground="{StaticResource ForegroundMainBrush}"
-                           FontWeight="Bold"
-                           FontSize="{StaticResource FontSizeXLarge}"
-                           HorizontalAlignment="Center"
-                           VerticalAlignment="Center"/>
-                </Border>
-                <!--50% opacity-->
                 <Border Grid.Row="1"
                         Background="#80000000"
                         BorderBrush="{StaticResource HighlightMainBrush}"
-                        BorderThickness="2,0,2,2">
-                    <!-- Notice Message -->
-                    <TextBox Grid.Row="1" Margin="6"
-                             BorderThickness="0"
-                             Background="Transparent"
-                             Foreground="{StaticResource ForegroundMainBrush}"
-                             FontSize="{StaticResource FontSizeRegular}"
-                             IsReadOnly="True"
-                             Text="Notice Message"
-                             TextAlignment="Center"
-                             VerticalScrollBarVisibility="Auto"/>
+                        BorderThickness="2"
+                        CornerRadius="6,6,0,0">
+                    <!-- Notice Message (Looking for CSS injection as priority) -->
+                    <htmlrender:HtmlPanel Background="Transparent" x:Name="test"
+                                          Margin="6"
+                                          BaseStylesheet="body{color:#eee;} a { color:#89b3ff; }"
+                                          Text="{Binding SelectedWebNotice.Article}"/>
                 </Border>
             </Grid>
-            <Grid Grid.Column="1">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="*"/>
-                    <RowDefinition Height="*"/>
-                </Grid.RowDefinitions>
-                <!-- Image logo -->
-                <Border Margin="15,0,15,15" Background="{StaticResource LogoImageBrush}"></Border>
-            </Grid>
         </Grid>
-        
+
         <!-- Actions -->
         <Grid Grid.Row="2" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
@@ -113,7 +133,6 @@
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-
             <Button Grid.Column="0"
                     Margin="0,12,0,4"
                     Style="{StaticResource ButtonBaseImageStyle}"

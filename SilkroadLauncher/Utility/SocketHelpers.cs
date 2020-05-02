@@ -7,8 +7,8 @@ namespace SilkroadLauncher.Utility
         /// <summary>
         /// Connects the specified socket
         /// </summary>
-        /// <param name="socket">The socket</param>
-        /// <param name="endpoint">The IP endpoint</param>
+        /// <param name="host">The host/IP to connect</param>
+        /// <param name="port">The port</param>
         /// <param name="timeout">The timeout</param>
         public static void Connect(this Socket socket, string host, int port, int milisecondsTimeout)
         {
@@ -21,7 +21,8 @@ namespace SilkroadLauncher.Utility
             else
             {
                 socket.Close();
-                throw new SocketException(10060); // Connection timed out.
+                // Connection timed out.
+                throw new SocketException(10060);
             }
         }
     }

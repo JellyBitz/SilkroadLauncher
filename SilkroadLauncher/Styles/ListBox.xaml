@@ -1,0 +1,50 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:SilkroadLauncher">
+
+    <!-- ListBox for application  -->
+    
+    <!-- Notice list item -->
+    <Style x:Key="NoticeListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="OverridesDefaultStyle" Value="True"></Setter>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border x:Name="xBorder">
+                        <ContentPresenter/>
+                    </Border>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter TargetName="xBorder" Property="Background" Value="#20FFFFFF">
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- Notice list -->
+    <Style x:Key="NoticeListBox" TargetType="{x:Type ListBox}">
+        <Setter Property="ItemContainerStyle" Value="{StaticResource NoticeListBoxItemStyle}"/>
+        <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <StackPanel Margin="3">
+                        <TextBlock VerticalAlignment="Center"
+                                   FontWeight="DemiBold"
+                                   FontSize="{StaticResource FontSizeLarge}"
+                                   Text="{Binding Subject}"/>
+                        <TextBlock Opacity="0.75"
+                                   FontSize="{StaticResource FontSizeSmall}"
+                                   Grid.Row="1"
+                                   Text="{Binding Date}"/>
+                        <Border Grid.Row="0" Grid.RowSpan="2"
+                                Opacity="0.35"
+                                BorderThickness="0,0,0,1" 
+                                BorderBrush="{StaticResource HighlightMainBrush}"/>
+                    </StackPanel>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>

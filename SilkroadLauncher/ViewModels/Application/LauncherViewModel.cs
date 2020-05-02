@@ -1,6 +1,5 @@
 ﻿using Pk2ReaderAPI;
 using SilkroadLauncher.Network;
-using SilkroadLauncher.SilkroadCommon;
 using SilkroadLauncher.Utility;
 using System;
 using System.Collections.Generic;
@@ -50,11 +49,15 @@ namespace SilkroadLauncher
         /// <summary>
         /// Arguments used to start the game client
         /// </summary>
-        private string m_SRClientArguments = @"0 \22 0 0";
+        private string m_SRClientArguments;
         /// <summary>
         /// Indicates if the Pk2 has been loaded correctly
         /// </summary>
         private bool m_IsLoaded;
+        /// <summary>
+        /// The initial connection to server
+        /// </summary>
+        private Session m_GatewaySession;
         /// <summary>
         /// Indicates if the launcher is checking for updates
         /// </summary>
@@ -63,6 +66,14 @@ namespace SilkroadLauncher
         /// Indicates if cannot connect to server
         /// </summary>
         private bool m_IsUnderInspection = true;
+        /// <summary>
+        /// Recent web notices
+        /// </summary>
+        private List<WebNoticeViewModel> m_WebNotices = new List<WebNoticeViewModel>();
+        /// <summary>
+        /// The notice being shown
+        /// </summary>
+        private WebNoticeViewModel m_SelectedWebNotice;
         /// <summary>
         /// Indicates if the launcher is on updating process
         /// </summary>
@@ -149,7 +160,7 @@ namespace SilkroadLauncher
             }
         }
         /// <summary>
-        /// Check if the launcher is updating the client
+        /// Check if the launcher is looking for update the client
         /// </summary>
         public bool IsCheckingUpdates
         {
@@ -183,7 +194,30 @@ namespace SilkroadLauncher
         /// <summary>
         /// All notices loaded after checking updates
         /// </summary>
-        public ObservableCollection<WebNotice> WebNotices { get; set; }
+        public List<WebNoticeViewModel> WebNotices
+        {
+            get { return m_WebNotices; }
+            set
+            {
+                m_WebNotices = value;
+                // notify event
+                OnPropertyChanged(nameof(WebNotices));
+            }
+        }
+        /// <summary>
+        /// The notice selected, the first one as default.
+        /// </summary>
+        public WebNoticeViewModel SelectedWebNotice
+        {
+            get { return m_SelectedWebNotice; }
+            set
+            {
+                // set new value
+                m_SelectedWebNotice = value;
+                // notify event
+                OnPropertyChanged(nameof(SelectedWebNotice));
+            }
+        }
         /// <summary>
         /// Check if the launcher is updating the client
         /// </summary>
@@ -258,7 +292,10 @@ namespace SilkroadLauncher
                 // Check the WindowState and change it
                 m_Window.WindowState = m_Window.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
             });
-            CommandClose = new RelayCommand(m_Window.Close);
+            CommandClose = new RelayCommand(() => {
+                m_GatewaySession?.Stop();
+                m_Window.Close();
+            });
             CommandStartGame = new RelayCommand(StartGame);
             CommandRegisterLink = new RelayCommand(() => RunLink("http://silkroadonline.net/"));
             CommandGuideLink = new RelayCommand(() => RunLink("https://www.google.com/"));
@@ -267,18 +304,73 @@ namespace SilkroadLauncher
             // Load Pk2 data 
             LoadPk2();
 
-            if (IsLoaded)
-            {
-                // Create handlers for updating
-                PacketManager.AddHandler(GatewayModule.Opcode.GLOBAL_IDENTIFICATION, new PacketHandler(GatewayModule.Server_GlobalIdentification));
-                PacketManager.AddHandler(GatewayModule.Opcode.SERVER_PATCH_RESPONSE, new PacketHandler(GatewayModule.Server_PatchResponse));
-                PacketManager.AddHandler(GatewayModule.Opcode.SERVER_WEB_NOTICE_RESPONSE, new PacketHandler(GatewayModule.Server_WebNoticeResponse));
-
-                CheckUpdatesAsync();
-            }
-
             // Set global
             Globals.LauncherViewModel = this;
+        }
+        #endregion
+
+        #region Public Methods
+        /// <summary>
+        /// Show message to the user
+        /// </summary>
+        public void ShowMessage(string Text)
+        {
+            m_Window.Dispatcher.Invoke(() => {
+                MessageBox.Show(m_Window, Text, Title, MessageBoxButton.OK);
+            });
+        }
+        /// <summary>
+        /// Check and loads the patch updates
+        /// </summary>
+        public async void CheckUpdatesAsync()
+        {
+            // Avoid connection
+            if (!IsLoaded)
+                return;
+
+            IsCheckingUpdates = true;
+            // Check all IP's and try to connect one at least
+            m_GatewaySession = new Session();
+
+            // Add handlers for updating
+            m_GatewaySession.AddHandler(GatewayModule.Opcode.GLOBAL_IDENTIFICATION, new PacketHandler(GatewayModule.Server_GlobalIdentification));
+            m_GatewaySession.AddHandler(GatewayModule.Opcode.SERVER_PATCH_RESPONSE, new PacketHandler(GatewayModule.Server_PatchResponse));
+            m_GatewaySession.AddHandler(GatewayModule.Opcode.SERVER_SHARD_LIST_RESPONSE, new PacketHandler(GatewayModule.Server_ShardListResponse));
+            m_GatewaySession.AddHandler(GatewayModule.Opcode.SERVER_WEB_NOTICE_RESPONSE, new PacketHandler(GatewayModule.Server_WebNoticeResponse));
+
+            m_GatewaySession.Disconnect += new EventHandler((_Session, _Event) => {
+                System.Diagnostics.Debug.WriteLine("Gateway: Session disconnected");
+            });
+            bool connectionSolved = false;
+            // Save at the same time the connection arguments
+            int divIndex = 0, hostIndex = 0;
+            foreach (var division in m_DivisionInfo)
+            {
+                for (int i = 0; i < division.Value.Count; i++)
+                {
+                    // Try to connect to the address
+                    System.Diagnostics.Debug.WriteLine("Starting Session..");
+                    connectionSolved = await Task.Run(() => m_GatewaySession.Start(division.Value[i], m_Gateport, 5000));
+                    if (connectionSolved)
+                    {
+                        hostIndex = i;
+                        break;
+                    }
+                }
+                if (connectionSolved)
+                {
+                    m_SRClientArguments = "0 \\" + m_Locale + " " + divIndex + " " + hostIndex;
+                    break;
+                }
+                divIndex++;
+            }
+            // Not able to connect to server
+            if (!connectionSolved)
+            {
+                IsCheckingUpdates = false;
+                IsUnderInspection = true;
+                ShowMessage(InspectionMessage);
+            }
         }
         #endregion
 
@@ -311,54 +403,15 @@ namespace SilkroadLauncher
                 m_Pk2Reader?.Close();
             }
         }
-        private async void CheckUpdatesAsync()
-        {
-            IsCheckingUpdates = true;
-
-            // Check all IP's and try to connect one at least
-            Session s = new Session();
-            bool connectionSolved = false;
-            // Save at the same time the connection arguments
-            int divIndex = 0, hostIndex = 0;
-            foreach (var division in m_DivisionInfo)
-            {
-                for (int i = 0; i < division.Value.Count; i++)
-                {
-                    // Try to connect to the address
-                    connectionSolved = await Task.Run(() => s.StartSession(division.Value[i], m_Gateport, 5000));
-                    if (connectionSolved)
-                    {
-                        hostIndex = i;
-                        break;
-                    }
-                }
-                if (connectionSolved)
-                {
-                    m_SRClientArguments = "0 \\" + m_Locale + " " + divIndex + " " + hostIndex;
-                    IsUnderInspection = false;
-                    break;
-                }
-                divIndex++;
-            }
-            IsCheckingUpdates = false;
-            // Display message box
-            if (IsUnderInspection)
-            {
-                MessageBox.Show(m_Window, InspectionMessage, Title, MessageBoxButton.OK);
-            }
-        }
         private void StartGame()
         {
             if (CanStartGame && File.Exists(Globals.ClientFileName))
-            {
                 System.Diagnostics.Process.Start(Globals.ClientFileName, m_SRClientArguments);
-            }
         }
         private void RunLink(string url)
         {
             System.Diagnostics.Process.Start(url);
         }
-
         #endregion
     }
 }

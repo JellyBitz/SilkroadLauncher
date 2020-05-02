@@ -1,8 +1,8 @@
 ﻿using System.Runtime.InteropServices;
 
-namespace Pk2ReaderAPI
+namespace Pk2WriterAPI
 {
-    public class Pk2Writer
+    public static class Pk2Writer
     {
         /// <summary>
         /// Sets up GfxFileManager.DLL for PK2 operations. This function must be called first.
@@ -35,7 +35,14 @@ namespace Pk2ReaderAPI
         /// </para>
         /// </summary>
         [DllImport("Pk2Writer.dll", EntryPoint = "_Open@12", CharSet = CharSet.Ansi, SetLastError = true, ExactSpelling = true)]
-        public static extern bool Open(string pk2Filename, string accessKey, int accessKeyLen);
+        private static extern bool Open(string Pk2Filename, string AccessKey, int AccessKeyLen);
+        /// <summary>
+        /// Opens a PK2 file for writing.
+        /// </summary>
+        public static bool Open(string Pk2Filename, string BlowfishKey)
+        {
+            return Open(Pk2Filename, BlowfishKey, BlowfishKey.Length);
+        }
         /// <summary>
         /// Closes an opened PK2 file. This function must be called before the program exits and before Deinitialize is called.
         /// <para>

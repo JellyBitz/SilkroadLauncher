@@ -26,14 +26,13 @@
 
     <Style x:Key="ButtonTinyImageStyle" TargetType="{x:Type Button}">
         <Setter Property="FontFamily" Value="{StaticResource FontAwesomeRegular}"/>
-        <Setter Property="FontWeight" Value="Bold"/>
         <Setter Property="Background" Value="{StaticResource ButtonTinyImageBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource ForegroundMainBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border Background="{TemplateBinding Background}">
-                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                        <ContentPresenter HorizontalAlignment="Center" Opacity="0.8" VerticalAlignment="Center"/>
                     </Border>
                 </ControlTemplate>
             </Setter.Value>

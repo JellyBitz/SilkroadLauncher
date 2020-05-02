@@ -7,11 +7,11 @@ using System.Windows;
 // La información general de un ensamblado se controla mediante el siguiente 
 // conjunto de atributos. Cambie estos valores de atributo para modificar la información
 // asociada con un ensamblado.
-[assembly: AssemblyTitle("SilkroadLauncher")]
+[assembly: AssemblyTitle("Silkroad Online Launcher")]
 [assembly: AssemblyDescription("Silkroad Online Launcher")]
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
-[assembly: AssemblyProduct("SilkroadLauncher")]
+[assembly: AssemblyProduct("Silkroad Online Launcher")]
 [assembly: AssemblyCopyright("Copyright © JellyBitz 2020")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
