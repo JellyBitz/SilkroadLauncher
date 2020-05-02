@@ -178,7 +178,6 @@
     </None>
     <Resource Include="Resources\Fonts\Amarante-Regular.ttf" />
     <Resource Include="Resources\Fonts\fa-brands-400.ttf" />
-    <Resource Include="Resources\Fonts\fa-duotone-900.ttf" />
     <Resource Include="Resources\Fonts\fa-light-300.ttf" />
     <Resource Include="Resources\Fonts\fa-regular-400.ttf" />
     <Resource Include="Resources\Fonts\fa-solid-900.ttf" />
@@ -187,26 +186,18 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\ButtonTiny.png" />
     <Resource Include="Resources\Images\Silkroad.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\Background.png" />
+    <Resource Include="Resources\Images\ButtonBase.png" />
+    <Resource Include="Resources\Images\ButtonBaseHover.png" />
+    <Resource Include="Resources\Images\ButtonTinyHover.png" />
+    <Resource Include="Resources\Images\Logo.png" />
     <Content Include="Pk2Writer.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Background.jpg" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\ButtonBase.png" />
-    <Resource Include="Resources\Images\ButtonBaseHover.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\ButtonTiny.png" />
-    <Resource Include="Resources\Images\ButtonTinyHover.png" />
-  </ItemGroup>
-  <ItemGroup>
-    <Resource Include="Resources\Images\Logo.png" />
   </ItemGroup>
   <ItemGroup>
     <Folder Include="Behaviors\" />

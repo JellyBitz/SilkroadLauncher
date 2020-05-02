@@ -8,10 +8,13 @@
     <Color x:Key="BackgroundLighter">#3a4750</Color>
     <SolidColorBrush x:Key="BackgroundLighterBrush" Color="{StaticResource BackgroundLighter}"/>
 
-    <Color x:Key="ForegroundMain">#eee</Color>
+    <Color x:Key="ForegroundMain">#F1F1F1</Color>
     <SolidColorBrush x:Key="ForegroundMainBrush" Color="{StaticResource ForegroundMain}"/>
 
-    <Color x:Key="HighlightMain">#89b3ff</Color>
+    <Color x:Key="ForegroundMainInversed">#FF0000</Color>
+    <SolidColorBrush x:Key="ForegroundMainInversedBrush" Color="{StaticResource ForegroundMainInversed}"/>
+
+    <Color x:Key="HighlightMain">#e0a021</Color>
     <SolidColorBrush x:Key="HighlightMainBrush" Color="{StaticResource HighlightMain}"/>
 
 </ResourceDictionary>

@@ -15,6 +15,7 @@
     <!-- Main layout -->
     <Grid>
         <Grid.RowDefinitions>
+            <RowDefinition Height="70"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
             <RowDefinition Height="30"/>
@@ -23,76 +24,112 @@
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
         </Grid.ColumnDefinitions>
-        <!-- Window Toolbar -->
-        <Grid>
+        <!-- Header Toolbar -->
+        <Grid Grid.Row="1" Margin="10,6,10,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="30*"/>
-                <ColumnDefinition Width="15*"/>
-                <ColumnDefinition Width="35*"/>
+                <ColumnDefinition Width="20*"/>
+                <ColumnDefinition Width="60*"/>
                 <ColumnDefinition Width="20*"/>
             </Grid.ColumnDefinitions>
-            <!-- Version -->
-            <StackPanel Grid.Column="2" Margin="15,0,0,0"
-                        Opacity="0.85"
-                        Orientation="Horizontal"
-                        VerticalAlignment="Stretch"
-                        HorizontalAlignment="Left">
-                <TextBlock Text="Client Version"
-                           VerticalAlignment="Center"
-                           Foreground="{StaticResource ForegroundMainBrush}"/>
-                <TextBlock Text="{Binding Version}"  Margin="3,0,0,0"
-                           VerticalAlignment="Center"
-                           Foreground="{StaticResource HighlightMainBrush}"/>
-            </StackPanel>
-            <Grid Grid.Column="3" Margin="0,6,10,0">
+            <!-- Social -->
+            <Grid>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="32"/>
+                    <ColumnDefinition Width="32"/>
+                    <ColumnDefinition Width="32"/>
+                </Grid.ColumnDefinitions>
+                <Button Grid.Column="0"
+                        Style="{StaticResource ButtonTinyImageStyle}"
+                        Command="{Binding CommandMinimize}">
+                    <TextBlock FontFamily="{StaticResource FontAwesomeBrands}"
+                               Text="{StaticResource fa-facebook}"
+                               FontSize="18"/>
+                </Button>
+                <Button Grid.Column="1"
+                        Style="{StaticResource ButtonTinyImageStyle}"
+                        Command="{Binding CommandMinimize}">
+                    <TextBlock FontFamily="{StaticResource FontAwesomeBrands}"
+                               Text="{StaticResource fa-discord}"
+                               FontSize="18"/>
+                </Button>
+                <Button Grid.Column="2"
+                        Style="{StaticResource ButtonTinyImageStyle}"
+                        Command="{Binding CommandMinimize}">
+                    <TextBlock FontFamily="{StaticResource FontAwesomeBrands}"
+                               Text="{StaticResource fa-youtube}"
+                               FontSize="18"/>
+                </Button>
+            </Grid>
+
+            <!-- Window buttons -->
+            <Grid Grid.Column="3">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="*"/>
                     <ColumnDefinition Width="32"/>
                     <ColumnDefinition Width="32"/>
                 </Grid.ColumnDefinitions>
-                <!-- Window buttons -->
                 <Button Grid.Column="1"
                         Style="{StaticResource ButtonTinyImageStyle}"
                         FontFamily="{StaticResource FontAwesomeLight}"
                         Command="{Binding CommandMinimize}">
-                    <TextBlock Margin="0,0,0,4" Text="{StaticResource fa-cog}"/>
+                    <TextBlock Text="{StaticResource fa-cog}"
+                               FontSize="18"/>
                 </Button>
                 <Button Grid.Column="2"
                         Style="{StaticResource ButtonTinyImageStyle}"
                         Command="{Binding CommandClose}">
-                    <TextBlock Margin="0,0,0,4" Text="{StaticResource fa-close}"/>
+                    <TextBlock Text="{StaticResource fa-close}"
+                               FontSize="18"/>
                 </Button>
             </Grid>
         </Grid>
+        <!-- Image logo -->
+        <Border Grid.Row="0" Grid.RowSpan="3" 
+                Height="200" Width="400"
+                Margin="0,-230,0,0"
+                Background="{StaticResource LogoImageBrush}"
+                MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow"
+                Panel.ZIndex="100">
+        </Border>
         <!-- Background -->
-        <Border MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow"
+        <Border Grid.Row="1"
+                Grid.RowSpan="3"
+                MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow"
                 Background="{StaticResource BackgroundImageBrush}"
                 BorderThickness="2"
                 BorderBrush="{StaticResource HighlightMainBrush}"
                 CornerRadius="20,20,5,5"
-                Grid.RowSpan="3"
                 Panel.ZIndex="-1"/>
         <!-- Body -->
-        <Grid Grid.Row="1" Margin="10,0">
+        <Grid Grid.Row="2" Margin="10,40,10,0">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="45*"/>
-                <ColumnDefinition Width="55*"/>
+                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="50*"/>
             </Grid.ColumnDefinitions>
-            <!-- Notices -->
-            <Grid Grid.Column="0">
+            <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="100"/>
+                    <RowDefinition Height="32"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <!-- Image logo -->
-                <Border Margin="0,-30,0,0"
-                        Background="{StaticResource LogoImageBrush}"
-                        MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow">
-                </Border>
-                <!--50% opacity -->
-                <Border Grid.Row="1"
+                <!-- Version -->
+                <StackPanel Opacity="0.8"
+                        Orientation="Horizontal" 
+                        HorizontalAlignment="Right">
+                    <TextBlock Text="Client Version" Opacity="0.85"
+                       HorizontalAlignment="Center"
+                       VerticalAlignment="Center"
+                       Foreground="{StaticResource ForegroundMainBrush}"/>
+                    <TextBlock Text="v" Margin="5,0,0,0"
+                           VerticalAlignment="Center"
+                           Foreground="{StaticResource HighlightMainBrush}"/>
+                    <TextBlock Text="{Binding Version}"
+                           VerticalAlignment="Center"
+                           Foreground="{StaticResource HighlightMainBrush}"/>
+                </StackPanel>
+                <!-- Notices -->
+                <Border Grid.Row="1" Margin="5,0,0,0"
                         BorderBrush="{StaticResource HighlightMainBrush}"
-                        BorderThickness="2"
+                        BorderThickness="3"
                         Background="#80000000"
                         CornerRadius="6,6,0,0">
                     <!-- Notice Subject -->
@@ -106,18 +143,18 @@
                     </ListBox>
                 </Border>
             </Grid>
-            <Grid Grid.Column="1" Margin="10,-30,0,0">
+            <!-- Notice Message -->
+            <Grid Grid.Column="0" Margin="5,0,0,0">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="30"/>
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
-                <!--50% opacity-->
-                <Border Grid.Row="1"
+                <!--50% background opacity-->
+                <Border
                         Background="#80000000"
                         BorderBrush="{StaticResource HighlightMainBrush}"
-                        BorderThickness="2"
+                        BorderThickness="3"
                         CornerRadius="6,6,0,0">
-                    <!-- Notice Message (Looking for CSS injection as priority) -->
+                    <!-- HTML Message (Looking for CSS injection as priority) -->
                     <htmlrender:HtmlPanel Background="Transparent" x:Name="test"
                                           Margin="6"
                                           BaseStylesheet="body{color:#eee;} a { color:#89b3ff; }"
@@ -127,7 +164,7 @@
         </Grid>
 
         <!-- Actions -->
-        <Grid Grid.Row="2" Grid.RowSpan="2">
+        <Grid Grid.Row="3" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="3*"/>

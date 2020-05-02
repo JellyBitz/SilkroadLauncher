@@ -7,13 +7,15 @@
     <FontFamily x:Key="FontAwesomeRegular">/SilkroadLauncher;component/Resources/Fonts/#Font Awesome 5 Pro Regular</FontFamily>
     <FontFamily x:Key="FontAwesomeLight">/SilkroadLauncher;component/Resources/Fonts/#Font Awesome 5 Pro Light</FontFamily>
     <FontFamily x:Key="FontAwesomeSolid">/SilkroadLauncher;component/Resources/Fonts/#Font Awesome 5 Pro Solid</FontFamily>
-    <FontFamily x:Key="FontAwesomeDuotone">/SilkroadLauncher;component/Resources/Fonts/#Font Awesome 5 Duotone Solid</FontFamily>
     <FontFamily x:Key="FontAwesomeBrands">/SilkroadLauncher;component/Resources/Fonts/#Font Awesome 5 Brands Regular</FontFamily>
     <!-- Font Awesome references -->
     <system:String x:Key="fa-minimize">&#xF2D1;</system:String>
     <system:String x:Key="fa-restore">&#xF2D2;</system:String>
     <system:String x:Key="fa-close">&#xF00D;</system:String>
     <system:String x:Key="fa-cog">&#xF013;</system:String>
+    <system:String x:Key="fa-facebook">&#xf39e;</system:String>
+    <system:String x:Key="fa-discord">&#xf392;</system:String>
+    <system:String x:Key="fa-youtube">&#xf431;</system:String>
 
     <!-- Font Amarante -->
     <FontFamily x:Key="AmaranteRegular">/SilkroadLauncher;component/Resources/Fonts/#Amarante Regular</FontFamily>
