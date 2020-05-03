@@ -111,21 +111,35 @@
                     <RowDefinition Height="32"/>
                     <RowDefinition Height="*"/>
                 </Grid.RowDefinitions>
-                <!-- Version -->
-                <StackPanel Opacity="0.8"
-                        Orientation="Horizontal" 
-                        HorizontalAlignment="Right">
-                    <TextBlock Text="Client Version" Opacity="0.85"
-                       HorizontalAlignment="Center"
-                       VerticalAlignment="Center"
-                       Foreground="{StaticResource ForegroundMainBrush}"/>
-                    <TextBlock Text="v" Margin="5,0,0,0"
-                           VerticalAlignment="Center"
-                           Foreground="{StaticResource HighlightMainBrush}"/>
-                    <TextBlock Text="{Binding Version}"
-                           VerticalAlignment="Center"
-                           Foreground="{StaticResource HighlightMainBrush}"/>
-                </StackPanel>
+                <Grid>
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    <!-- Notices HEAD -->
+                    <TextBlock Margin="50,0"
+                               Text="NEWS"
+                               FontSize="{StaticResource FontSizeXLarge}"
+                               FontWeight="DemiBold"
+                               HorizontalAlignment="Left"
+                               Foreground="{StaticResource ForegroundMainBrush}"/>
+                    <!-- Version -->
+                    <StackPanel Grid.Column="1"
+                                Opacity="0.8"
+                                Orientation="Horizontal">
+                        <TextBlock Text="Client Version"
+                                   HorizontalAlignment="Right"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource ForegroundMainBrush}"/>
+                        <TextBlock Text="v"
+                                   Margin="5,0,0,0"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource HighlightMainBrush}"/>
+                        <TextBlock Text="{Binding Version}"
+                                   VerticalAlignment="Center"
+                                   Foreground="{StaticResource HighlightMainBrush}"/>
+                    </StackPanel>
+                </Grid>
                 <!-- Notices -->
                 <Border Grid.Row="1" Margin="5,0,0,0"
                         BorderBrush="{StaticResource HighlightMainBrush}"
@@ -144,7 +158,8 @@
                 </Border>
             </Grid>
             <!-- Notice Message -->
-            <Grid Grid.Column="0" Margin="5,0,0,0">
+            <Grid Grid.Column="0"
+                  Margin="5,0,0,0">
                 <Grid.RowDefinitions>
                     <RowDefinition Height="2*"/>
                 </Grid.RowDefinitions>
@@ -183,6 +198,19 @@
                     Command="{Binding CommandStartGame}"
                     Visibility="{Binding CanStartGame,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}">
                 Start Game
+            </Button>
+            <Button Grid.Column="1"
+                    IsEnabled="False"
+                    Style="{StaticResource ButtonBaseImageStyle}"
+                    Visibility="{Binding IsUpdating,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}">
+                <StackPanel Orientation="Horizontal">
+                    <TextBlock Text="Applying Patch.." 
+                           FontSize="{StaticResource FontSizeLarge}"/>
+                    <TextBlock Text="{Binding UpdatingPercentage}" 
+                           FontSize="{StaticResource FontSizeLarge}"/>
+                    <TextBlock Text="%"
+                           FontSize="{StaticResource FontSizeLarge}"/>
+                </StackPanel>
             </Button>
             <Button Grid.Column="2"
                     Margin="2,12,0,4"

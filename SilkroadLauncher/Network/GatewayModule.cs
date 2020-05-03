@@ -1,5 +1,6 @@
 ﻿using Pk2WriterAPI;
 using SilkroadCommon;
+using SilkroadCommon.Download;
 using SilkroadSecurityAPI;
 using System.Collections.Generic;
 
@@ -64,18 +65,26 @@ namespace SilkroadLauncher.Network
                                 uint DownloadServerCurVersion = p.ReadUInt();
 
                                 System.Diagnostics.Debug.WriteLine("Version outdate. New version available (v" + DownloadServerCurVersion + ")");
+                                ulong bytesToDownload = 0;
 
                                 while (p.ReadByte() == 1)
                                 {
-                                    DownloadModule.DownloadFiles.Add(new SilkroadCommon.Download.FileEntry()
+                                    FileEntry file = new FileEntry()
                                     {
                                         ID = p.ReadUInt(),
                                         Name = p.ReadAscii(),
                                         Path = p.ReadAscii(),
                                         Size = p.ReadUInt(),
                                         ToBePacked = p.ReadByte() == 1
-                                    });
+                                    };
+
+                                    DownloadModule.DownloadFiles.Add(file);
+
+                                    bytesToDownload += file.Size;
                                 }
+
+                                Globals.LauncherViewModel.UpdatingBytesMaxDownloading = bytesToDownload;
+                                Globals.LauncherViewModel.UpdatingBytesDownloading = 0;
 
                                 // Start downloader protocol
                                 if (DownloadModule.DownloadFiles.Count > 0)

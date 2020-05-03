@@ -79,6 +79,14 @@ namespace SilkroadLauncher
         /// </summary>
         private bool m_IsUpdating;
         /// <summary>
+        /// The total bytes required download to apply patch
+        /// </summary>
+        private ulong m_UpdatingBytesMaxDownloading;
+        /// <summary>
+        /// The current bytes downloaded to apply patch
+        /// </summary>
+        private ulong m_UpdatingBytesDownloading;
+        /// <summary>
         /// Indicates if the game can be started
         /// </summary>
         private bool m_CanStartGame;
@@ -230,6 +238,45 @@ namespace SilkroadLauncher
                 m_IsUpdating = value;
                 // notify event
                 OnPropertyChanged(nameof(IsUpdating));
+            }
+        }
+        /// <summary>
+        /// Get the current percentage from patch download
+        /// </summary>
+        public int UpdatingPercentage
+        {
+            get {
+                if (m_UpdatingBytesMaxDownloading == 0)
+                    return 0;
+                return (int)(m_UpdatingBytesDownloading * 100ul /m_UpdatingBytesMaxDownloading); }
+        }
+        /// <summary>
+        /// Get or sets the max. bytes quantity to be downloaded to apply patch
+        /// </summary>
+        public ulong UpdatingBytesMaxDownloading
+        {
+            get { return m_UpdatingBytesMaxDownloading; }
+            set
+            {
+                // set new value
+                m_UpdatingBytesMaxDownloading = value;
+                // notify event
+                OnPropertyChanged(nameof(UpdatingBytesMaxDownloading));
+            }
+        }
+        /// <summary>
+        /// Get or sets the bytes quantity downloaded to apply patch
+        /// </summary>
+        public ulong UpdatingBytesDownloading
+        {
+            get { return m_UpdatingBytesDownloading; }
+            set
+            {
+                // set new value
+                m_UpdatingBytesDownloading = value;
+                // notify event
+                OnPropertyChanged(nameof(UpdatingBytesDownloading));
+                OnPropertyChanged(nameof(UpdatingPercentage));
             }
         }
         /// <summary>

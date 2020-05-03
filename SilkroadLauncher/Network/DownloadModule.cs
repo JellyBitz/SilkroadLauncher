@@ -48,6 +48,8 @@ namespace SilkroadLauncher.Network
             // Continue adding bytes to the file
             byte[] buffer = p.GetBytes();
             m_FileStream.WriteAsync(buffer, 0, buffer.Length);
+
+            Globals.LauncherViewModel.UpdatingBytesDownloading += (uint)buffer.Length;
         }
         public static void Server_FileCompleted(Packet p, Session s)
         {
