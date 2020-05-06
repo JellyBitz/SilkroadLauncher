@@ -1,9 +1,9 @@
 ﻿using Pk2ReaderAPI;
 using SilkroadLauncher.Network;
+using SilkroadLauncher.SilkroadCommon;
 using SilkroadLauncher.Utility;
 using System;
 using System.Collections.Generic;
-using System.Collections.ObjectModel;
 using System.IO;
 using System.Threading.Tasks;
 using System.Windows;
@@ -22,10 +22,6 @@ namespace SilkroadLauncher
         /// The title of the application
         /// </summary>
         private string m_Title = "Silkroad Online";
-        /// <summary>
-        /// The process logged in the application
-        /// </summary>
-        private string m_ProcessLogged = "Loading...";
         /// <summary>
         /// Pk2 reader
         /// </summary>
@@ -54,6 +50,10 @@ namespace SilkroadLauncher
         /// Indicates if the Pk2 has been loaded correctly
         /// </summary>
         private bool m_IsLoaded;
+        /// <summary>
+        /// Indicates if the user is viewing game config
+        /// </summary>
+        private bool m_IsViewingConfig;
         /// <summary>
         /// The initial connection to server
         /// </summary>
@@ -110,22 +110,6 @@ namespace SilkroadLauncher
             }
         }
         /// <summary>
-        /// Process logged being executed by the application
-        /// </summary>
-        public string ProcessLogged
-        {
-            get { return m_ProcessLogged; }
-            set
-            {
-                if (m_ProcessLogged == value)
-                    return;
-                // set new value
-                m_ProcessLogged = value;
-                // notify event
-                OnPropertyChanged(nameof(ProcessLogged));
-            }
-        }
-        /// <summary>
         /// Client locale
         /// </summary>
         public byte Locale
@@ -165,6 +149,24 @@ namespace SilkroadLauncher
                 m_IsLoaded = value;
                 // notify event
                 OnPropertyChanged(nameof(IsLoaded));
+            }
+        }
+        /// <summary>
+        /// The basic view config used by the game client
+        /// </summary>
+        public ConfigViewModel Config { get; private set; }
+        /// <summary>
+        /// Check if the launcher is on game config screen
+        /// </summary>
+        public bool IsViewingConfig
+        {
+            get { return m_IsViewingConfig; }
+            set
+            {
+                // set new value
+                m_IsViewingConfig = value;
+                // notify event
+                OnPropertyChanged(nameof(IsViewingConfig));
             }
         }
         /// <summary>
@@ -313,13 +315,13 @@ namespace SilkroadLauncher
         /// </summary>
         public ICommand CommandStartGame { get; set; }
         /// <summary>
-        /// Run the register link website
+        /// Open an hyperlink on default browser
         /// </summary>
-        public ICommand CommandRegisterLink { get; set; }
+        public ICommand CommandOpenLink { get; set; }
         /// <summary>
-        /// Run the guide link website
+        /// Set the config viewing state
         /// </summary>
-        public ICommand CommandGuideLink { get; set; }
+        public ICommand CommandToggleConfig { get; set; }
         #endregion
 
         #region Constructor
@@ -344,12 +346,14 @@ namespace SilkroadLauncher
                 m_Window.Close();
             });
             CommandStartGame = new RelayCommand(StartGame);
-            CommandRegisterLink = new RelayCommand(() => RunLink("http://silkroadonline.net/"));
-            CommandGuideLink = new RelayCommand(() => RunLink("https://www.google.com/"));
+            CommandOpenLink = new RelayParameterizedCommand(OpenLink);
+            CommandToggleConfig = new RelayCommand(() => { IsViewingConfig = !IsViewingConfig; });
             #endregion
 
             // Load Pk2 data 
             LoadPk2();
+            // 
+            LoadConfig();
 
             // Set global
             Globals.LauncherViewModel = this;
@@ -397,7 +401,7 @@ namespace SilkroadLauncher
                 {
                     // Try to connect to the address
                     System.Diagnostics.Debug.WriteLine("Starting Session..");
-                    connectionSolved = await Task.Run(() => m_GatewaySession.Start(division.Value[i], m_Gateport, 5000));
+                    connectionSolved = await Task.Run(() => m_GatewaySession.Start(division.Value[i], m_Gateport, 10000));
                     if (connectionSolved)
                     {
                         hostIndex = i;
@@ -450,14 +454,37 @@ namespace SilkroadLauncher
                 m_Pk2Reader?.Close();
             }
         }
+        /// <summary>
+        /// Try to loads the config or creates a new one
+        /// </summary>
+        private void LoadConfig()
+        {
+            var temp = new ConfigViewModel();
+            if (temp.Load("SilkCfg.dat"))
+            {
+                Config = temp;
+            }
+            else
+            {
+                this.Config = new ConfigViewModel();
+                Config.Save("SilkCfg.dat");
+            }
+        }
+        /// <summary>
+        /// Starts the game client if is ready
+        /// </summary>
         private void StartGame()
         {
             if (CanStartGame && File.Exists(Globals.ClientFileName))
                 System.Diagnostics.Process.Start(Globals.ClientFileName, m_SRClientArguments);
         }
-        private void RunLink(string url)
+        /// <summary>
+        /// Open a link using default browser
+        /// </summary>
+        private void OpenLink(object url)
         {
-            System.Diagnostics.Process.Start(url);
+            if(url is string link)
+                System.Diagnostics.Process.Start(link);
         }
         #endregion
     }

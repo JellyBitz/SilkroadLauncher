@@ -40,21 +40,24 @@
                 </Grid.ColumnDefinitions>
                 <Button Grid.Column="0"
                         Style="{StaticResource ButtonTinyImageStyle}"
-                        Command="{Binding CommandMinimize}">
+                        Command="{Binding CommandOpenLink}"
+                        CommandParameter="https://www.facebook.com/ImJellyBitz">
                     <TextBlock FontFamily="{StaticResource FontAwesomeBrands}"
                                Text="{StaticResource fa-facebook}"
                                FontSize="18"/>
                 </Button>
                 <Button Grid.Column="1"
                         Style="{StaticResource ButtonTinyImageStyle}"
-                        Command="{Binding CommandMinimize}">
+                        Command="{Binding CommandOpenLink}"
+                        CommandParameter="http://bit.ly/SRO-LA">
                     <TextBlock FontFamily="{StaticResource FontAwesomeBrands}"
                                Text="{StaticResource fa-discord}"
                                FontSize="18"/>
                 </Button>
                 <Button Grid.Column="2"
                         Style="{StaticResource ButtonTinyImageStyle}"
-                        Command="{Binding CommandMinimize}">
+                        Command="{Binding CommandOpenLink}"
+                        CommandParameter="https://www.google.com/">
                     <TextBlock FontFamily="{StaticResource FontAwesomeBrands}"
                                Text="{StaticResource fa-youtube}"
                                FontSize="18"/>
@@ -71,7 +74,7 @@
                 <Button Grid.Column="1"
                         Style="{StaticResource ButtonTinyImageStyle}"
                         FontFamily="{StaticResource FontAwesomeLight}"
-                        Command="{Binding CommandMinimize}">
+                        Command="{Binding CommandToggleConfig}">
                     <TextBlock Text="{StaticResource fa-cog}"
                                FontSize="18"/>
                 </Button>
@@ -140,7 +143,7 @@
                                    Foreground="{StaticResource HighlightMainBrush}"/>
                     </StackPanel>
                 </Grid>
-                <!-- Notices -->
+                <!-- Right Panel / 50% background opacity -->
                 <Border Grid.Row="1" Margin="5,0,0,0"
                         BorderBrush="{StaticResource HighlightMainBrush}"
                         BorderThickness="3"
@@ -157,25 +160,27 @@
                     </ListBox>
                 </Border>
             </Grid>
-            <!-- Notice Message -->
-            <Grid Grid.Column="0"
-                  Margin="5,0,0,0">
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="2*"/>
-                </Grid.RowDefinitions>
-                <!--50% background opacity-->
-                <Border
-                        Background="#80000000"
-                        BorderBrush="{StaticResource HighlightMainBrush}"
-                        BorderThickness="3"
-                        CornerRadius="6,6,0,0">
-                    <!-- HTML Message (Looking for CSS injection as priority) -->
+            <!-- Left panel / 50% background opacity -->
+            <Border Background="#80000000"
+                    BorderBrush="{StaticResource HighlightMainBrush}"
+                    BorderThickness="3"
+                    CornerRadius="6,6,0,0">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition></RowDefinition>
+                    </Grid.RowDefinitions>
+                    <!-- Notice Message (HTML) -->
                     <htmlrender:HtmlPanel Background="Transparent" x:Name="test"
                                           Margin="6"
                                           BaseStylesheet="body{color:#eee;} a { color:#89b3ff; }"
                                           Text="{Binding SelectedWebNotice.Article}"/>
-                </Border>
-            </Grid>
+                    <!-- Game basic config -->
+                    <Grid Background="#000000"
+                          Visibility="{Binding IsViewingConfig,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}">
+                          <!-- TO DO: Settings UI -->
+                    </Grid>
+                </Grid>
+            </Border>
         </Grid>
 
         <!-- Actions -->
@@ -189,7 +194,8 @@
                     Margin="0,12,0,4"
                     Style="{StaticResource ButtonBaseImageStyle}"
                     FontSize="{StaticResource FontSizeXLarge}"
-                    Command="{Binding CommandGuideLink}">
+                    Command="{Binding CommandOpenLink}"
+                    CommandParameter="https://www.google.com/">
                 Guide
             </Button>
             <Button Grid.Column="1"
@@ -216,7 +222,8 @@
                     Margin="2,12,0,4"
                     Style="{StaticResource ButtonBaseImageStyle}"
                     FontSize="{StaticResource FontSizeXLarge}"
-                    Command="{Binding CommandRegisterLink}">
+                    Command="{Binding CommandOpenLink}"
+                    CommandParameter="https://www.google.com/">
                 Register
             </Button>
         </Grid>

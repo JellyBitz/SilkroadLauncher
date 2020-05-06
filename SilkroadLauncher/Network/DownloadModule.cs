@@ -29,15 +29,26 @@ namespace SilkroadLauncher.Network
         {
             System.Diagnostics.Debug.WriteLine("Server_Ready");
 
-            // Create a temporary directory
+            // Create a temporary directory to allocate the file
             Directory.CreateDirectory("Temp");
 
+            // Create file download from server
+            RequestFileDownload(s);
+        }
+        /// <summary>
+        /// Request a server file to be downloaded inmediatly
+        /// </summary>
+        private static void RequestFileDownload(Session s)
+        {
+            // Request the first file on list
+            var file = DownloadFiles[0];
+
             // Init file holder
-            m_FileStream = new FileStream("Temp\\"+ DownloadFiles[0].ID,FileMode.Create,FileAccess.Write);
+            m_FileStream = new FileStream("Temp\\" + file.ID, FileMode.Create, FileAccess.Write);
 
             // Request the first file
             Packet response = new Packet(Opcode.CLIENT_FILE_REQUEST, false);
-            response.WriteUInt(DownloadFiles[0].ID);
+            response.WriteUInt(file.ID);
             response.WriteUInt(0);
             s.Send(response);
         }
@@ -54,35 +65,46 @@ namespace SilkroadLauncher.Network
         public static void Server_FileCompleted(Packet p, Session s)
         {
             byte result = p.ReadByte();
-            System.Diagnostics.Debug.WriteLine($"Server_FileCompleted: {DownloadFiles[0].ID} - Result:{result}");
+
+            // File downloaded
+            var file = DownloadFiles[0];
+
+            System.Diagnostics.Debug.WriteLine($"Server_FileCompleted: {file.ID} - Result:{result}");
 
             // Close the file
             m_FileStream.Close();
             m_FileStream.Dispose();
 
             // Process the file
-            if (DownloadFiles[0].ToBePacked)
+            if (file.ImportToPk2)
             {
                 // Get the Pk2 to open
-                int pk2FileNameLength = DownloadFiles[0].Path.IndexOf("\\");
-                string pk2FileName = DownloadFiles[0].Path.Remove(pk2FileNameLength);
+                int pk2FileNameLength = file.Path.IndexOf("\\");
+                string pk2FileName = file.Path.Remove(pk2FileNameLength);
                 // Open the Pk2 and insert the file
                 if (Pk2Writer.Open(pk2FileName, Globals.BlowfishKey))
                 {
-                    if (Pk2Writer.ImportFile(DownloadFiles[0].Path.Substring(pk2FileNameLength + 1) + "\\" + DownloadFiles[0].Name, "Temp\\" + DownloadFiles[0].ID))
-                        System.Diagnostics.Debug.WriteLine($"File {DownloadFiles[0].Name} imported into the Pk2");
+                    if (Pk2Writer.ImportFile(file.Path.Substring(pk2FileNameLength + 1) + "\\" + file.Name, "Temp\\" + file.ID))
+                        System.Diagnostics.Debug.WriteLine($"File {file.Name} imported into the Pk2");
                     // Close the Pk2
                     Pk2Writer.Close();
                 }
                    
                 // Delete the file
-                File.Delete("Temp\\" + DownloadFiles[0].ID);
+                File.Delete("Temp\\" + file.ID);
             }
             else
             {
-                // Just move it from Temp to the folder required
-                Directory.CreateDirectory(DownloadFiles[0].Path);
-                File.Move("Temp\\" + DownloadFiles[0].ID, DownloadFiles[0].Path+ "\\" + DownloadFiles[0].Name);
+                // Create directory if doesn't exists
+                if (!string.IsNullOrWhiteSpace(file.Path))
+                    Directory.CreateDirectory(DownloadFiles[0].Path);
+
+                // Check if is Launcher to process at the end
+                if (!(string.IsNullOrWhiteSpace(file.Path) && file.Name == System.Reflection.Assembly.GetEntryAssembly().CodeBase))
+                {
+                    // Just move it from Temp to the folder required
+                    File.Move("Temp\\" + file.ID, file.Path + "\\" + file.Name);
+                }
             }
             
             // Remove the file and delete it from Temp
@@ -91,29 +113,45 @@ namespace SilkroadLauncher.Network
             // Continue protocol
             if (DownloadFiles.Count > 0)
             {
-                // Init file holder
-                m_FileStream = new FileStream("Temp\\" + DownloadFiles[0].ID, FileMode.Create, FileAccess.Write);
-
-                // Request the next file
-                Packet response = new Packet(Opcode.CLIENT_FILE_REQUEST, false);
-                response.WriteUInt(DownloadFiles[0].ID);
-                response.WriteUInt(0);
-                s.Send(response);
+                RequestFileDownload(s);
             }
             else
             {
+                Globals.LauncherViewModel.IsUpdating = false;
+                System.Diagnostics.Debug.WriteLine($"Download finished!");
+
                 // Dispose writer
                 Pk2Writer.Deinitialize();
 
-                // Update done
-                Globals.LauncherViewModel.Version += 1;
-                Globals.LauncherViewModel.IsUpdating = false;
-                System.Diagnostics.Debug.WriteLine($"Download finished!");
-                Globals.LauncherViewModel.CanStartGame = true;
+                // Process Launcher if exists
+                if (File.Exists("Temp\\"+ System.Reflection.Assembly.GetEntryAssembly().CodeBase))
+                {
+                    // Replace launcher
+                    StartReplacer();
+                }
+                else
+                {
+                    // Update done
+                    Globals.LauncherViewModel.Version += 1;
+                    Globals.LauncherViewModel.CanStartGame = true;
 
-                // Stop downloader
-                s.Stop();
+                    // Stop connection
+                    s.Stop();
+                }
             }
+        }
+        private static void StartReplacer()
+        {
+            var launcherFilename = System.Reflection.Assembly.GetEntryAssembly().CodeBase;
+            var launcherPath = Path.GetFullPath(launcherFilename);
+            // Move my current executable to temp
+            File.Move(launcherPath, "Temp\\"+ launcherFilename+".bkp");
+            // Move the new launcher to the folder
+            File.Move(launcherPath, "Temp\\" + launcherFilename);
+            // Run the new launcher
+            System.Diagnostics.Process.Start(launcherPath);
+            // Close this one
+            Globals.LauncherViewModel.CommandClose.Execute(null);
         }
     }
 }

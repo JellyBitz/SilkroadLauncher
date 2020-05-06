@@ -75,7 +75,7 @@ namespace SilkroadLauncher.Network
                                         Name = p.ReadAscii(),
                                         Path = p.ReadAscii(),
                                         Size = p.ReadUInt(),
-                                        ToBePacked = p.ReadByte() == 1
+                                        ImportToPk2 = p.ReadByte() == 1
                                     };
 
                                     DownloadModule.DownloadFiles.Add(file);
