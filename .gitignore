@@ -1,9 +1,6 @@
 # Visual Studio cache
 .vs/
 
-# Dependencies
-packages/
-
 # Debugging data generated
 SilkroadLauncher/bin/
 SilkroadLauncher/obj/
