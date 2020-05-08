@@ -4,15 +4,15 @@ namespace SilkroadLauncher.SilkroadCommon
     /// <summary>
     /// SilkCfg.dat file structure
     /// </summary>
-    public class Config
+    public class SilkCfg
     {
         public uint Version { get; set; } = 3;
         public uint unkUint01 { get; set; } = 1;
-        public WindowResoltuion Resoltuion { get; set; } = new WindowResoltuion(800, 600);
-        public Graphic GraphicType01 { get; set; } = Graphic.Middle;
+        public WindowResolution Resolution { get; set; } = new WindowResolution(800, 600);
+        public Graphic GraphicType { get; set; } = Graphic.Middle;
         public Brightness BrightnessType { get; set; } = Brightness.Normal;
         public byte unkByte01 { get; set; } = 1;
-        public bool EnabledSound { get; set; } = true;
+        public bool IsSoundEnabled { get; set; } = true;
         public byte unkByte02 { get; set; } = 0;
         /// <summary>
         /// Graphic visual type
@@ -36,19 +36,32 @@ namespace SilkroadLauncher.SilkroadCommon
             Bright = 3,
             VeryBright = 4
         }
-        public class WindowResoltuion
+        /// <summary>
+        /// Game window resolution
+        /// </summary>
+        public class WindowResolution
         {
             public uint Width { get; }
             public uint Height { get; }
-            public WindowResoltuion(uint Width, uint Height)
+            public WindowResolution(uint Width, uint Height)
             {
                 this.Width = Width;
                 this.Height = Height;
             }
+            #region Enum Type Reference
             public override string ToString()
             {
-                return Width + "x" + Height;
+                return Width + " x " + Height;
             }
+            public override bool Equals(object obj)
+            {
+                return (obj is WindowResolution wr && wr.Width == Width && wr.Height == Height);
+            }
+            public override int GetHashCode()
+            {
+                return ToString().GetHashCode();
+            }
+            #endregion
         }
     }
 }

@@ -55,6 +55,10 @@ namespace SilkroadLauncher
         /// </summary>
         private bool m_IsViewingConfig;
         /// <summary>
+        /// Game bsic config
+        /// </summary>
+        private ConfigViewModel m_Config = new ConfigViewModel();
+        /// <summary>
         /// The initial connection to server
         /// </summary>
         private Session m_GatewaySession;
@@ -86,6 +90,10 @@ namespace SilkroadLauncher
         /// The current bytes downloaded to apply patch
         /// </summary>
         private ulong m_UpdatingBytesDownloading;
+        /// <summary>
+        /// The current patch percentage
+        /// </summary>
+        private int m_UpdatingPercentage;
         /// <summary>
         /// Indicates if the game can be started
         /// </summary>
@@ -152,10 +160,6 @@ namespace SilkroadLauncher
             }
         }
         /// <summary>
-        /// The basic view config used by the game client
-        /// </summary>
-        public ConfigViewModel Config { get; private set; }
-        /// <summary>
         /// Check if the launcher is on game config screen
         /// </summary>
         public bool IsViewingConfig
@@ -167,6 +171,20 @@ namespace SilkroadLauncher
                 m_IsViewingConfig = value;
                 // notify event
                 OnPropertyChanged(nameof(IsViewingConfig));
+            }
+        }
+        /// <summary>
+        /// The basic view config used by the game client
+        /// </summary>
+        public ConfigViewModel Config
+        {
+            get { return m_Config; }
+            set
+            {
+                // set new value
+                m_Config = value;
+                // notify event
+                OnPropertyChanged(nameof(Config));
             }
         }
         /// <summary>
@@ -197,10 +215,6 @@ namespace SilkroadLauncher
                 OnPropertyChanged(nameof(IsUnderInspection));
             }
         }
-        /// <summary>
-        /// Inspection predefined message
-        /// </summary>
-        public string InspectionMessage { get; } = "The server is undergoing inspection or updates.\nConnect to http://silkroadonline.net/ for more information.";
         /// <summary>
         /// All notices loaded after checking updates
         /// </summary>
@@ -247,10 +261,14 @@ namespace SilkroadLauncher
         /// </summary>
         public int UpdatingPercentage
         {
-            get {
-                if (m_UpdatingBytesMaxDownloading == 0)
-                    return 0;
-                return (int)(m_UpdatingBytesDownloading * 100ul /m_UpdatingBytesMaxDownloading); }
+            get { return m_UpdatingPercentage; }
+            set {
+                if (m_UpdatingPercentage == value)
+                    return;
+
+                m_UpdatingPercentage = value;
+                OnPropertyChanged(nameof(UpdatingPercentage));
+            }
         }
         /// <summary>
         /// Get or sets the max. bytes quantity to be downloaded to apply patch
@@ -278,7 +296,10 @@ namespace SilkroadLauncher
                 m_UpdatingBytesDownloading = value;
                 // notify event
                 OnPropertyChanged(nameof(UpdatingBytesDownloading));
-                OnPropertyChanged(nameof(UpdatingPercentage));
+
+                // Set percentage
+                if(m_UpdatingBytesMaxDownloading != 0)
+                    UpdatingPercentage = (int)(m_UpdatingBytesDownloading * 100ul / m_UpdatingBytesMaxDownloading);
             }
         }
         /// <summary>
@@ -322,6 +343,10 @@ namespace SilkroadLauncher
         /// Set the config viewing state
         /// </summary>
         public ICommand CommandToggleConfig { get; set; }
+        /// <summary>
+        /// Save the config file
+        /// </summary>
+        public ICommand CommandSaveConfig { get; set; }
         #endregion
 
         #region Constructor
@@ -345,15 +370,31 @@ namespace SilkroadLauncher
                 m_GatewaySession?.Stop();
                 m_Window.Close();
             });
-            CommandStartGame = new RelayCommand(StartGame);
-            CommandOpenLink = new RelayParameterizedCommand(OpenLink);
-            CommandToggleConfig = new RelayCommand(() => { IsViewingConfig = !IsViewingConfig; });
+            CommandStartGame = new RelayCommand(()=> {
+                // Starts the game but only if is ready and exists
+                if (CanStartGame && File.Exists(Globals.ClientFileName)) { 
+                    System.Diagnostics.Process.Start(Globals.ClientFileName, m_SRClientArguments);
+                    // Closing launcher
+                    CommandClose.Execute(null);
+                }
+            });
+            CommandOpenLink = new RelayParameterizedCommand((url) => {
+                // Run link with default browser
+                if (url is string link)
+                    System.Diagnostics.Process.Start(link);
+            });
+            CommandToggleConfig = new RelayCommand(() => {
+                IsViewingConfig = !IsViewingConfig;
+            });
+            CommandSaveConfig = new RelayCommand(() => {
+                Config.Save();
+                IsViewingConfig = false;
+            });
             #endregion
 
-            // Load Pk2 data 
-            LoadPk2();
-            // 
+            // Loading stuffs
             LoadConfig();
+            LoadPk2();
 
             // Set global
             Globals.LauncherViewModel = this;
@@ -420,7 +461,7 @@ namespace SilkroadLauncher
             {
                 IsCheckingUpdates = false;
                 IsUnderInspection = true;
-                ShowMessage(InspectionMessage);
+                ShowMessage("The server is undergoing inspection or updates.\nConnect to https://www.alfa.srolatino-servers.com/ for more information.");
             }
         }
         #endregion
@@ -434,7 +475,10 @@ namespace SilkroadLauncher
             try
             {
                 // Load pk2 reader
-                m_Pk2Reader = new Pk2Reader(Globals.MediaPk2FileName,Globals.BlowfishKey);
+                m_Pk2Reader = new Pk2Reader("Media.pk2",Globals.BlowfishKey);
+
+                // Try to load Type.txt
+                m_Config.LoadTypeFile(m_Pk2Reader);
 
                 // Extract essential stuffs for the process
                 if (m_Pk2Reader.TryGetDivisionInfo(out m_DivisionInfo) 
@@ -455,36 +499,23 @@ namespace SilkroadLauncher
             }
         }
         /// <summary>
-        /// Try to loads the config or creates a new one
+        /// Try to loads the config or create a new one
         /// </summary>
         private void LoadConfig()
         {
-            var temp = new ConfigViewModel();
-            if (temp.Load("SilkCfg.dat"))
-            {
-                Config = temp;
+            bool createNew = false;
+            m_Config = new ConfigViewModel();
+            // Try to load configs or create a new one
+            if (!m_Config.LoadSilkCfg()){
+                m_Config.ResetSilkCfg();
+                createNew = true;
             }
-            else
-            {
-                this.Config = new ConfigViewModel();
-                Config.Save("SilkCfg.dat");
+            if (!m_Config.LoadSROptionSet()){
+                m_Config.ResetSROptionSet();
+                createNew = true;
             }
-        }
-        /// <summary>
-        /// Starts the game client if is ready
-        /// </summary>
-        private void StartGame()
-        {
-            if (CanStartGame && File.Exists(Globals.ClientFileName))
-                System.Diagnostics.Process.Start(Globals.ClientFileName, m_SRClientArguments);
-        }
-        /// <summary>
-        /// Open a link using default browser
-        /// </summary>
-        private void OpenLink(object url)
-        {
-            if(url is string link)
-                System.Diagnostics.Process.Start(link);
+            if (createNew)
+                m_Config.Save();
         }
         #endregion
     }

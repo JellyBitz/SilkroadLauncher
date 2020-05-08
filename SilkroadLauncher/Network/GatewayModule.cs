@@ -39,7 +39,7 @@ namespace SilkroadLauncher.Network
                 Packet packet = new Packet(Opcode.CLIENT_PATCH_REQUEST, true);
                 packet.WriteByte(Globals.LauncherViewModel.Locale);
                 packet.WriteAscii("SR_Client"); // Module Name
-                packet.WriteUInt(Globals.LauncherViewModel.Version-1);
+                packet.WriteUInt(Globals.LauncherViewModel.Version);
                 s.Send(packet);
             }
         }
@@ -62,9 +62,9 @@ namespace SilkroadLauncher.Network
                             {
                                 string DownloadServerIP = p.ReadAscii();
                                 ushort DownloadServerPort = p.ReadUShort();
-                                uint DownloadServerCurVersion = p.ReadUInt();
+                                DownloadModule.DownloadVersion = p.ReadUInt();
 
-                                System.Diagnostics.Debug.WriteLine("Version outdate. New version available (v" + DownloadServerCurVersion + ")");
+                                System.Diagnostics.Debug.WriteLine("Version outdate. New version available (v" + DownloadModule.DownloadVersion + ")");
                                 ulong bytesToDownload = 0;
 
                                 while (p.ReadByte() == 1)
@@ -83,6 +83,7 @@ namespace SilkroadLauncher.Network
                                     bytesToDownload += file.Size;
                                 }
 
+                                // Set progress bar values
                                 Globals.LauncherViewModel.UpdatingBytesMaxDownloading = bytesToDownload;
                                 Globals.LauncherViewModel.UpdatingBytesDownloading = 0;
 
@@ -106,7 +107,7 @@ namespace SilkroadLauncher.Network
                                             System.Diagnostics.Debug.WriteLine("Download: Session disconnected");
                                         });
 
-                                        System.Threading.Tasks.Task.Run(() => downloaderSession.Start(DownloadServerIP, DownloadServerPort, 5000));
+                                        System.Threading.Tasks.Task.Run(() => downloaderSession.Start(DownloadServerIP,DownloadServerPort,10000));
                                     }
                                     else
                                     {

@@ -25,6 +25,12 @@ namespace SilkroadLauncher.Network
         /// Get the files to be downloaded
         /// </summary>
         public static List<FileEntry> DownloadFiles { get; set; } = new List<FileEntry>();
+        /// <summary>
+        /// The version currently downloaded
+        /// </summary>
+        public static uint DownloadVersion { get; set; }
+
+        #region Public Methods
         public static void Server_Ready(Packet p, Session s)
         {
             System.Diagnostics.Debug.WriteLine("Server_Ready");
@@ -34,23 +40,6 @@ namespace SilkroadLauncher.Network
 
             // Create file download from server
             RequestFileDownload(s);
-        }
-        /// <summary>
-        /// Request a server file to be downloaded inmediatly
-        /// </summary>
-        private static void RequestFileDownload(Session s)
-        {
-            // Request the first file on list
-            var file = DownloadFiles[0];
-
-            // Init file holder
-            m_FileStream = new FileStream("Temp\\" + file.ID, FileMode.Create, FileAccess.Write);
-
-            // Request the first file
-            Packet response = new Packet(Opcode.CLIENT_FILE_REQUEST, false);
-            response.WriteUInt(file.ID);
-            response.WriteUInt(0);
-            s.Send(response);
         }
         public static void Server_FileChunk(Packet p, Session s)
         {
@@ -89,18 +78,18 @@ namespace SilkroadLauncher.Network
                     // Close the Pk2
                     Pk2Writer.Close();
                 }
-                   
                 // Delete the file
                 File.Delete("Temp\\" + file.ID);
             }
             else
             {
                 // Create directory if doesn't exists
-                if (!string.IsNullOrWhiteSpace(file.Path))
-                    Directory.CreateDirectory(DownloadFiles[0].Path);
-
+                string dir = Path.GetDirectoryName(file.Path);
+                if (dir != string.Empty && !Directory.Exists(dir))
+                    Directory.CreateDirectory(dir);
+                
                 // Check if is Launcher to process at the end
-                if (!(string.IsNullOrWhiteSpace(file.Path) && file.Name == System.Reflection.Assembly.GetEntryAssembly().CodeBase))
+                if (!(dir == string.Empty && file.Name == System.Reflection.Assembly.GetEntryAssembly().CodeBase))
                 {
                     // Just move it from Temp to the folder required
                     File.Move("Temp\\" + file.ID, file.Path + "\\" + file.Name);
@@ -126,13 +115,13 @@ namespace SilkroadLauncher.Network
                 // Process Launcher if exists
                 if (File.Exists("Temp\\"+ System.Reflection.Assembly.GetEntryAssembly().CodeBase))
                 {
-                    // Replace launcher
+                    // Replace launcher required
                     StartReplacer();
                 }
                 else
                 {
-                    // Update done
-                    Globals.LauncherViewModel.Version += 1;
+                    // Update done, set new version
+                    Globals.LauncherViewModel.Version = DownloadVersion;
                     Globals.LauncherViewModel.CanStartGame = true;
 
                     // Stop connection
@@ -140,6 +129,29 @@ namespace SilkroadLauncher.Network
                 }
             }
         }
+        #endregion
+
+        #region Private Helpers
+        /// <summary>
+        /// Request a server file to be downloaded inmediatly
+        /// </summary>
+        private static void RequestFileDownload(Session s)
+        {
+            // Request the first file on list
+            var file = DownloadFiles[0];
+
+            // Init file holder
+            m_FileStream = new FileStream("Temp\\" + file.ID, FileMode.Create, FileAccess.Write);
+
+            // Request the first file
+            Packet response = new Packet(Opcode.CLIENT_FILE_REQUEST, false);
+            response.WriteUInt(file.ID);
+            response.WriteUInt(0);
+            s.Send(response);
+        }
+        /// <summary>
+        /// Replaces the current executable with the new one downloaded
+        /// </summary>
         private static void StartReplacer()
         {
             var launcherFilename = System.Reflection.Assembly.GetEntryAssembly().CodeBase;
@@ -153,5 +165,6 @@ namespace SilkroadLauncher.Network
             // Close this one
             Globals.LauncherViewModel.CommandClose.Execute(null);
         }
+        #endregion
     }
 }

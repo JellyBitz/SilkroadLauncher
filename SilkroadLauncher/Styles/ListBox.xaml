@@ -6,7 +6,7 @@
     
     <!-- Notice list item -->
     <Style x:Key="NoticeListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
-        <Setter Property="OverridesDefaultStyle" Value="True"></Setter>
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ListBoxItem}">
@@ -25,6 +25,7 @@
     </Style>
     <!-- Notice list -->
     <Style x:Key="NoticeListBox" TargetType="{x:Type ListBox}">
+        <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="ItemContainerStyle" Value="{StaticResource NoticeListBoxItemStyle}"/>
         <Setter Property="ItemTemplate">
             <Setter.Value>
