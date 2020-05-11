@@ -7,8 +7,5 @@
 
     <ImageBrush x:Key="ButtonBaseImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/ButtonBase.png" Stretch="Fill"/>
     <ImageBrush x:Key="ButtonBaseHoverImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/ButtonBaseHover.png" Stretch="Fill"/>
-
-    <ImageBrush x:Key="ButtonTinyImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/ButtonTiny.png" Stretch="Fill"/>
-    <ImageBrush x:Key="ButtonTinyHoverImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/ButtonTinyHover.png" Stretch="Fill"/>
-
+    
 </ResourceDictionary>

@@ -15,11 +15,11 @@
     <!-- Main layout -->
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="70"/>
+            <RowDefinition Height="60"/>
             <RowDefinition Height="40"/>
             <RowDefinition Height="*"/>
-            <RowDefinition Height="30"/>
-            <RowDefinition Height="20"/>
+            <RowDefinition Height="32"/>
+            <RowDefinition Height="32"/>
         </Grid.RowDefinitions>
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="1*"/>
@@ -85,13 +85,14 @@
                 </Button>
             </Grid>
         </Grid>
+        
         <!-- Image logo -->
-        <Border Grid.Row="0" Grid.RowSpan="3" 
-                Height="200" Width="400"
-                Margin="0,-230,0,0"
+        <Border Grid.Row="0" Grid.RowSpan="3"
+                Width="275" Height="171"
+                Margin="0,-259,0,0"
                 Background="{StaticResource LogoImageBrush}"
                 MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow"
-                Panel.ZIndex="100">
+                Panel.ZIndex="1">
         </Border>
 
         <!-- Background -->
@@ -119,26 +120,31 @@
                         <ColumnDefinition Width="*"/>
                         <ColumnDefinition Width="Auto"/>
                     </Grid.ColumnDefinitions>
+                    <Border Grid.ColumnSpan="2"
+                            Margin="5"
+                            CornerRadius="6"
+                            Background="#80000000"/>
                     <!-- Notices HEAD -->
-                    <TextBlock Margin="50,0"
-                               Text="NEWS"
-                               FontSize="{StaticResource FontSizeXLarge}"
+                    <TextBlock Margin="10,0"
+                               Text="News and Announcements"
+                               FontSize="{StaticResource FontSizeLarge}"
                                FontWeight="DemiBold"
                                HorizontalAlignment="Left"
+                               VerticalAlignment="Center"
                                Foreground="{StaticResource ForegroundMainBrush}"/>
                     <!-- Version -->
                     <StackPanel Grid.Column="1"
-                                Opacity="0.8"
+                                Opacity="0.7"
                                 Orientation="Horizontal">
-                        <TextBlock Text="Client Version"
+                        <TextBlock Text="Client"
                                    HorizontalAlignment="Right"
                                    VerticalAlignment="Center"
                                    Foreground="{StaticResource ForegroundMainBrush}"/>
                         <TextBlock Text="v"
-                                   Margin="5,0,0,0"
+                                   Margin="4,0,0,0"
                                    VerticalAlignment="Center"
                                    Foreground="{StaticResource HighlightMainBrush}"/>
-                        <TextBlock Text="{Binding Version}"
+                        <TextBlock Text="2200"
                                    VerticalAlignment="Center"
                                    Foreground="{StaticResource HighlightMainBrush}"/>
                     </StackPanel>
@@ -167,13 +173,13 @@
                     CornerRadius="6,6,0,0">
                 <Grid>
                     <!-- Notice Message (HTML) -->
-                    <htmlrender:HtmlPanel Visibility="{Binding IsViewingConfig,Converter={x:Static local:BooleanToInvisibilityConverter.Instance}}"
+                    <htmlrender:HtmlPanel Visibility="{Binding IsViewingConfig,Converter={x:Static local:BooleanToVisibilityGoneConverter.Instance}}"
                                           Background="Transparent" Margin="6"
                                           BaseStylesheet="body{color:#eee;} a { color:#89b3ff; }"
                                           Text="{Binding SelectedWebNotice.Article}"/>
                     <!-- Game Settings -->
                     <Grid Visibility="{Binding IsViewingConfig,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}"
-                           Margin="40,45,40,25">
+                          Margin="40,45,40,25">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"></RowDefinition>
                             <RowDefinition Height="Auto"></RowDefinition>
@@ -282,13 +288,15 @@
                                 <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
                             <TextBlock Grid.Column="2" Style="{StaticResource TextBlockBaseStyle}"
-                                       Opacity="0.15"
+                                       Foreground="{StaticResource HighlightMainBrush}"
+                                       Opacity="0.5"
                                        Text="Settings v"
                                        FontWeight="DemiBold"
                                        FontSize="{StaticResource FontSizeSmall}"
                                        VerticalAlignment="Center"/>
                             <TextBlock Grid.Column="3" Style="{StaticResource TextBlockBaseStyle}"
-                                       Opacity="0.15"
+                                       Opacity="0.5"
+                                       Foreground="{StaticResource HighlightMainBrush}"
                                        Text="{Binding Config.Version}"
                                        FontWeight="DemiBold"
                                        FontSize="{StaticResource FontSizeSmall}"
@@ -312,43 +320,54 @@
             </Border>
         </Grid>
 
-        <!-- Actions -->
+        <!-- Launcher buttom actions -->
         <Grid Grid.Row="3" Grid.RowSpan="2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="2*"/>
                 <ColumnDefinition Width="3*"/>
                 <ColumnDefinition Width="2*"/>
             </Grid.ColumnDefinitions>
-            <Button Grid.Column="0"
-                    Margin="0,12,0,4"
+            <!-- Link -->
+            <Button Grid.Column="0" Margin="3,3,0,3"
+                    Content="Guide"
                     Style="{StaticResource ButtonBaseImageStyle}"
                     FontSize="{StaticResource FontSizeXLarge}"
                     Command="{Binding CommandOpenLink}"
-                    CommandParameter="https://www.google.com/">
-                Guide
-            </Button>
-            <Button Grid.Column="1"
+                    CommandParameter="https://www.google.com/"/>
+            <!-- Start Game -->
+            <Button Grid.Column="1" Margin="0,-4,0,0"
                     Style="{StaticResource ButtonBaseImageStyle}"
-                    FontSize="{StaticResource FontSizeXXLarge}"
                     Command="{Binding CommandStartGame}"
                     Visibility="{Binding CanStartGame,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}">
-                Start Game
+                <TextBlock Text="Play" Margin="0,-3,0,0"
+                           FontSize="{StaticResource FontSizeXXLarge}"/>
             </Button>
-            <Button Grid.Column="1"
-                    IsEnabled="False"
-                    Style="{StaticResource ButtonBaseImageStyle}"
-                    Visibility="{Binding IsUpdating,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}">
-                <StackPanel Orientation="Horizontal">
-                    <TextBlock Text="Applying Patch.." 
-                           FontSize="{StaticResource FontSizeLarge}"/>
-                    <TextBlock Text="{Binding UpdatingPercentage}" 
-                           FontSize="{StaticResource FontSizeLarge}"/>
+            <!-- Patch Progress -->
+            <Grid Grid.Column="1"  Margin="0,-4,0,0"
+                  Visibility="{Binding IsUpdating,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}">
+                <ProgressBar Style="{StaticResource ProgressBarImageFill}"
+                             Value="{Binding UpdatingPercentage}">
+                </ProgressBar>
+                <StackPanel Grid.Column="1"
+                            Orientation="Horizontal"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Center">
+                    <TextBlock Text="Applying Patch.."
+                               Foreground="{StaticResource ForegroundMainBrush}"
+                               FontFamily="{StaticResource AmaranteRegular}"
+                               FontSize="{StaticResource FontSizeLarge}"/>
+                    <TextBlock Text="{Binding UpdatingPercentage}"
+                               Foreground="{StaticResource ForegroundMainBrush}"
+                               FontFamily="{StaticResource AmaranteRegular}"
+                               FontSize="{StaticResource FontSizeLarge}"/>
                     <TextBlock Text="%"
-                           FontSize="{StaticResource FontSizeLarge}"/>
+                               Foreground="{StaticResource ForegroundMainBrush}"
+                               FontFamily="{StaticResource AmaranteRegular}"
+                               FontSize="{StaticResource FontSizeLarge}"/>
                 </StackPanel>
-            </Button>
-            <Button Grid.Column="2"
-                    Margin="2,12,0,4"
+            </Grid>
+            <!-- Link -->
+            <Button Grid.Column="2" Margin="0,3,3,3"
                     Style="{StaticResource ButtonBaseImageStyle}"
                     FontSize="{StaticResource FontSizeXLarge}"
                     Command="{Binding CommandOpenLink}"

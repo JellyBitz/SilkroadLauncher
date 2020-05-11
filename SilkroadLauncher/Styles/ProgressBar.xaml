@@ -1,0 +1,30 @@
+﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+                    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+                    xmlns:local="clr-namespace:SilkroadLauncher">
+
+    <!-- Progressbar for application  -->
+    <Style x:Key="ProgressBarImageFill" TargetType="{x:Type ProgressBar}">
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ProgressBar}">
+                    <Grid x:Name="TemplateRoot"
+                          SnapsToDevicePixels="true">
+                        <Image x:Name="PART_Track" 
+                               Stretch="Fill"
+                               Source="/SilkroadLauncher;component/Resources/Images/ProgressBarEmpty.png"/>
+
+                        <Canvas Name="PART_Indicator"
+                                ClipToBounds="True"
+                                HorizontalAlignment="Left">
+                            <Image x:Name="ImageFill"
+                                   Width="{Binding Path=ActualWidth, ElementName=PART_Track}" 
+                                   Height="{Binding Path=ActualHeight, ElementName=PART_Track}" 
+                                   Stretch="Fill"
+                                   Source="/SilkroadLauncher;component/Resources/Images/ProgressBarFull.png"/>
+                        </Canvas>
+                    </Grid>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+</ResourceDictionary>
