@@ -49,7 +49,7 @@ namespace SilkroadLauncher.Network
             byte[] buffer = p.GetBytes();
             m_FileStream.WriteAsync(buffer, 0, buffer.Length);
 
-            Globals.LauncherViewModel.UpdatingBytesDownloading += (uint)buffer.Length;
+            LauncherViewModel.Instance.UpdatingBytesDownloading += (uint)buffer.Length;
         }
         public static void Server_FileCompleted(Packet p, Session s)
         {
@@ -71,7 +71,7 @@ namespace SilkroadLauncher.Network
                 int pk2FileNameLength = file.Path.IndexOf("\\");
                 string pk2FileName = file.Path.Remove(pk2FileNameLength);
                 // Open the Pk2 and insert the file
-                if (Pk2Writer.Open(pk2FileName, Globals.BlowfishKey))
+                if (Pk2Writer.Open(pk2FileName, LauncherViewModel.Instance.BlowfishKey))
                 {
                     if (Pk2Writer.ImportFile(file.Path.Substring(pk2FileNameLength + 1) + "\\" + file.Name, "Temp\\" + file.ID))
                         System.Diagnostics.Debug.WriteLine($"File {file.Name} imported into the Pk2");
@@ -106,7 +106,7 @@ namespace SilkroadLauncher.Network
             }
             else
             {
-                Globals.LauncherViewModel.IsUpdating = false;
+                LauncherViewModel.Instance.IsUpdating = false;
                 System.Diagnostics.Debug.WriteLine($"Download finished!");
 
                 // Dispose writer
@@ -121,8 +121,8 @@ namespace SilkroadLauncher.Network
                 else
                 {
                     // Update done, set new version
-                    Globals.LauncherViewModel.Version = DownloadVersion;
-                    Globals.LauncherViewModel.CanStartGame = true;
+                    LauncherViewModel.Instance.Version = DownloadVersion;
+                    LauncherViewModel.Instance.CanStartGame = true;
 
                     // Stop connection
                     s.Stop();
@@ -163,7 +163,7 @@ namespace SilkroadLauncher.Network
             // Run the new launcher
             System.Diagnostics.Process.Start(launcherPath);
             // Close this one
-            Globals.LauncherViewModel.CommandClose.Execute(null);
+            LauncherViewModel.Instance.CommandClose.Execute(null);
         }
         #endregion
     }

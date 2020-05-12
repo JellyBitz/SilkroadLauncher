@@ -92,7 +92,6 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
-    <Compile Include="Globals.cs" />
     <Compile Include="Network\DownloadModule.cs" />
     <Compile Include="Network\GatewayModule.cs" />
     <Compile Include="Network\PacketHandler.cs" />

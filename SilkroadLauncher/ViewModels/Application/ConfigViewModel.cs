@@ -398,7 +398,7 @@ namespace SilkroadLauncher
                 // Import to Pk2
                 if (Pk2Writer.Initialize("GFXFileManager.dll"))
                 {
-                    if(Pk2Writer.Open("Media.pk2", Globals.BlowfishKey))
+                    if(Pk2Writer.Open("Media.pk2", LauncherViewModel.Instance.BlowfishKey))
                     {
                         // Create a temporary file
                         if (!Directory.Exists("Temp"))

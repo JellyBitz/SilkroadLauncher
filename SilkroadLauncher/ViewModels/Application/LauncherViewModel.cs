@@ -11,21 +11,23 @@ using System.Windows.Input;
 
 namespace SilkroadLauncher
 {
+    /// <summary>
+    /// Handles all Silkroad launcher processes
+    /// </summary>
     public class LauncherViewModel : BaseViewModel
     {
+        #region Singleton
+        /// <summary>
+        /// Unique instance of this class
+        /// </summary>
+        public static LauncherViewModel Instance { get; } = new LauncherViewModel();
+        #endregion
+        
         #region Private Properties
         /// <summary>
         /// The window this view model controls
         /// </summary>
         private Window m_Window;
-        /// <summary>
-        /// The title of the application
-        /// </summary>
-        private string m_Title = "Silkroad Online";
-        /// <summary>
-        /// Pk2 reader
-        /// </summary>
-        private Pk2Reader m_Pk2Reader;
         /// <summary>
         /// Division info
         /// </summary>
@@ -104,19 +106,11 @@ namespace SilkroadLauncher
         /// <summary>
         /// Title of the application
         /// </summary>
-        public string Title
-        {
-            get
-            {
-                return m_Title;
-            }
-            set
-            {
-                m_Title = value;
-                // notify event
-                OnPropertyChanged(nameof(Title));
-            }
-        }
+        public string Title { get; } = "Silkroad Online";
+        /// <summary>
+        /// Blowfish key yo decrypt the Pk2 files
+        /// </summary>
+        public string BlowfishKey { get; } = "169841";
         /// <summary>
         /// Client locale
         /// </summary>
@@ -353,27 +347,30 @@ namespace SilkroadLauncher
         /// <summary>
         /// Default constructor
         /// </summary>
-        public LauncherViewModel(Window Window)
+        private LauncherViewModel()
         {
-            // Save reference
-            m_Window = Window;
-            
             #region Commands Setup
             // Windows commands
-            CommandMinimize = new RelayCommand(() => m_Window.WindowState = WindowState.Minimized);
-            CommandRestore = new RelayCommand(() =>
-            {
-                // Check the WindowState and change it
-                m_Window.WindowState = m_Window.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+            CommandMinimize = new RelayCommand(() => {
+                if (m_Window != null)
+                    m_Window.WindowState = WindowState.Minimized;
+            });
+            CommandRestore = new RelayCommand(() => {
+                if (m_Window != null)
+                {
+                    // Check the WindowState and change it
+                    m_Window.WindowState = m_Window.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
+                }
             });
             CommandClose = new RelayCommand(() => {
                 m_GatewaySession?.Stop();
-                m_Window.Close();
+                m_Window?.Close();
             });
             CommandStartGame = new RelayCommand(()=> {
+                var clientFileName = "sro_client.exe";
                 // Starts the game but only if is ready and exists
-                if (CanStartGame && File.Exists(Globals.ClientFileName)) { 
-                    System.Diagnostics.Process.Start(Globals.ClientFileName, m_SRClientArguments);
+                if (CanStartGame && File.Exists(clientFileName)) { 
+                    System.Diagnostics.Process.Start(clientFileName, m_SRClientArguments);
                     // Closing launcher
                     CommandClose.Execute(null);
                 }
@@ -402,6 +399,14 @@ namespace SilkroadLauncher
         #endregion
 
         #region Public Methods
+        /// <summary>
+        /// Set the window this view model controls
+        /// </summary>
+        public void SetWindow(Window Window)
+        {
+            // Just save reference
+            m_Window = Window;
+        }
         /// <summary>
         /// Show message to the user
         /// </summary>
@@ -472,19 +477,20 @@ namespace SilkroadLauncher
         /// </summary>
         private void LoadPk2()
         {
+            Pk2Reader pk2Reader = null;
             try
             {
                 // Load pk2 reader
-                m_Pk2Reader = new Pk2Reader("Media.pk2",Globals.BlowfishKey);
+                pk2Reader = new Pk2Reader("Media.pk2",BlowfishKey);
 
                 // Try to load Type.txt
-                m_Config.LoadTypeFile(m_Pk2Reader);
+                m_Config.LoadTypeFile(pk2Reader);
 
                 // Extract essential stuffs for the process
-                if (m_Pk2Reader.TryGetDivisionInfo(out m_DivisionInfo) 
-                    && m_Pk2Reader.TryGetGateport(out m_Gateport) 
-                    && m_Pk2Reader.TryGetVersion(out m_Version)
-                    && m_Pk2Reader.TryGetLocale(out m_Locale))
+                if (pk2Reader.TryGetDivisionInfo(out m_DivisionInfo) 
+                    && pk2Reader.TryGetGateport(out m_Gateport) 
+                    && pk2Reader.TryGetVersion(out m_Version)
+                    && pk2Reader.TryGetLocale(out m_Locale))
                 {
                     IsLoaded = true;
                 }
@@ -495,7 +501,7 @@ namespace SilkroadLauncher
             }
             finally
             {
-                m_Pk2Reader?.Close();
+                pk2Reader?.Close();
             }
         }
         /// <summary>

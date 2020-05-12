@@ -37,22 +37,22 @@ namespace SilkroadLauncher.Network
             {
                 // Send authentication
                 Packet packet = new Packet(Opcode.CLIENT_PATCH_REQUEST, true);
-                packet.WriteByte(Globals.LauncherViewModel.Locale);
+                packet.WriteByte(LauncherViewModel.Instance.Locale);
                 packet.WriteAscii("SR_Client"); // Module Name
-                packet.WriteUInt(Globals.LauncherViewModel.Version);
+                packet.WriteUInt(LauncherViewModel.Instance.Version);
                 s.Send(packet);
             }
         }
         public static void Server_PatchResponse(Packet p, Session s)
         {
             System.Diagnostics.Debug.WriteLine("Server_PatchResponse");
-            Globals.LauncherViewModel.IsCheckingUpdates = false;
+            LauncherViewModel.Instance.IsCheckingUpdates = false;
 
             // Analyze the patch
             switch (p.ReadByte())
             {
                 case 1:
-                    Globals.LauncherViewModel.CanStartGame = true;
+                    LauncherViewModel.Instance.CanStartGame = true;
                     break;
                 case 2:
                     byte errorCode = p.ReadByte();
@@ -84,8 +84,8 @@ namespace SilkroadLauncher.Network
                                 }
 
                                 // Set progress bar values
-                                Globals.LauncherViewModel.UpdatingBytesMaxDownloading = bytesToDownload;
-                                Globals.LauncherViewModel.UpdatingBytesDownloading = 0;
+                                LauncherViewModel.Instance.UpdatingBytesMaxDownloading = bytesToDownload;
+                                LauncherViewModel.Instance.UpdatingBytesDownloading = 0;
 
                                 // Start downloader protocol
                                 if (DownloadModule.DownloadFiles.Count > 0)
@@ -94,7 +94,7 @@ namespace SilkroadLauncher.Network
                                     if (Pk2Writer.Initialize("GFXFileManager.dll"))
                                     {
                                         // Start downloading patch
-                                        Globals.LauncherViewModel.IsUpdating = true;
+                                        LauncherViewModel.Instance.IsUpdating = true;
                                         System.Diagnostics.Debug.WriteLine("Downloading updates...");
 
                                         Session downloaderSession = new Session();
@@ -111,7 +111,7 @@ namespace SilkroadLauncher.Network
                                     }
                                     else
                                     {
-                                        Globals.LauncherViewModel.ShowMessage("GFXFileManager not found!");
+                                        LauncherViewModel.Instance.ShowMessage("GFXFileManager not found!");
                                     }
                                 }
                             }
@@ -139,7 +139,7 @@ namespace SilkroadLauncher.Network
             // Request notice
             System.Diagnostics.Debug.WriteLine("CLIENT_WEB_NOTICE_REQUEST");
             Packet packet = new Packet(Opcode.CLIENT_WEB_NOTICE_REQUEST);
-            packet.WriteByte(Globals.LauncherViewModel.Locale);
+            packet.WriteByte(LauncherViewModel.Instance.Locale);
             s.Send(packet);
         }
         public static void Server_WebNoticeResponse(Packet p, Session s)
@@ -165,11 +165,11 @@ namespace SilkroadLauncher.Network
                 }));
             }
             // Set the GUI
-            Globals.LauncherViewModel.WebNotices = webNotices;
+            LauncherViewModel.Instance.WebNotices = webNotices;
 
             // Select the first notice found as default
-            if (Globals.LauncherViewModel.WebNotices.Count > 0)
-                Globals.LauncherViewModel.SelectedWebNotice = Globals.LauncherViewModel.WebNotices[0];
+            if (LauncherViewModel.Instance.WebNotices.Count > 0)
+                LauncherViewModel.Instance.SelectedWebNotice = LauncherViewModel.Instance.WebNotices[0];
         }
 
         public static void Server_ShardListResponse(Packet p, Session s)

@@ -10,8 +10,9 @@ namespace SilkroadLauncher
         public MainWindow()
         {
             InitializeComponent();
-            // Create viewmodel
-            DataContext = new LauncherViewModel(this);
+            // Set viewmodel
+            LauncherViewModel.Instance.SetWindow(this);
+            DataContext = LauncherViewModel.Instance;
         }
 
         #region Events about UI behavior only
