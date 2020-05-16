@@ -392,9 +392,6 @@ namespace SilkroadLauncher
             // Loading stuffs
             LoadConfig();
             LoadPk2();
-
-            // Set global
-            Globals.LauncherViewModel = this;
         }
         #endregion
 
