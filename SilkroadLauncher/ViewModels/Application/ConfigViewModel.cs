@@ -13,17 +13,9 @@ namespace SilkroadLauncher
     {
         #region Private Members
         /// <summary>
-        /// SilkCfg file location
-        /// </summary>
-        string m_SilkCfgPath = "SilkCfg.dat";
-        /// <summary>
         /// The basic config used to start the client
         /// </summary>
         private SilkCfg m_SilkCfg;
-        /// <summary>
-        /// SilkCfg file location
-        /// </summary>
-        string m_SROptionSetPath = "Setting\\SROptionSet.dat";
         /// <summary>
         /// The basic settings used by the client
         /// </summary>
@@ -168,11 +160,7 @@ namespace SilkroadLauncher
             // Set default SROptionSet.dat
             m_SROptionSet = new SROptionSet();
             // Set languages supported
-            SupportedLanguages = new List<string>()
-            {
-                "English",
-                "Vietnam"
-            };
+            SupportedLanguages = new List<string>(LauncherSettings.CLIENT_LANGUAGE_SUPPORTED);
         }
         #endregion
 
@@ -182,12 +170,12 @@ namespace SilkroadLauncher
         /// </summary>
         public bool LoadSilkCfg()
         {
-            if (File.Exists(m_SilkCfgPath))
+            if (File.Exists(LauncherSettings.PATH_SILKCFG))
             {
                 BinaryReader reader = null;
                 try
                 {
-                    reader = new BinaryReader(new FileStream(m_SilkCfgPath, FileMode.Open, FileAccess.Read));
+                    reader = new BinaryReader(new FileStream(LauncherSettings.PATH_SILKCFG, FileMode.Open, FileAccess.Read));
                     // Read config structure by version
                     m_SilkCfg.Version = reader.ReadUInt32();
                     if (m_SilkCfg.Version < 4)
@@ -242,11 +230,11 @@ namespace SilkroadLauncher
             try
             {
                 // Create location
-                string dir = Path.GetDirectoryName(m_SilkCfgPath);
+                string dir = Path.GetDirectoryName(LauncherSettings.PATH_SILKCFG);
                 if (dir != string.Empty && !Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
 
-                writer = new BinaryWriter(new FileStream(m_SilkCfgPath, FileMode.Create, FileAccess.Write));
+                writer = new BinaryWriter(new FileStream(LauncherSettings.PATH_SILKCFG, FileMode.Create, FileAccess.Write));
                 // Write config structure by version
                 writer.Write(m_SilkCfg.Version);
                 if (m_SilkCfg.Version < 4)
@@ -280,12 +268,12 @@ namespace SilkroadLauncher
         /// </summary>
         public bool LoadSROptionSet()
         {
-            if (File.Exists(m_SROptionSetPath))
+            if (File.Exists(LauncherSettings.PATH_SROPTIONSET))
             {
                 BinaryReader reader = null;
                 try
                 {
-                    reader = new BinaryReader(new FileStream(m_SROptionSetPath, FileMode.Open, FileAccess.Read));
+                    reader = new BinaryReader(new FileStream(LauncherSettings.PATH_SROPTIONSET, FileMode.Open, FileAccess.Read));
                     // Read config structure by version
                     m_SROptionSet.Version = reader.ReadUInt32();
                     m_SROptionSet.unkByte01 = reader.ReadByte();
@@ -335,11 +323,11 @@ namespace SilkroadLauncher
             try
             {
                 // Create location
-                string dir = Path.GetDirectoryName(m_SROptionSetPath);
+                string dir = Path.GetDirectoryName(LauncherSettings.PATH_SROPTIONSET);
                 if (dir != string.Empty && !Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
 
-                writer = new BinaryWriter(new FileStream(m_SROptionSetPath, FileMode.Create, FileAccess.Write));
+                writer = new BinaryWriter(new FileStream(LauncherSettings.PATH_SROPTIONSET, FileMode.Create, FileAccess.Write));
                 // Write config structure by version
                 writer.Write(m_SROptionSet.Version);
                 writer.Write(m_SROptionSet.unkByte01);
@@ -398,7 +386,7 @@ namespace SilkroadLauncher
                 // Import to Pk2
                 if (Pk2Writer.Initialize("GFXFileManager.dll"))
                 {
-                    if(Pk2Writer.Open("Media.pk2", LauncherViewModel.Instance.BlowfishKey))
+                    if(Pk2Writer.Open(LauncherSettings.PATH_PK2_MEDIA, LauncherSettings.CLIENT_BLOWFISH_KEY))
                     {
                         // Create a temporary file
                         if (!Directory.Exists("Temp"))

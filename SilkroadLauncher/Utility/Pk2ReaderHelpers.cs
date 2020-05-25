@@ -1,11 +1,8 @@
 ﻿using Pk2ReaderAPI;
 using SilkroadSecurityAPI;
-using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Linq;
 using System.Text;
-using System.Threading.Tasks;
 
 namespace SilkroadLauncher.Utility
 {

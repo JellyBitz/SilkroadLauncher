@@ -117,16 +117,16 @@ namespace SilkroadLauncher.Network
                             }
                             break;
                         case 4:
-                            System.Diagnostics.Debug.WriteLine("The server is down");
+                            LauncherViewModel.Instance.ShowMessage(LauncherSettings.MSG_PATCH_UNABLE);
                             break;
                         case 5:
-                            System.Diagnostics.Debug.WriteLine("Version is too old");
+                            LauncherViewModel.Instance.ShowMessage(LauncherSettings.MSG_PATCH_TOO_OLD);
                             break;
                         case 1:
-                            System.Diagnostics.Debug.WriteLine("Version is too new");
+                            LauncherViewModel.Instance.ShowMessage(LauncherSettings.MSG_PATCH_TOO_NEW);
                             break;
                         default:
-                            System.Diagnostics.Debug.WriteLine("Patch error: [" + errorCode + "]");
+                            LauncherViewModel.Instance.ShowMessage("Patch Error: [" + errorCode + "]");
                             break;
                     }
                     break;

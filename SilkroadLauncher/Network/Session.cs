@@ -25,10 +25,7 @@ namespace SilkroadLauncher.Network
         private readonly object lockHandlers = new object();
         #endregion
 
-        /// <summary>
-        /// Called when the connection is lost for some reason.
-        /// </summary>
-        public event EventHandler Disconnect;
+        #region Constructor
         public Session()
         {
             m_Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
@@ -37,6 +34,7 @@ namespace SilkroadLauncher.Network
 
             m_PacketHandlers = new Dictionary<ushort, List<PacketHandler>>();
         }
+        #endregion
 
         #region Public Methods
         /// <summary>
@@ -182,16 +180,6 @@ namespace SilkroadLauncher.Network
                 OnDisconnect();
             }
         }
-
-        private void OnDisconnect()
-        {
-            if (m_Socket != null)
-            {
-                m_Socket.Close();
-                m_Socket = null;
-            }
-            Disconnect?.Invoke(this, EventArgs.Empty);
-        }
         private void OnReceivedPackets(List<Packet> Packets)
         {
             // Just in case
@@ -215,6 +203,23 @@ namespace SilkroadLauncher.Network
                     }
                 }
             }
+        }
+        #endregion
+
+        #region Events
+        /// <summary>
+        /// Called when the connection is lost for some reason.
+        /// </summary>
+        public event EventHandler Disconnect;
+
+        private void OnDisconnect()
+        {
+            if (m_Socket != null)
+            {
+                m_Socket.Close();
+                m_Socket = null;
+            }
+            Disconnect?.Invoke(this, EventArgs.Empty);
         }
         #endregion
     }

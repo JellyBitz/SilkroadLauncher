@@ -88,8 +88,8 @@
         
         <!-- Image logo -->
         <Border Grid.Row="0" Grid.RowSpan="3"
-                Width="275" Height="171"
-                Margin="0,-259,0,0"
+                Width="350" Height="121"
+                Margin="0,-295,0,0"
                 Background="{StaticResource LogoImageBrush}"
                 MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow"
                 Panel.ZIndex="1">
@@ -144,7 +144,7 @@
                                    Margin="4,0,0,0"
                                    VerticalAlignment="Center"
                                    Foreground="{StaticResource HighlightMainBrush}"/>
-                        <TextBlock Text="2200"
+                        <TextBlock Text="{Binding Version}"
                                    VerticalAlignment="Center"
                                    Foreground="{StaticResource HighlightMainBrush}"/>
                     </StackPanel>

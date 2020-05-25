@@ -4,13 +4,6 @@ namespace SilkroadLauncher
 {
     public class WebNoticeViewModel: BaseViewModel
     {
-        #region Private Members
-        // <summary>
-        // The silkroad notice message structure
-        // </summary>
-        // private WebNotice m_WebNotice;
-        #endregion
-
         #region Public Properties
         /// <summary>
         /// Notice title
@@ -37,7 +30,7 @@ namespace SilkroadLauncher
             else
                 Article = WebNotice.Article;
 
-            Date = new DateTime(WebNotice.Year, WebNotice.Month, WebNotice.Day).ToString("dd MMMM yyyy");
+            Date = new DateTime(WebNotice.Year, WebNotice.Month, WebNotice.Day).ToString(LauncherSettings.APP_WEBNOTICE_TIME_FORMAT);
         }
         #endregion
     }

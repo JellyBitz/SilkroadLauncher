@@ -71,7 +71,7 @@ namespace SilkroadLauncher.Network
                 int pk2FileNameLength = file.Path.IndexOf("\\");
                 string pk2FileName = file.Path.Remove(pk2FileNameLength);
                 // Open the Pk2 and insert the file
-                if (Pk2Writer.Open(pk2FileName, LauncherViewModel.Instance.BlowfishKey))
+                if (Pk2Writer.Open(pk2FileName, LauncherSettings.CLIENT_BLOWFISH_KEY))
                 {
                     if (Pk2Writer.ImportFile(file.Path.Substring(pk2FileNameLength + 1) + "\\" + file.Name, "Temp\\" + file.ID))
                         System.Diagnostics.Debug.WriteLine($"File {file.Name} imported into the Pk2");

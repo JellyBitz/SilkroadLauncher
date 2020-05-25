@@ -22,8 +22,12 @@ namespace SilkroadLauncher
         /// </summary>
         public static LauncherViewModel Instance { get; } = new LauncherViewModel();
         #endregion
-        
+
         #region Private Properties
+        /// <summary>
+        /// Application title
+        /// </summary>
+        private string m_Title = LauncherSettings.APP_TITLE;
         /// <summary>
         /// The window this view model controls
         /// </summary>
@@ -104,13 +108,16 @@ namespace SilkroadLauncher
 
         #region Public Properties
         /// <summary>
-        /// Title of the application
+        /// Application title shown on windows title bar
         /// </summary>
-        public string Title { get; } = "Silkroad Online";
-        /// <summary>
-        /// Blowfish key yo decrypt the Pk2 files
-        /// </summary>
-        public string BlowfishKey { get; } = "169841";
+        public string Title {
+            get { return m_Title; }
+            set
+            {
+                m_Title = value;
+                OnPropertyChanged(nameof(Title));
+            }
+        }
         /// <summary>
         /// Client locale
         /// </summary>
@@ -367,10 +374,9 @@ namespace SilkroadLauncher
                 m_Window?.Close();
             });
             CommandStartGame = new RelayCommand(()=> {
-                var clientFileName = "sro_client.exe";
                 // Starts the game but only if is ready and exists
-                if (CanStartGame && File.Exists(clientFileName)) { 
-                    System.Diagnostics.Process.Start(clientFileName, m_SRClientArguments);
+                if (CanStartGame && File.Exists(LauncherSettings.CLIENT_EXECUTABLE)) { 
+                    System.Diagnostics.Process.Start(LauncherSettings.CLIENT_EXECUTABLE, m_SRClientArguments);
                     // Closing launcher
                     CommandClose.Execute(null);
                 }
@@ -453,7 +459,7 @@ namespace SilkroadLauncher
                 }
                 if (connectionSolved)
                 {
-                    m_SRClientArguments = "0 \\" + m_Locale + " " + divIndex + " " + hostIndex;
+                    m_SRClientArguments = "0 /" + m_Locale + " " + divIndex + " " + hostIndex;
                     break;
                 }
                 divIndex++;
@@ -463,7 +469,7 @@ namespace SilkroadLauncher
             {
                 IsCheckingUpdates = false;
                 IsUnderInspection = true;
-                ShowMessage("The server is undergoing inspection or updates.\nConnect to https://www.alfa.srolatino-servers.com/ for more information.");
+                ShowMessage(LauncherSettings.MSG_INSPECTION);
             }
         }
         #endregion
@@ -478,7 +484,7 @@ namespace SilkroadLauncher
             try
             {
                 // Load pk2 reader
-                pk2Reader = new Pk2Reader("Media.pk2",BlowfishKey);
+                pk2Reader = new Pk2Reader(LauncherSettings.PATH_PK2_MEDIA,LauncherSettings.CLIENT_BLOWFISH_KEY);
 
                 // Try to load Type.txt
                 m_Config.LoadTypeFile(pk2Reader);
