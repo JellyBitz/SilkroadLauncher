@@ -369,10 +369,7 @@ namespace SilkroadLauncher
                     m_Window.WindowState = m_Window.WindowState == WindowState.Maximized ? WindowState.Normal : WindowState.Maximized;
                 }
             });
-            CommandClose = new RelayCommand(() => {
-                m_GatewaySession?.Stop();
-                m_Window?.Close();
-            });
+            CommandClose = new RelayCommand(Exit);
             CommandStartGame = new RelayCommand(()=> {
                 // Starts the game but only if is ready and exists
                 if (CanStartGame && File.Exists(LauncherSettings.CLIENT_EXECUTABLE)) { 
@@ -415,7 +412,7 @@ namespace SilkroadLauncher
         /// </summary>
         public void ShowMessage(string Text)
         {
-            m_Window.Dispatcher.Invoke(() => {
+            m_Window?.Dispatcher.Invoke(() => {
                 MessageBox.Show(m_Window, Text, Title, MessageBoxButton.OK);
             });
         }
@@ -471,6 +468,17 @@ namespace SilkroadLauncher
                 IsUnderInspection = true;
                 ShowMessage(LauncherSettings.MSG_INSPECTION);
             }
+        }
+
+        /// <summary>
+        /// Exit from Launcher
+        /// </summary>
+        public void Exit()
+        {
+            App.Current.Dispatcher.Invoke(() => {
+                m_GatewaySession?.Stop();
+                m_Window?.Close();
+            });
         }
         #endregion
 

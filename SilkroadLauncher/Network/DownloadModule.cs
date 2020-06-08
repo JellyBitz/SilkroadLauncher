@@ -1,8 +1,12 @@
 ﻿using Pk2WriterAPI;
 using SilkroadCommon.Download;
 using SilkroadSecurityAPI;
+using System;
 using System.Collections.Generic;
 using System.IO;
+using System.IO.Compression;
+using System.Reflection;
+using System.Text;
 
 namespace SilkroadLauncher.Network
 {
@@ -83,19 +87,45 @@ namespace SilkroadLauncher.Network
             }
             else
             {
-                // Create directory if doesn't exists
-                string dir = Path.GetDirectoryName(file.Path);
-                if (dir != string.Empty && !Directory.Exists(dir))
-                    Directory.CreateDirectory(dir);
-                
-                // Check if is Launcher to process at the end
-                if (!(dir == string.Empty && file.Name == System.Reflection.Assembly.GetEntryAssembly().CodeBase))
+                // Create an empty file to decompress (zlib)
+                using (FileStream outFileStream = File.Create("Temp\\" + file.Name))
                 {
-                    // Just move it from Temp to the folder required
-                    File.Move("Temp\\" + file.ID, file.Path + "\\" + file.Name);
+                    using (FileStream inFileStream = new FileStream("Temp\\" + file.ID, FileMode.Open, FileAccess.Read))
+                    {
+                        // Read past unknown bytes (4) and zlib header bytes (2)
+                        inFileStream.Seek(6, SeekOrigin.Begin);
+
+                        using (DeflateStream zlib = new DeflateStream(inFileStream, CompressionMode.Decompress))
+                        {
+                            zlib.CopyTo(outFileStream);
+                        }
+                    }
+                    // Delete decompressed file
+                    File.Delete("Temp\\" + file.ID);
+                }
+
+                // Check file path
+                if (file.Path != string.Empty) {
+                    // Create directory if doesn't exists
+                    if (!Directory.Exists(file.Path))
+                        Directory.CreateDirectory(file.Path);
+                    // Fix path for easy file moving
+                    file.Path += "\\";
+                }
+
+                // Check if it's the Launcher to process it at the end
+                var launcherFilename = Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
+                if (file.Path == string.Empty && file.Name.Equals(launcherFilename, StringComparison.InvariantCultureIgnoreCase))
+                {
+                    ForceMovingFile("Temp\\" + file.Name, "Temp\\_" + file.Name);
+                }
+                else
+                {
+                    // Move or replace from Temp to the folder required
+                    ForceMovingFile("Temp\\" + file.Name, file.Path + file.Name);
                 }
             }
-            
+
             // Remove the file and delete it from Temp
             DownloadFiles.RemoveAt(0);
             
@@ -106,21 +136,26 @@ namespace SilkroadLauncher.Network
             }
             else
             {
-                LauncherViewModel.Instance.IsUpdating = false;
                 System.Diagnostics.Debug.WriteLine($"Download finished!");
 
-                // Dispose writer
+                // Update SV.T on media.pk2
+                UpdateSilkroadVersion();
+
+                // Update done!
+                LauncherViewModel.Instance.IsUpdating = false;
+                
+                // Dispose pk2 writer
                 Pk2Writer.Deinitialize();
 
-                // Process Launcher if exists
-                if (File.Exists("Temp\\"+ System.Reflection.Assembly.GetEntryAssembly().CodeBase))
+                // Replace the Launcher if exists
+                if (File.Exists("Temp\\_"+ Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)))
                 {
                     // Replace launcher required
                     StartReplacer();
                 }
                 else
                 {
-                    // Update done, set new version
+                    // Update launcher version
                     LauncherViewModel.Instance.Version = DownloadVersion;
                     LauncherViewModel.Instance.CanStartGame = true;
 
@@ -150,20 +185,64 @@ namespace SilkroadLauncher.Network
             s.Send(response);
         }
         /// <summary>
+        /// Updates the SV.T file with the newer version
+        /// </summary>
+        private static void UpdateSilkroadVersion()
+        {
+            // Set the new version into pk2 automagically...
+            if (Pk2Writer.Open(LauncherSettings.PATH_PK2_MEDIA, LauncherSettings.CLIENT_BLOWFISH_KEY))
+            {
+                var buffer = Encoding.ASCII.GetBytes(DownloadVersion.ToString());
+                // Add blowfish minimum padding
+                Array.Resize(ref buffer, 8);
+                // Init blowfish for encoding
+                Blowfish bf = new Blowfish();
+                bf.Initialize(Encoding.ASCII.GetBytes("SILKROADVERSION"), 0, 8);
+                // Create the SV.T file
+                using (FileStream fs = File.Create("Temp\\SV.T"))
+                using (BinaryWriter bw = new BinaryWriter(fs))
+                {
+                    bw.Write(buffer.Length);
+                    // Encode it
+                    buffer = bf.Encode(buffer, 0, buffer.Length);
+                    // Add empty data
+                    Array.Resize(ref buffer, 1024);
+                    // Save it all
+                    bw.Write(buffer);
+                }
+                // Update Pk2
+                if (Pk2Writer.ImportFile("SV.T", "Temp\\SV.T"))
+                    System.Diagnostics.Debug.WriteLine($"New version created and imported into the Pk2");
+                // Close the Pk2
+                Pk2Writer.Close();
+                // Delete it
+                File.Delete("Temp\\SV.T");
+            }
+        }
+        /// <summary>
         /// Replaces the current executable with the new one downloaded
         /// </summary>
         private static void StartReplacer()
         {
-            var launcherFilename = System.Reflection.Assembly.GetEntryAssembly().CodeBase;
+            var launcherFilename = Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             var launcherPath = Path.GetFullPath(launcherFilename);
             // Move my current executable to temp
-            File.Move(launcherPath, "Temp\\"+ launcherFilename+".bkp");
+            ForceMovingFile(launcherPath,"Temp\\" + launcherFilename + ".bkp");
             // Move the new launcher to the folder
-            File.Move(launcherPath, "Temp\\" + launcherFilename);
+            File.Move("Temp\\_" + launcherFilename, launcherPath);
             // Run the new launcher
             System.Diagnostics.Process.Start(launcherPath);
             // Close this one
-            LauncherViewModel.Instance.CommandClose.Execute(null);
+            LauncherViewModel.Instance.Exit();
+        }
+        /// <summary>
+        /// Move a file. The destination file will be replaced if exists.
+        /// </summary>
+        private static void ForceMovingFile(string sourceFileName, string destFileName)
+        {
+            if (File.Exists(destFileName))
+                File.Delete(destFileName);
+            File.Move(sourceFileName, destFileName);
         }
         #endregion
     }

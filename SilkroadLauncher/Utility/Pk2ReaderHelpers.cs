@@ -29,7 +29,7 @@ namespace SilkroadLauncher.Utility
 
                 // Initialize the blowfish to decrypt the file
                 Blowfish bf = new Blowfish();
-                bf.Initialize(Encoding.ASCII.GetBytes("SILKROADVERSION"), 0, versionLength);
+                bf.Initialize(Encoding.ASCII.GetBytes("SILKROADVERSION"), 0, 8);
 
                 // Decrypting
                 versionBuffer = bf.Decode(versionBuffer);

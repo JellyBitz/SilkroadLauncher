@@ -1,4 +1,9 @@
-﻿using System.Windows;
+﻿using SilkroadSecurityAPI;
+using System;
+using System.IO;
+using System.IO.Compression;
+using System.Text;
+using System.Windows;
 using System.Windows.Input;
 namespace SilkroadLauncher
 {

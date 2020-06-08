@@ -5,7 +5,9 @@ Customizable launcher writted on C# (WPF) for Silkroad Online (vSRO 1.188)
 - Create whatever design you can imagine
 - By using ViewModels, you won't need to worry about coding
 - News can be customized by using CSS
-- Auto updater included with progress bar possibility
+- Auto updater included (support zlib)
+- Self replacer if is required
+- Downloading and update progress
 - Settings (even window mode has been added)
 - Client language switch support
 
