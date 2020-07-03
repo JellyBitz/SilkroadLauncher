@@ -1,0 +1,142 @@
+﻿<UserControl x:Class="SilkroadLauncher.Controls.VideoPlayerControl"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:SilkroadLauncher.Controls"
+             xmlns:main="clr-namespace:SilkroadLauncher"
+             mc:Ignorable="d" 
+             d:DesignHeight="300" d:DesignWidth="400">
+    <Grid Background="Black">
+        <!-- Layout -->
+        <Grid.RowDefinitions>
+            <RowDefinition Height="90*"/>
+            <RowDefinition Height="10*"/>
+        </Grid.RowDefinitions>
+        
+        <!-- Player View -->
+        <MediaElement x:Name="MediaPlayer"
+                      Grid.RowSpan="2"
+                      Stretch="Fill"/>
+
+        <!-- Overlay on start -->
+        <Border Width="64" Height="64" CornerRadius="64"
+                Grid.RowSpan="2"
+                Opacity="0.75"
+                Background="Black">
+            <Border.Style>
+                <Style TargetType="{x:Type Border}">
+                    <Style.Triggers>
+                        <DataTrigger Binding="{Binding IsAtStart}" Value="False">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsLoaded}" Value="False">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Border.Style>
+            <Button Style="{StaticResource ButtonCleanStyle}"
+                    Margin="8,0,0,0"
+                    Command="{Binding CommandSmartPlay}">
+                <TextBlock  FontFamily="{StaticResource FontAwesomeSolid}"
+                       Text="{StaticResource fa-play}"
+                       FontSize="32"/>
+            </Button>
+        </Border>
+        <!-- Overlay on finish -->
+        <Border Width="64" Height="64" CornerRadius="64"
+                Grid.RowSpan="2"
+                Opacity="0.75"
+                Background="Black"
+                Visibility="{Binding IsAtFinish,Converter={x:Static main:BooleanToVisibilityConverter.Instance}}">
+            <Button Style="{StaticResource ButtonCleanStyle}"
+                    Command="{Binding CommandSmartPlay}">
+                <TextBlock FontFamily="{StaticResource FontAwesomeRegular}"
+                           Text="{StaticResource fa-replay}"
+                           FontSize="32"/>
+            </Button>
+        </Border>
+
+        <!-- Player Controls -->
+        <Grid Grid.Row="1"
+              Name="GridPlayerControls"
+              Background="#80000000">
+            <!-- Show toolbar if has been started -->
+            <Grid.Style>
+                <Style TargetType="{x:Type Grid}">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="False">
+                            <Setter Property="Opacity" Value="0"/>
+                        </Trigger>
+                        <DataTrigger Binding="{Binding IsAtStart}" Value="True">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsAtFinish}" Value="True">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                        <DataTrigger Binding="{Binding IsLoaded}" Value="False">
+                            <Setter Property="Visibility" Value="Hidden"/>
+                        </DataTrigger>
+                    </Style.Triggers>
+                </Style>
+            </Grid.Style>
+            
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="70*"/>
+                <ColumnDefinition Width="20*"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Play / Pause / Replay -->
+            <Button Style="{StaticResource ButtonCleanStyle}"
+                    Command="{Binding CommandSmartPlay}">
+                <Grid>
+                    <TextBlock FontFamily="{StaticResource FontAwesomeRegular}"
+                           Text="{StaticResource fa-play}"
+                           Visibility="{Binding IsPlaying,Converter={x:Static main:BooleanToVisibilityGoneConverter.Instance}}"
+                           Margin="5"/>
+                    <TextBlock FontFamily="{StaticResource FontAwesomeRegular}"
+                           Text="{StaticResource fa-pause}"
+                           Visibility="{Binding IsPlaying,Converter={x:Static main:BooleanToVisibilityConverter.Instance}}"
+                           Margin="5"/>
+                </Grid>
+            </Button>
+            
+            <!-- Timeline -->
+            <Slider Grid.Column="1"
+                    Name="SliderTimeline"
+                    Margin="5"
+                    IsSnapToTickEnabled="False"
+                    IsMoveToPointEnabled="True"/>
+
+            <!-- Volume slider -->
+            <Grid Grid.Column="2" Margin="5">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <TextBlock VerticalAlignment="Center"
+                           FontFamily="{StaticResource FontAwesomeRegular}"
+                           Text="{StaticResource fa-volume}"
+                           Foreground="White"
+                           Visibility="{Binding IsMuted,Converter={x:Static main:BooleanToVisibilityGoneConverter.Instance}}"
+                           FontSize="16"/>
+                <TextBlock VerticalAlignment="Center"
+                           FontFamily="{StaticResource FontAwesomeRegular}"
+                           Text="{StaticResource fa-volume-mute}"
+                           Foreground="White"
+                           Visibility="{Binding IsMuted,Converter={x:Static main:BooleanToVisibilityConverter.Instance}}"
+                           FontSize="16"/>
+                <Slider Grid.Column="1"
+                        Name="SliderVolume"
+                        VerticalAlignment="Center"
+                        Value="{Binding Volume}"
+                        Minimum="0"
+                        Maximum="1"
+                        IsSnapToTickEnabled="False"
+                        IsMoveToPointEnabled="True"/>
+            </Grid>
+        </Grid>
+    </Grid>
+</UserControl>

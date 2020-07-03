@@ -2,6 +2,12 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:SilkroadLauncher">
 
+    <!-- Image from sections -->
+    <ImageBrush x:Key="SectionImage1Brush" ImageSource="/SilkroadLauncher;component/Resources/Images/image-1.jpg" Stretch="Fill"/>
+    <ImageBrush x:Key="SectionImage2Brush" ImageSource="/SilkroadLauncher;component/Resources/Images/image-2.jpg" Stretch="Fill"/>
+    <ImageBrush x:Key="SectionImage3Brush" ImageSource="/SilkroadLauncher;component/Resources/Images/image-3.jpg" Stretch="Fill"/>
+    <ImageBrush x:Key="SectionImage4Brush" ImageSource="/SilkroadLauncher;component/Resources/Images/image-4.jpg" Stretch="Fill"/>
+    
     <ImageBrush x:Key="BackgroundImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/Background.png" Stretch="Fill"/>
     <ImageBrush x:Key="LogoImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/Logo.png" Stretch="Fill"/>
 

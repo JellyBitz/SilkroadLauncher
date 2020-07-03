@@ -1,7 +1,15 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:SilkroadLauncher">
-    
+
+    <!-- Sections Title -->
+    <Style x:Key="SectionStyle" TargetType="{x:Type TextBlock}">
+        <Setter Property="Foreground" Value="#C0F1F1F1"/>
+        <Setter Property="Margin" Value="10,0"/>
+        <Setter Property="VerticalAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+    </Style>
+
     <!-- TextBlock for application  -->
     <Style x:Key="TextBlockBaseStyle" TargetType="{x:Type TextBlock}">
         <Setter Property="Foreground" Value="{StaticResource ForegroundMainBrush}"/>

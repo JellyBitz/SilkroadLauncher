@@ -1,6 +1,5 @@
 ﻿using Pk2ReaderAPI;
 using SilkroadLauncher.Network;
-using SilkroadLauncher.SilkroadCommon;
 using SilkroadLauncher.Utility;
 using System;
 using System.Collections.Generic;

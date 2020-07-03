@@ -17,6 +17,11 @@
     <system:String x:Key="fa-facebook">&#xf39e;</system:String>
     <system:String x:Key="fa-discord">&#xf392;</system:String>
     <system:String x:Key="fa-youtube">&#xf431;</system:String>
+    <system:String x:Key="fa-play">&#xf04b;</system:String>
+    <system:String x:Key="fa-replay">&#xF01E;</system:String>
+    <system:String x:Key="fa-pause">&#xf04c;</system:String>
+    <system:String x:Key="fa-volume">&#xf6a8;</system:String>
+    <system:String x:Key="fa-volume-mute">&#xf6a9;</system:String>
 
     <!-- Font Amarante -->
     <FontFamily x:Key="AmaranteRegular">/SilkroadLauncher;component/Resources/Fonts/#Amarante Regular</FontFamily>

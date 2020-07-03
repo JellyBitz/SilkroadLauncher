@@ -59,5 +59,15 @@ namespace SilkroadLauncher.Properties {
                 resourceCulture = value;
             }
         }
+        
+        /// <summary>
+        ///   Busca un recurso adaptado de tipo System.Byte[].
+        /// </summary>
+        internal static byte[] video {
+            get {
+                object obj = ResourceManager.GetObject("video", resourceCulture);
+                return ((byte[])(obj));
+            }
+        }
     }
 }

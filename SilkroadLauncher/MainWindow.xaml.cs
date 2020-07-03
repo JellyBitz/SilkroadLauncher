@@ -1,8 +1,5 @@
-﻿using SilkroadSecurityAPI;
-using System;
+﻿using System;
 using System.IO;
-using System.IO.Compression;
-using System.Text;
 using System.Windows;
 using System.Windows.Input;
 namespace SilkroadLauncher
@@ -27,8 +24,8 @@ namespace SilkroadLauncher
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             // Start loading updates
-            if (DataContext is LauncherViewModel launcher)
-                launcher.CheckUpdatesAsync();
+            //if (DataContext is LauncherViewModel launcher)
+            //    launcher.CheckUpdatesAsync();
 
             // Force to the top
             Topmost = true;

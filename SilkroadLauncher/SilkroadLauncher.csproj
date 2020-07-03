@@ -92,6 +92,9 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\VideoPlayerControl.xaml.cs">
+      <DependentUpon>VideoPlayerControl.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Network\DownloadModule.cs" />
     <Compile Include="Network\GatewayModule.cs" />
     <Compile Include="Network\PacketHandler.cs" />
@@ -124,6 +127,11 @@
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
     <Compile Include="ViewModels\Base\RelayParameterizedCommand.cs" />
     <Compile Include="ViewModels\Application\LauncherViewModel.cs" />
+    <Compile Include="ViewModels\Media\VideoPlayerViewModel.cs" />
+    <Page Include="Controls\VideoPlayerControl.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -210,17 +218,25 @@
     <Resource Include="Resources\Images\Silkroad.ico" />
   </ItemGroup>
   <ItemGroup>
+    <None Include="Resources\Video\video.mp4" />
     <Resource Include="Resources\Images\ProgressBarEmpty.png" />
     <Resource Include="Resources\Images\ProgressBarFull.png" />
     <Resource Include="Resources\Images\Background.png" />
     <Resource Include="Resources\Images\ButtonBase.png" />
     <Resource Include="Resources\Images\ButtonBaseHover.png" />
-    <Content Include="Pk2Writer.dll">
+    <Resource Include="Pk2Writer.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
+    </Resource>
   </ItemGroup>
   <ItemGroup>
-    <Folder Include="Behaviors\" />
+    <Resource Include="Resources\Images\image-1.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\image-2.jpg" />
+    <Resource Include="Resources\Images\image-4.jpg" />
+  </ItemGroup>
+  <ItemGroup>
+    <Resource Include="Resources\Images\image-3.jpg" />
   </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>

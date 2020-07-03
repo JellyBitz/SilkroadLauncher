@@ -2,6 +2,37 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:SilkroadLauncher">
 
+    <!-- Main background used on launcher -->
+    <LinearGradientBrush x:Key="BackgroundBrush"  StartPoint="0,0" EndPoint="0,1" MappingMode="RelativeToBoundingBox">
+        <GradientStop Color="#222" Offset="0" />
+        <GradientStop Color="#000" Offset="0.02" />
+        <GradientStop Color="#100000" Offset="0.5" />
+        <GradientStop Color="#000" Offset="0.98" />
+        <GradientStop Color="#000" Offset="1" />
+    </LinearGradientBrush>
+
+    <!-- Border used on every section -->
+    <LinearGradientBrush x:Key="BorderSectionBrush"  StartPoint="0,0" EndPoint="0.5,1" MappingMode="RelativeToBoundingBox">
+        <GradientStop Color="#20FF0000" Offset="0" />
+        <GradientStop Color="#80ffa500" Offset="0.25"/>
+        <GradientStop Color="#20FF0000" Offset="0.5" />
+        <GradientStop Color="#80ffa500" Offset="0.75"/>
+        <GradientStop Color="#20FF0000" Offset="1" />
+    </LinearGradientBrush>
+
+    <!-- Section PATCH NOTES color -->
+    <LinearGradientBrush x:Key="SectionPatchBrush"  StartPoint="0,0" EndPoint="0,1" MappingMode="RelativeToBoundingBox">
+        <GradientStop Color="#80ffa500" Offset="0" />
+        <GradientStop Color="#C0FFFFFF" Offset="0.50"/>
+        <GradientStop Color="#C0FFFFFF" Offset="0.55"/>
+        <GradientStop Color="#80ffa500" Offset="1" />
+    </LinearGradientBrush>
+
+    <!-- Clean button color on hover -->
+    <Color x:Key="ButtonCleanHover">#80ffa500</Color>
+    <SolidColorBrush x:Key="ButtonCleanHoverBrush" Color="{StaticResource ButtonCleanHover}"/>
+
+
     <Color x:Key="BackgroundMain">#303841</Color>
     <SolidColorBrush x:Key="BackgroundMainBrush" Color="{StaticResource BackgroundMain}"/>
 
