@@ -39,7 +39,7 @@ namespace SilkroadLauncher.Network
                 Packet packet = new Packet(Opcode.CLIENT_PATCH_REQUEST, true);
                 packet.WriteByte(LauncherViewModel.Instance.Locale);
                 packet.WriteAscii("SR_Client"); // Module Name
-                packet.WriteUInt(LauncherViewModel.Instance.Version);
+                packet.WriteUInt(LauncherViewModel.Instance.Version-1); // Forzing update for testing
                 s.Send(packet);
             }
         }

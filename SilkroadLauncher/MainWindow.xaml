@@ -23,11 +23,12 @@
         
         <!-- Background -->
         <Border Grid.RowSpan="2"
-                Background="{StaticResource BackgroundBrush}"
-                CornerRadius="5"/>
+                Background="{StaticResource LauncherBackgroundBrush}"
+                CornerRadius="8"/>
 
         <!-- Header -->
-        <Grid MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow">
+        <Grid MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow" 
+              Background="Transparent">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="192"/>
                 <ColumnDefinition/>
@@ -39,19 +40,57 @@
 
             <!-- Loading / Start -->
             <Grid Grid.Column="1">
-                
+                <Button Style="{StaticResource ButtonBaseStyle}"
+                        Margin="50,5"
+                        Background="{StaticResource ButtonStartBrush}"
+                        BorderThickness="2"
+                        Command="{Binding CommandStartGame}"
+                        Visibility="{Binding CanStartGame,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}">
+                    <TextBlock Text="Start Game"
+                                   VerticalAlignment="Center"
+                                   FontWeight="SemiBold"
+                                   FontSize="{StaticResource FontSizeXXLarge}"/>
+                </Button>
             </Grid>
 
-            <!-- Toolbar -->
+            <!-- Header / Right side -->
             <Grid Grid.Column="2">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="28"/>
                     <RowDefinition/>
-                    <RowDefinition Height="28"/>
+                    <RowDefinition/>
                 </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
 
-                <!-- Basic buttons -->
-                <Grid>
+                <!-- Loading as percentage / Ready -->
+                <Grid Grid.RowSpan="3"
+                      Margin="5"
+                      Visibility="{Binding IsUpdating,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}">
+                    <Border Background="{StaticResource BackgroundMainBrush}"
+                            CornerRadius="25"
+                            BorderThickness="4"
+                            BorderBrush="{StaticResource BorderBaseBrush}">
+                        <StackPanel Orientation="Horizontal"
+                                    Margin="5"
+                                    VerticalAlignment="Center"
+                                    HorizontalAlignment="Center">
+                            <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                                       Text="{Binding UpdatingPercentage}"
+                                       VerticalAlignment="Center"
+                                       HorizontalAlignment="Center"
+                                       FontSize="{StaticResource FontSizeXLarge}"/>
+                            <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                                       Text="%"
+                                       FontSize="{StaticResource FontSizeXLarge}"/>
+
+                        </StackPanel>
+                    </Border>
+                </Grid>
+                
+                <!-- Toolbar buttons -->
+                <Grid Grid.Column="1" Margin="0,0,0,5">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="30"/>
@@ -60,25 +99,45 @@
                     </Grid.ColumnDefinitions>
 
                     <Button Grid.Column="1" Margin="0,0,2,0"
-                        Style="{StaticResource ButtonCleanStyle}"
-                        Command="{Binding CommandToggleConfig}">
+                            Style="{StaticResource ButtonCleanStyle}"
+                            Command="{Binding CommandToggleConfig}">
                         <TextBlock FontFamily="{StaticResource FontAwesomeLight}"
-                               Text="{StaticResource fa-cog}"/>
+                                   Text="{StaticResource fa-cog}"/>
                     </Button>
                     <Button Grid.Column="2"
-                        Style="{StaticResource ButtonCleanStyle}"
-                        Command="{Binding CommandMinimize}">
+                            Style="{StaticResource ButtonCleanStyle}"
+                            Command="{Binding CommandMinimize}">
                         <TextBlock FontFamily="{StaticResource FontAwesomeRegular}"
-                               Text="{StaticResource fa-minimize}"
-                               FontSize="14"/>
+                                   Text="{StaticResource fa-minimize}"
+                                   FontSize="14"/>
                     </Button>
                     <Button Grid.Column="3"
-                        Style="{StaticResource ButtonCleanStyle}"
-                        Command="{Binding CommandClose}">
+                            Style="{StaticResource ButtonCleanStyle}"
+                            Command="{Binding CommandClose}">
                         <TextBlock FontFamily="{StaticResource FontAwesomeRegular}"
-                               Text="{StaticResource fa-close}"/>
+                                   Text="{StaticResource fa-close}"/>
                     </Button>
                 </Grid>
+                
+                <!-- Website Link -->
+                <Button Grid.Row="1" Grid.Column="1"
+                        Style="{StaticResource ButtonCleanStyle}"
+                        VerticalAlignment="Bottom"
+                        Command="{Binding CommandOpenLink}"
+                        CommandParameter="https://www.google.com">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                                   FontFamily="{StaticResource FontAwesomeLight}"
+                                   Text="{StaticResource fa-globe}"
+                                   FontSize="{StaticResource FontSizeSmall}"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                                   Text="Go to Website"
+                                   Margin="4,0"
+                                   FontSize="{StaticResource FontSizeSmaller}"/>
+                    </StackPanel>
+                </Button>
+                
             </Grid>
         </Grid>
         
@@ -200,8 +259,7 @@
                                 HorizontalAlignment="Left"
                                 Command="{Binding CommandOpenLink}"
                                 CommandParameter="https://www.facebook.com/ImJellyBitz">
-                            <TextBlock 
-                                       Text="Last Man Standing, Win or Die"
+                            <TextBlock Text="Last Man Standing, Win or Die"
                                        Style="{StaticResource SectionStyle}"/>
                         </Button>
                     </Grid>
@@ -225,6 +283,172 @@
                     </Grid>
                 </Border>
             </Grid>
+        </Grid>
+
+        <!-- Setting (as Dialog) -->
+        <Grid Grid.Row="1"
+              Background="#E0000000"
+              Visibility="{Binding IsViewingConfig,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}">
+            <!-- Dialog toggle -->
+            <Button Command="{Binding CommandToggleConfig}">
+                <Button.Style>
+                    <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonCleanStyle}">
+                        <Style.Triggers>
+                            <Trigger Property="IsMouseOver" Value="True">
+                                <Setter Property="Cursor" Value="Arrow" />
+                            </Trigger>
+                        </Style.Triggers>
+                    </Style>
+                </Button.Style>
+            </Button>
+            <!-- Content -->
+            <Border Width="265" Height="260"
+                    BorderThickness="2"
+                    CornerRadius="10"
+                    Background="{StaticResource BackgroundMainBrush}"
+                    BorderBrush="{StaticResource BorderSectionBrush}"
+                    Padding="20,25,20,15">
+                <Grid>
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="Auto"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="Auto"/>
+                    </Grid.RowDefinitions>
+                    <!-- Lang -->
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                                       Text="Set Language "
+                                       FontWeight="DemiBold"
+                                       FontSize="{StaticResource FontSizeRegular}"
+                                       VerticalAlignment="Center"/>
+                        <ComboBox Grid.Column="1" Style="{StaticResource ComboBoxBaseStyle}"
+                                      FontSize="{StaticResource FontSizeRegular}"
+                                      ItemsSource="{Binding Config.SupportedLanguages}"
+                                      SelectedItem="{Binding Config.Language}"/>
+                    </Grid>
+                    <!-- Resolution -->
+                    <Grid Grid.Row="1" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                                   Text="Set Resolution "
+                                   FontWeight="DemiBold"
+                                   FontSize="{StaticResource FontSizeRegular}"
+                                   VerticalAlignment="Center"/>
+                        <ComboBox Grid.Column="1" Style="{StaticResource ComboBoxBaseStyle}"
+                                  FontSize="{StaticResource FontSizeRegular}"
+                                  ItemsSource="{Binding Config.SupportedResolutions}"
+                                  SelectedItem="{Binding Config.Resolution}"/>
+                    </Grid>
+                    <!-- Brightness -->
+                    <Grid Grid.Row="2" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                                   Text="Set Brightness "
+                                   FontWeight="DemiBold"
+                                   FontSize="{StaticResource FontSizeRegular}"
+                                   VerticalAlignment="Center"/>
+                        <ComboBox Grid.Column="1" Style="{StaticResource ComboBoxBaseStyle}"
+                                  FontSize="{StaticResource FontSizeRegular}"
+                                  ItemsSource="{Binding Config.SupportedBrightness}"
+                                  SelectedItem="{Binding Config.Brightness}"/>
+                    </Grid>
+                    <!-- Graphics -->
+                    <Grid Grid.Row="3" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                                   Text="Set Graphics "
+                                   FontWeight="DemiBold"
+                                   FontSize="{StaticResource FontSizeRegular}"
+                                   VerticalAlignment="Center"/>
+                        <ComboBox Grid.Column="1" Style="{StaticResource ComboBoxBaseStyle}"
+                                  FontSize="{StaticResource FontSizeRegular}"
+                                  ItemsSource="{Binding Config.SupportedGraphics}"
+                                  SelectedItem="{Binding Config.Graphics}"/>
+                    </Grid>
+                    <!-- Tick settings -->
+                    <Grid Grid.Row="4" Margin="0,10,0,0">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <!-- Using sound -->
+                        <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                                   Text="Use Sound "
+                                   FontWeight="DemiBold"
+                                   FontSize="{StaticResource FontSizeRegular}"
+                                   VerticalAlignment="Center"/>
+                        <CheckBox Grid.Column="1" Style="{StaticResource CheckBoxBaseStyle}"
+                                  IsChecked="{Binding Config.IsSoundEnabled}"
+                                  VerticalAlignment="Center"/>
+                        <!-- Window mode -->
+                        <TextBlock Grid.Column="3"  Style="{StaticResource TextBlockBaseStyle}"
+                                   Text="Window Mode "
+                                   FontWeight="DemiBold"
+                                   FontSize="{StaticResource FontSizeRegular}"
+                                   VerticalAlignment="Center"/>
+                        <CheckBox Grid.Column="4" Style="{StaticResource CheckBoxBaseStyle}"
+                                  IsChecked="{Binding Config.IsWindowMode}"
+                                  VerticalAlignment="Center"/>
+                    </Grid>
+                    
+                    <!-- Save stuff -->
+                    <Grid Grid.Row="6">
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
+                        <TextBlock Grid.Column="0" Style="{StaticResource TextBlockBaseStyle}"
+                                   Foreground="{StaticResource HighlightMainBrush}"
+                                   Opacity="0.3"
+                                   Text="Settings v"
+                                   FontWeight="DemiBold"
+                                   FontSize="{StaticResource FontSizeSmall}"
+                                   VerticalAlignment="Center"/>
+                        <TextBlock Grid.Column="2" Style="{StaticResource TextBlockBaseStyle}"
+                                   Opacity="0.5"
+                                   Foreground="{StaticResource HighlightMainBrush}"
+                                   Text="{Binding Config.Version}"
+                                   FontWeight="DemiBold"
+                                   FontSize="{StaticResource FontSizeSmall}"
+                                   VerticalAlignment="Center"/>
+                        <Button Grid.Column="3" Style="{StaticResource ButtonBaseStyle}"
+                                Command="{Binding CommandSaveConfig}"
+                                CommandParameter="https://www.google.com/">
+                            <StackPanel Orientation="Horizontal">
+                                <TextBlock Foreground="{StaticResource ForegroundMainBrush}"
+                                           FontFamily="{StaticResource FontAwesomeRegular}"
+                                           Text="{StaticResource fa-save}"
+                                           FontSize="18"/>
+                                <TextBlock Foreground="{StaticResource ForegroundMainBrush}"
+                                           Text=" Save"
+                                           FontSize="{StaticResource FontSizeRegular}"/>
+                            </StackPanel>
+                        </Button>
+                    </Grid>
+                </Grid>
+            </Border>
         </Grid>
     </Grid>
 </Window>

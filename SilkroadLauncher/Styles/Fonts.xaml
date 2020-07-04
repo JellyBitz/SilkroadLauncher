@@ -14,6 +14,7 @@
     <system:String x:Key="fa-close">&#xF00D;</system:String>
     <system:String x:Key="fa-cog">&#xF013;</system:String>
     <system:String x:Key="fa-save">&#xf0c7;</system:String>
+    <system:String x:Key="fa-globe">&#xf0ac;</system:String>
     <system:String x:Key="fa-facebook">&#xf39e;</system:String>
     <system:String x:Key="fa-discord">&#xf392;</system:String>
     <system:String x:Key="fa-youtube">&#xf431;</system:String>
@@ -27,7 +28,7 @@
     <FontFamily x:Key="AmaranteRegular">/SilkroadLauncher;component/Resources/Fonts/#Amarante Regular</FontFamily>
     
     <!-- Font sizes-->
-    <system:Double x:Key="FontSizeSmaller">10</system:Double>
+    <system:Double x:Key="FontSizeSmaller">11</system:Double>
     <system:Double x:Key="FontSizeSmall">12</system:Double>
     <system:Double x:Key="FontSizeRegular">14</system:Double>
     <system:Double x:Key="FontSizeLarge">18</system:Double>

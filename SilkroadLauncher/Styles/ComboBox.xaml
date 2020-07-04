@@ -1,6 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:SilkroadLauncher" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero">
+    
+    <!-- ComboBox Base Style -->
     <Style x:Key="ComboBoxFocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>
@@ -144,9 +146,9 @@
     </ControlTemplate>
     <Style x:Key="ComboBoxBaseStyle" TargetType="{x:Type ComboBox}">
         <Setter Property="Background" Value="#80000000"/>
+        <Setter Property="BorderBrush" Value="{StaticResource BorderBaseBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource ForegroundMainBrush}"/>
         <Setter Property="HorizontalContentAlignment" Value="Center"/>
-
         <Setter Property="FocusVisualStyle" Value="{StaticResource ComboBoxFocusVisual}"/>
         <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Auto"/>
         <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
@@ -165,7 +167,7 @@
                         <Popup x:Name="PART_Popup" AllowsTransparency="true" Grid.ColumnSpan="2" IsOpen="{Binding IsDropDownOpen, RelativeSource={RelativeSource TemplatedParent}}" Margin="1" PopupAnimation="{DynamicResource {x:Static SystemParameters.ComboBoxPopupAnimationKey}}" Placement="Bottom">
                             <Themes:SystemDropShadowChrome x:Name="Shdw" Color="Transparent" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=MainGrid}">
                                 <Border x:Name="DropDownBorder"
-                                        BorderBrush="{StaticResource BorderBaseBrush}" 
+                                        BorderBrush="{TemplateBinding BorderBrush}" 
                                         BorderThickness="1"
                                         Background="{TemplateBinding Background}">
                                     <ScrollViewer x:Name="DropDownScrollViewer">

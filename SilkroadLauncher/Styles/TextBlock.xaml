@@ -10,7 +10,7 @@
         <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
     </Style>
 
-    <!-- TextBlock for application  -->
+    <!-- Base TextBlock for application  -->
     <Style x:Key="TextBlockBaseStyle" TargetType="{x:Type TextBlock}">
         <Setter Property="Foreground" Value="{StaticResource ForegroundMainBrush}"/>
     </Style>

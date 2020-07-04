@@ -14,9 +14,22 @@
             <RowDefinition Height="10*"/>
         </Grid.RowDefinitions>
         
+        <!-- Play / Pause from video itself -->
+        <!--<Button Grid.RowSpan="2"
+                Command="{Binding CommandSmartPlay}">
+            <Button.Style>
+                <Style TargetType="{x:Type Button}" BasedOn="{StaticResource ButtonCleanStyle}">
+                    <Style.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Arrow" />
+                        </Trigger>
+                    </Style.Triggers>
+                </Style>
+            </Button.Style>
+        </Button>-->
         <!-- Player View -->
-        <MediaElement x:Name="MediaPlayer"
-                      Grid.RowSpan="2"
+        <MediaElement Grid.RowSpan="2"
+                      x:Name="MediaPlayer"
                       Stretch="Fill"/>
 
         <!-- Overlay on start -->
@@ -84,8 +97,8 @@
             
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition Width="70*"/>
-                <ColumnDefinition Width="20*"/>
+                <ColumnDefinition Width="75*"/>
+                <ColumnDefinition Width="25*"/>
             </Grid.ColumnDefinitions>
 
             <!-- Play / Pause / Replay -->
@@ -105,6 +118,9 @@
             
             <!-- Timeline -->
             <Slider Grid.Column="1"
+                    Style="{StaticResource BaseSliderStyle}"
+                    Foreground="{StaticResource HighlightMainBrush}"
+                    VerticalAlignment="Center"
                     Name="SliderTimeline"
                     Margin="5"
                     IsSnapToTickEnabled="False"
@@ -119,21 +135,23 @@
                 <TextBlock VerticalAlignment="Center"
                            FontFamily="{StaticResource FontAwesomeRegular}"
                            Text="{StaticResource fa-volume}"
-                           Foreground="White"
+                           Foreground="{StaticResource ForegroundMainBrush}"
                            Visibility="{Binding IsMuted,Converter={x:Static main:BooleanToVisibilityGoneConverter.Instance}}"
                            FontSize="16"/>
                 <TextBlock VerticalAlignment="Center"
                            FontFamily="{StaticResource FontAwesomeRegular}"
                            Text="{StaticResource fa-volume-mute}"
-                           Foreground="White"
+                           Foreground="{StaticResource ForegroundMainBrush}"
                            Visibility="{Binding IsMuted,Converter={x:Static main:BooleanToVisibilityConverter.Instance}}"
                            FontSize="16"/>
                 <Slider Grid.Column="1"
+                        Style="{StaticResource BaseSliderStyle}"
                         Name="SliderVolume"
                         VerticalAlignment="Center"
-                        Value="{Binding Volume}"
                         Minimum="0"
                         Maximum="1"
+                        Value="{Binding Volume}"
+                        Margin="5,0"
                         IsSnapToTickEnabled="False"
                         IsMoveToPointEnabled="True"/>
             </Grid>

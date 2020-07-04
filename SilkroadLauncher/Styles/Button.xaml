@@ -31,17 +31,17 @@
         </Setter>
     </Style>
 
-    <!-- Buttons for application  -->
+    <!-- Base Button for application  -->
     <Style x:Key="ButtonBaseStyle" TargetType="{x:Type Button}">
         <Setter Property="BorderThickness" Value="2"/>
         <Setter Property="BorderBrush" Value="{StaticResource BorderBaseBrush}"/>
         <Setter Property="Foreground" Value="{StaticResource ForegroundMainBrush}"/>
-        <Setter Property="Background" Value="{StaticResource ButtonBackgroundBaseBrush}"/>
+        <Setter Property="Background" Value="{StaticResource ButtonBaseBackgroundBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="xBorder"
-                            Background="{StaticResource ButtonBackgroundBaseBrush}" 
+                            Background="{TemplateBinding Background}" 
                             BorderBrush="{TemplateBinding BorderBrush}"
                             CornerRadius="6"
                             BorderThickness="{TemplateBinding BorderThickness}"
@@ -61,6 +61,7 @@
         </Setter>
     </Style>
 
+    
     <Style x:Key="ButtonBaseImageStyle" TargetType="{x:Type Button}">
         <Setter Property="FontFamily" Value="{StaticResource AmaranteRegular}"/>
         <Setter Property="FontWeight" Value="Bold"/>

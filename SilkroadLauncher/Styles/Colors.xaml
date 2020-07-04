@@ -2,12 +2,20 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:SilkroadLauncher">
 
-    <!-- Main background used on launcher -->
-    <LinearGradientBrush x:Key="BackgroundBrush"  StartPoint="0,0" EndPoint="0,1" MappingMode="RelativeToBoundingBox">
+    <!-- Base Palette Colors -->
+    <Color x:Key="BackgroundMain">#050505</Color>
+    <SolidColorBrush x:Key="BackgroundMainBrush" Color="{StaticResource BackgroundMain}"/>
+    <Color x:Key="ForegroundMain">#CCC</Color>
+    <SolidColorBrush x:Key="ForegroundMainBrush" Color="{StaticResource ForegroundMain}"/>
+
+    <Color x:Key="HighlightMain">#FFA500</Color>
+    <SolidColorBrush x:Key="HighlightMainBrush" Color="{StaticResource HighlightMain}"/>
+    
+    <!-- Background used on launcher -->
+    <LinearGradientBrush x:Key="LauncherBackgroundBrush"  StartPoint="0,0" EndPoint="0,1" MappingMode="RelativeToBoundingBox">
         <GradientStop Color="#222" Offset="0" />
-        <GradientStop Color="#000" Offset="0.02" />
-        <GradientStop Color="#100000" Offset="0.5" />
-        <GradientStop Color="#000" Offset="0.98" />
+        <GradientStop Color="#000" Offset="0.01" />
+        <GradientStop Color="#100000" Offset="0.2" />
         <GradientStop Color="#000" Offset="1" />
     </LinearGradientBrush>
 
@@ -28,38 +36,32 @@
         <GradientStop Color="#80ffa500" Offset="1" />
     </LinearGradientBrush>
 
+    <!-- Border used on controls -->
+    <LinearGradientBrush x:Key="BorderBaseBrush"  StartPoint="0,0" EndPoint="0,1" MappingMode="RelativeToBoundingBox">
+        <GradientStop Color="#20FF0000" Offset="0" />
+        <GradientStop Color="#80ffa500" Offset="0.5"/>
+        <GradientStop Color="#20FF0000" Offset="1" />
+    </LinearGradientBrush>
+    
     <!-- Clean button color on hover -->
     <Color x:Key="ButtonCleanHover">#80ffa500</Color>
     <SolidColorBrush x:Key="ButtonCleanHoverBrush" Color="{StaticResource ButtonCleanHover}"/>
-
-
-    <Color x:Key="BackgroundMain">#303841</Color>
-    <SolidColorBrush x:Key="BackgroundMainBrush" Color="{StaticResource BackgroundMain}"/>
-
-    <Color x:Key="ForegroundMain">#F1F1F1</Color>
-    <SolidColorBrush x:Key="ForegroundMainBrush" Color="{StaticResource ForegroundMain}"/>
-
-    <Color x:Key="ForegroundMainLighter">#CAC9CF</Color>
-    <SolidColorBrush x:Key="ForegroundMainLighterBrush" Color="{StaticResource ForegroundMainLighter}"/>
-
-    <Color x:Key="ForegroundMainInversed">#FF0000</Color>
-    <SolidColorBrush x:Key="ForegroundMainInversedBrush" Color="{StaticResource ForegroundMainInversed}"/>
-
-    <Color x:Key="HighlightMain">#a1bae2</Color>
-    <SolidColorBrush x:Key="HighlightMainBrush" Color="{StaticResource HighlightMain}"/>
-
-    <LinearGradientBrush x:Key="BorderBaseBrush"  StartPoint="0,0" EndPoint="0,1" MappingMode="RelativeToBoundingBox">
-        <GradientStop Color="#a6afe9" Offset="0.1" />
-        <GradientStop Color="#273855" Offset="0.6"/>
-        <GradientStop Color="#b4bcec" Offset="0.9"/>
-        <GradientStop Color="#989fcb" Offset="1"/>
+    
+    <!-- Background used on base buttons -->
+    <LinearGradientBrush x:Key="ButtonBaseBackgroundBrush" StartPoint="0,0" EndPoint="0,1" MappingMode="RelativeToBoundingBox" >
+        <GradientStop Color="{StaticResource BackgroundMain}" Offset="0"/>
+        <GradientStop Color="{StaticResource BackgroundMain}" Offset="0.15"/>
+        <GradientStop Color="#00555555" Offset="0.30"/>
+        <GradientStop  Color="{StaticResource BackgroundMain}" Offset="0.65"/>
+        <GradientStop Color="{StaticResource BackgroundMain}" Offset="1"/>
     </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="ButtonBackgroundBaseBrush" MappingMode="RelativeToBoundingBox" EndPoint="0,1"  StartPoint="0,0">
-        <GradientStop Color="#434282" Offset="0.05"/>
-        <GradientStop Color="#252459" Offset="0.3"/>
-        <GradientStop Color="#101e3f" Offset="0.9"/>
-        <GradientStop Color="#1c1162" Offset="1"/>
+    
+    <!-- START GAME background -->
+    <LinearGradientBrush x:Key="ButtonStartBrush"  StartPoint="0,0" EndPoint="0,1" MappingMode="RelativeToBoundingBox">
+        <GradientStop Color="#20FF0000" Offset="0" />
+        <GradientStop Color="#80ffa500" Offset="0.15"/>
+        <GradientStop Color="#A0ffa500" Offset="0.45" />
+        <GradientStop Color="#80ffa500" Offset="0.55" />
+        <GradientStop Color="#20FF0000" Offset="1" />
     </LinearGradientBrush>
-
 </ResourceDictionary>

@@ -15,6 +15,8 @@ namespace SilkroadLauncher
             // Set viewmodel
             LauncherViewModel.Instance.SetWindow(this);
             DataContext = LauncherViewModel.Instance;
+            // Force to the top on loading
+            Topmost = true;
         }
 
         #region Events about UI behavior only
@@ -24,11 +26,9 @@ namespace SilkroadLauncher
         private void Window_Loaded(object sender, RoutedEventArgs e)
         {
             // Start loading updates
-            //if (DataContext is LauncherViewModel launcher)
-            //    launcher.CheckUpdatesAsync();
-
-            // Force to the top
-            Topmost = true;
+            if (DataContext is LauncherViewModel launcher)
+                launcher.CheckUpdatesAsync();
+            // Cancel forcing top
             Topmost = false;
         }
         /// <summary>
