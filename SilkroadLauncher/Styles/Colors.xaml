@@ -46,7 +46,13 @@
     <!-- Clean button color on hover -->
     <Color x:Key="ButtonCleanHover">#80ffa500</Color>
     <SolidColorBrush x:Key="ButtonCleanHoverBrush" Color="{StaticResource ButtonCleanHover}"/>
-    
+
+    <LinearGradientBrush x:Key="ButtonBaseHoverBrush"  StartPoint="0,0" EndPoint="0,1" MappingMode="RelativeToBoundingBox">
+        <GradientStop Color="#A0FFA500" Offset="0" />
+        <GradientStop Color="#80FFA500" Offset="0.5"/>
+        <GradientStop Color="#A0FFA500" Offset="1" />
+    </LinearGradientBrush>
+
     <!-- Background used on base buttons -->
     <LinearGradientBrush x:Key="ButtonBaseBackgroundBrush" StartPoint="0,0" EndPoint="0,1" MappingMode="RelativeToBoundingBox" >
         <GradientStop Color="{StaticResource BackgroundMain}" Offset="0"/>
@@ -55,13 +61,30 @@
         <GradientStop  Color="{StaticResource BackgroundMain}" Offset="0.65"/>
         <GradientStop Color="{StaticResource BackgroundMain}" Offset="1"/>
     </LinearGradientBrush>
-    
+
+    <!-- Loading bar colors -->
+    <LinearGradientBrush x:Key="SliderLoadingBrush"  StartPoint="0,0" EndPoint="1,0" MappingMode="RelativeToBoundingBox">
+        <GradientStop Color="#20FF0000" Offset="0" />
+        <GradientStop Color="#80ffa500" Offset="0.7"/>
+        <GradientStop Color="#A0ffa500" Offset="98" />
+        <GradientStop Color="#C0FFFFFF" Offset="1" />
+    </LinearGradientBrush>
+    <LinearGradientBrush x:Key="SliderLoadingBorderBrush"  StartPoint="0,0" EndPoint="1,0" MappingMode="RelativeToBoundingBox">
+        <GradientStop Color="Transparent" Offset="0" />
+        <GradientStop Color="#20FF0000" Offset="0" />
+        <GradientStop Color="#40FF0000" Offset="0.5" />
+        <GradientStop Color="#80ffa500" Offset="1"/>
+    </LinearGradientBrush>
+
     <!-- START GAME background -->
     <LinearGradientBrush x:Key="ButtonStartBrush"  StartPoint="0,0" EndPoint="0,1" MappingMode="RelativeToBoundingBox">
-        <GradientStop Color="#20FF0000" Offset="0" />
-        <GradientStop Color="#80ffa500" Offset="0.15"/>
+        <GradientStop Color="Transparent" Offset="0" />
+        <GradientStop Color="#20FF0000" Offset="0.05" />
+        <GradientStop Color="#80ffa500" Offset="0.05"/>
         <GradientStop Color="#A0ffa500" Offset="0.45" />
         <GradientStop Color="#80ffa500" Offset="0.55" />
-        <GradientStop Color="#20FF0000" Offset="1" />
+        <GradientStop Color="#20FF0000" Offset="0.98" />
+        <GradientStop Color="Transparent" Offset="1" />
     </LinearGradientBrush>
+
 </ResourceDictionary>

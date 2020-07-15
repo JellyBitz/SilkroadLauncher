@@ -53,7 +53,7 @@
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Cursor" Value="Hand" />
-                            <Setter TargetName="xBorder" Property="BorderBrush" Value="#80FFFFFF" />
+                            <Setter TargetName="xBorder" Property="BorderBrush" Value="{StaticResource ButtonBaseHoverBrush}" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>

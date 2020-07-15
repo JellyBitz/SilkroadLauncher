@@ -3,7 +3,6 @@
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-        xmlns:htmlrender="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
         xmlns:local="clr-namespace:SilkroadLauncher"
         xmlns:controls="clr-namespace:SilkroadLauncher.Controls"
         mc:Ignorable="d"
@@ -40,6 +39,15 @@
 
             <!-- Loading / Start -->
             <Grid Grid.Column="1">
+                <Slider Style="{StaticResource SliderLoadingStyle}"
+                        Visibility="{Binding IsUpdating,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}"
+                        IsEnabled="False"
+                        Value="{Binding UpdatingPercentage}"
+                        Minimum="0"
+                        Maximum="100"
+                        VerticalAlignment="Center"/>
+
+                <!-- Start Game -->
                 <Button Style="{StaticResource ButtonBaseStyle}"
                         Margin="50,5"
                         Background="{StaticResource ButtonStartBrush}"
@@ -47,9 +55,9 @@
                         Command="{Binding CommandStartGame}"
                         Visibility="{Binding CanStartGame,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}">
                     <TextBlock Text="Start Game"
-                                   VerticalAlignment="Center"
-                                   FontWeight="SemiBold"
-                                   FontSize="{StaticResource FontSizeXXLarge}"/>
+                               VerticalAlignment="Center"
+                               FontWeight="SemiBold"
+                               FontSize="{StaticResource FontSizeXXLarge}"/>
                 </Button>
             </Grid>
 
@@ -60,16 +68,16 @@
                     <RowDefinition/>
                 </Grid.RowDefinitions>
                 <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="90"/>
+                    <ColumnDefinition Width="60"/>
                     <ColumnDefinition Width="*"/>
                 </Grid.ColumnDefinitions>
 
                 <!-- Loading as percentage / Ready -->
                 <Grid Grid.RowSpan="3"
-                      Margin="5"
+                      Margin="0,12"
                       Visibility="{Binding IsUpdating,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}">
                     <Border Background="{StaticResource BackgroundMainBrush}"
-                            CornerRadius="25"
+                            CornerRadius="10"
                             BorderThickness="4"
                             BorderBrush="{StaticResource BorderBaseBrush}">
                         <StackPanel Orientation="Horizontal"
@@ -78,12 +86,13 @@
                                     HorizontalAlignment="Center">
                             <TextBlock Style="{StaticResource TextBlockBaseStyle}"
                                        Text="{Binding UpdatingPercentage}"
+                                       FontWeight="SemiBold"
                                        VerticalAlignment="Center"
                                        HorizontalAlignment="Center"
-                                       FontSize="{StaticResource FontSizeXLarge}"/>
+                                       FontSize="{StaticResource FontSizeLarge}"/>
                             <TextBlock Style="{StaticResource TextBlockBaseStyle}"
                                        Text="%"
-                                       FontSize="{StaticResource FontSizeXLarge}"/>
+                                       FontSize="{StaticResource FontSizeLarge}"/>
 
                         </StackPanel>
                     </Border>
@@ -123,6 +132,8 @@
                 <Button Grid.Row="1" Grid.Column="1"
                         Style="{StaticResource ButtonCleanStyle}"
                         VerticalAlignment="Bottom"
+                        HorizontalAlignment="Right"
+                        Margin="5,0"
                         Command="{Binding CommandOpenLink}"
                         CommandParameter="https://www.google.com">
                     <StackPanel Orientation="Horizontal">
@@ -421,13 +432,13 @@
                         </Grid.ColumnDefinitions>
                         <TextBlock Grid.Column="0" Style="{StaticResource TextBlockBaseStyle}"
                                    Foreground="{StaticResource HighlightMainBrush}"
-                                   Opacity="0.3"
+                                   Opacity="0.45"
                                    Text="Settings v"
                                    FontWeight="DemiBold"
                                    FontSize="{StaticResource FontSizeSmall}"
                                    VerticalAlignment="Center"/>
                         <TextBlock Grid.Column="2" Style="{StaticResource TextBlockBaseStyle}"
-                                   Opacity="0.5"
+                                   Opacity="0.45"
                                    Foreground="{StaticResource HighlightMainBrush}"
                                    Text="{Binding Config.Version}"
                                    FontWeight="DemiBold"

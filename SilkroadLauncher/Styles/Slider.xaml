@@ -72,7 +72,7 @@
         </Grid>
     </ControlTemplate>
     
-    <Style x:Key="BaseSliderStyle" TargetType="{x:Type Slider}">
+    <Style x:Key="SliderBaseStyle" TargetType="{x:Type Slider}">
         <Setter Property="Focusable" Value="False"/>
         <Setter Property="SnapsToDevicePixels" Value="true" />
         <Setter Property="OverridesDefaultStyle" Value="true" />
@@ -82,6 +82,95 @@
         <Style.Triggers>
             <Trigger Property="Orientation" Value="Horizontal">
                 <Setter Property="Template" Value="{StaticResource SliderBaseHorizontal}" />
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    
+    <!-- Slider used as loading bar -->
+    <Style x:Key="SliderLoadingRepeatButtonBefore" TargetType="{x:Type RepeatButton}">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Border SnapsToDevicePixels="True"
+                            BorderThickness="0,2"
+                            BorderBrush="{StaticResource SliderLoadingBorderBrush}"
+                            Background="{TemplateBinding Foreground}"
+                            Height="{TemplateBinding MinHeight}"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SliderLoadingRepeatButtonAfter" TargetType="{x:Type RepeatButton}">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="IsTabStop" Value="false" />
+        <Setter Property="Focusable" Value="false" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type RepeatButton}">
+                    <Border SnapsToDevicePixels="True"
+                            BorderThickness="0,2"
+                            BorderBrush="{StaticResource SliderLoadingBorderBrush}"
+                            Background="{TemplateBinding Background}"
+                            Height="{TemplateBinding MinHeight}"/>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <Style x:Key="SliderLoadingThumb" TargetType="{x:Type Thumb}">
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Thumb}">
+                    <!--<Ellipse Height="12" Width="5"
+                             Fill="{TemplateBinding Foreground}"/>-->
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <ControlTemplate x:Key="SliderLoadingHorizontal" TargetType="{x:Type Slider}">
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto" />
+                <RowDefinition Height="Auto" MinHeight="{TemplateBinding MinHeight}" />
+                <RowDefinition Height="Auto" />
+            </Grid.RowDefinitions>
+            <Track Grid.Row="1" x:Name="PART_Track"   >
+                <Track.DecreaseRepeatButton>
+                    <RepeatButton Style="{StaticResource SliderLoadingRepeatButtonBefore}"
+                                  Background="{TemplateBinding Background}"
+                                  MinHeight="{TemplateBinding MinHeight}"
+                                  Command="Slider.DecreaseLarge"/>
+                </Track.DecreaseRepeatButton>
+                <Track.Thumb>
+                    <Thumb Style="{StaticResource SliderLoadingThumb}" />
+                </Track.Thumb>
+                <Track.IncreaseRepeatButton>
+                    <RepeatButton Style="{StaticResource SliderLoadingRepeatButtonAfter}"
+                                  Background="{TemplateBinding Background}"
+                                  MinHeight="{TemplateBinding MinHeight}"
+                                  Command="Slider.IncreaseLarge"/>
+                </Track.IncreaseRepeatButton>
+            </Track>
+        </Grid>
+    </ControlTemplate>
+    
+    <Style x:Key="SliderLoadingStyle" TargetType="{x:Type Slider}">
+        <Setter Property="Focusable" Value="False"/>
+        <Setter Property="SnapsToDevicePixels" Value="true" />
+        <Setter Property="OverridesDefaultStyle" Value="true" />
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Foreground" Value="{StaticResource SliderLoadingBrush}"/>
+        <Setter Property="MinHeight" Value="12"/>
+        <Style.Triggers>
+            <Trigger Property="Orientation" Value="Horizontal">
+                <Setter Property="Template" Value="{StaticResource SliderLoadingHorizontal}" />
             </Trigger>
         </Style.Triggers>
     </Style>

@@ -118,7 +118,7 @@
             
             <!-- Timeline -->
             <Slider Grid.Column="1"
-                    Style="{StaticResource BaseSliderStyle}"
+                    Style="{StaticResource SliderBaseStyle}"
                     Foreground="{StaticResource HighlightMainBrush}"
                     VerticalAlignment="Center"
                     Name="SliderTimeline"
@@ -145,7 +145,7 @@
                            Visibility="{Binding IsMuted,Converter={x:Static main:BooleanToVisibilityConverter.Instance}}"
                            FontSize="16"/>
                 <Slider Grid.Column="1"
-                        Style="{StaticResource BaseSliderStyle}"
+                        Style="{StaticResource SliderBaseStyle}"
                         Name="SliderVolume"
                         VerticalAlignment="Center"
                         Minimum="0"
