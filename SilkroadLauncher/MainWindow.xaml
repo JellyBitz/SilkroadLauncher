@@ -55,6 +55,7 @@
                         Command="{Binding CommandStartGame}"
                         Visibility="{Binding CanStartGame,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}">
                     <TextBlock Text="Start Game"
+                               Margin="0,0,0,6"
                                VerticalAlignment="Center"
                                FontWeight="SemiBold"
                                FontSize="{StaticResource FontSizeXXLarge}"/>
@@ -128,27 +129,31 @@
                     </Button>
                 </Grid>
                 
-                <!-- Website Link -->
-                <Button Grid.Row="1" Grid.Column="1"
-                        Style="{StaticResource ButtonCleanStyle}"
-                        VerticalAlignment="Bottom"
-                        HorizontalAlignment="Right"
-                        Margin="5,0"
-                        Command="{Binding CommandOpenLink}"
-                        CommandParameter="https://www.google.com">
-                    <StackPanel Orientation="Horizontal">
-                        <TextBlock Style="{StaticResource TextBlockBaseStyle}"
-                                   FontFamily="{StaticResource FontAwesomeLight}"
-                                   Text="{StaticResource fa-globe}"
-                                   FontSize="{StaticResource FontSizeSmall}"
-                                   VerticalAlignment="Center"/>
-                        <TextBlock Style="{StaticResource TextBlockBaseStyle}"
-                                   Text="Go to Website"
-                                   Margin="4,0"
-                                   FontSize="{StaticResource FontSizeSmaller}"/>
-                    </StackPanel>
-                </Button>
-                
+                <!-- Client Version -->
+                <StackPanel Grid.Row="1" Grid.Column="1"
+                            Opacity="0.4"
+                            Margin="5,0"
+                            VerticalAlignment="Bottom"
+                            HorizontalAlignment="Right"
+                            Orientation="Horizontal">
+                    <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                               Foreground="{StaticResource HighlightMainBrush}"
+                               FontFamily="{StaticResource FontAwesomeRegular}"
+                               Text="{StaticResource fa-swords}"
+                               Margin="0,0,3,0"
+                               FontSize="{StaticResource FontSizeSmall}"
+                               VerticalAlignment="Center"/>
+                    <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                               Foreground="{StaticResource HighlightMainBrush}"
+                               Text="Client v"
+                               FontSize="{StaticResource FontSizeSmaller}"/>
+                    <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                               Foreground="{StaticResource HighlightMainBrush}"
+                               Text="{Binding Version}"
+                               Margin="0,0,3,0"
+                               FontSize="{StaticResource FontSizeSmaller}"/>
+                </StackPanel>
+
             </Grid>
         </Grid>
         

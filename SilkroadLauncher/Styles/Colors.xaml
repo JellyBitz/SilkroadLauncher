@@ -48,9 +48,11 @@
     <SolidColorBrush x:Key="ButtonCleanHoverBrush" Color="{StaticResource ButtonCleanHover}"/>
 
     <LinearGradientBrush x:Key="ButtonBaseHoverBrush"  StartPoint="0,0" EndPoint="0,1" MappingMode="RelativeToBoundingBox">
-        <GradientStop Color="#A0FFA500" Offset="0" />
+        <GradientStop Color="#FFF" Offset="0" />
+        <GradientStop Color="#A0FFA500" Offset="0.01" />
         <GradientStop Color="#80FFA500" Offset="0.5"/>
-        <GradientStop Color="#A0FFA500" Offset="1" />
+        <GradientStop Color="#A0FFA500" Offset="0.99" />
+        <GradientStop Color="#FFF" Offset="1" />
     </LinearGradientBrush>
 
     <!-- Background used on base buttons -->
@@ -78,9 +80,7 @@
 
     <!-- START GAME background -->
     <LinearGradientBrush x:Key="ButtonStartBrush"  StartPoint="0,0" EndPoint="0,1" MappingMode="RelativeToBoundingBox">
-        <GradientStop Color="Transparent" Offset="0" />
-        <GradientStop Color="#20FF0000" Offset="0.05" />
-        <GradientStop Color="#80ffa500" Offset="0.05"/>
+        <GradientStop Color="#80ffa500" Offset="0"/>
         <GradientStop Color="#A0ffa500" Offset="0.45" />
         <GradientStop Color="#80ffa500" Offset="0.55" />
         <GradientStop Color="#20FF0000" Offset="0.98" />

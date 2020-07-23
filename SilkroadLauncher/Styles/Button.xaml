@@ -61,7 +61,6 @@
         </Setter>
     </Style>
 
-    
     <Style x:Key="ButtonBaseImageStyle" TargetType="{x:Type Button}">
         <Setter Property="FontFamily" Value="{StaticResource AmaranteRegular}"/>
         <Setter Property="FontWeight" Value="Bold"/>
