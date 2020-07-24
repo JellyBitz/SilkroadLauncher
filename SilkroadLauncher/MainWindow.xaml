@@ -4,6 +4,7 @@
         xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
         xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
         xmlns:htmlrender="clr-namespace:TheArtOfDev.HtmlRenderer.WPF;assembly=HtmlRenderer.WPF"
+        xmlns:gif="http://wpfanimatedgif.codeplex.com"
         xmlns:local="clr-namespace:SilkroadLauncher"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
@@ -88,7 +89,7 @@
         
         <!-- Image logo -->
         <Border Grid.Row="0" Grid.RowSpan="3"
-                Width="350" Height="121"
+                Width="380" Height="121"
                 Margin="0,-295,0,0"
                 Background="{StaticResource LogoImageBrush}"
                 MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow"
@@ -99,11 +100,14 @@
         <Border Grid.Row="1"
                 Grid.RowSpan="3"
                 MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow"
-                Background="{StaticResource BackgroundImageBrush}"
                 BorderThickness="2"
                 BorderBrush="{StaticResource BorderBaseBrush}"
-                CornerRadius="20,20,5,5"
-                Panel.ZIndex="-1"/>
+                Panel.ZIndex="-1">
+            <Image Stretch="Fill"
+                   gif:ImageBehavior.AnimatedSource="/SilkroadLauncher;component/Resources/Images/BackgroundAnimated.gif"/>
+        </Border>
+
+        
         <!-- Body -->
         <Grid Grid.Row="2" Margin="10,40,10,0">
             <Grid.ColumnDefinitions>

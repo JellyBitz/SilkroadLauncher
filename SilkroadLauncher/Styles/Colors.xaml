@@ -18,17 +18,17 @@
     <SolidColorBrush x:Key="HighlightMainBrush" Color="{StaticResource HighlightMain}"/>
 
     <LinearGradientBrush x:Key="BorderBaseBrush"  StartPoint="0,0" EndPoint="0,1" MappingMode="RelativeToBoundingBox">
-        <GradientStop Color="#a6afe9" Offset="0.1" />
-        <GradientStop Color="#273855" Offset="0.6"/>
-        <GradientStop Color="#b4bcec" Offset="0.9"/>
+        <GradientStop Color="#AAA" Offset="0.1" />
+        <GradientStop Color="#EEE" Offset="0.6"/>
+        <GradientStop Color="#CCC" Offset="0.9"/>
         <GradientStop Color="#989fcb" Offset="1"/>
     </LinearGradientBrush>
 
     <LinearGradientBrush x:Key="ButtonBackgroundBaseBrush" MappingMode="RelativeToBoundingBox" EndPoint="0,1"  StartPoint="0,0">
-        <GradientStop Color="#434282" Offset="0.05"/>
-        <GradientStop Color="#252459" Offset="0.3"/>
-        <GradientStop Color="#101e3f" Offset="0.9"/>
-        <GradientStop Color="#1c1162" Offset="1"/>
+        <GradientStop Color="#006f6c" Offset="0.05"/>
+        <GradientStop Color="#009e99" Offset="0.3"/>
+        <GradientStop Color="#014341" Offset="0.9"/>
+        <GradientStop Color="#002625" Offset="1"/>
     </LinearGradientBrush>
 
 </ResourceDictionary>
