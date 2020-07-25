@@ -14,7 +14,7 @@
     <Color x:Key="ForegroundMainInversed">#FF0000</Color>
     <SolidColorBrush x:Key="ForegroundMainInversedBrush" Color="{StaticResource ForegroundMainInversed}"/>
 
-    <Color x:Key="HighlightMain">#a1bae2</Color>
+    <Color x:Key="HighlightMain">#01fff9</Color>
     <SolidColorBrush x:Key="HighlightMainBrush" Color="{StaticResource HighlightMain}"/>
 
     <LinearGradientBrush x:Key="BorderBaseBrush"  StartPoint="0,0" EndPoint="0,1" MappingMode="RelativeToBoundingBox">

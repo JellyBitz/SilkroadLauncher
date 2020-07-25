@@ -97,16 +97,15 @@
         </Border>
 
         <!-- Background -->
-        <Border Grid.Row="1"
-                Grid.RowSpan="3"
-                MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow"
-                BorderThickness="2"
-                BorderBrush="{StaticResource BorderBaseBrush}"
-                Panel.ZIndex="-1">
+        <Grid Grid.Row="1"
+              Grid.RowSpan="3"
+              MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow"
+              Panel.ZIndex="-1">
             <Image Stretch="Fill"
                    gif:ImageBehavior.AnimatedSource="/SilkroadLauncher;component/Resources/Images/BackgroundAnimated.gif"/>
-        </Border>
-
+            <Border BorderThickness="1"
+                    BorderBrush="#000" Background="{StaticResource BackgroundBorderBrush}"/>
+        </Grid>
         
         <!-- Body -->
         <Grid Grid.Row="2" Margin="10,40,10,0">
@@ -140,15 +139,15 @@
                     <StackPanel Grid.Column="1"
                                 Opacity="0.7"
                                 Orientation="Horizontal">
-                        <TextBlock Text="Client"
+                        <TextBlock Text="Client "
                                    HorizontalAlignment="Right"
                                    VerticalAlignment="Center"
                                    Foreground="{StaticResource ForegroundMainBrush}"/>
                         <TextBlock Text="v"
-                                   Margin="4,0,0,0"
                                    VerticalAlignment="Center"
                                    Foreground="{StaticResource HighlightMainBrush}"/>
                         <TextBlock Text="{Binding Version}"
+                                   Margin="0,0,8,0"
                                    VerticalAlignment="Center"
                                    Foreground="{StaticResource HighlightMainBrush}"/>
                     </StackPanel>
@@ -179,7 +178,7 @@
                     <!-- Notice Message (HTML) -->
                     <htmlrender:HtmlPanel Visibility="{Binding IsViewingConfig,Converter={x:Static local:BooleanToVisibilityGoneConverter.Instance}}"
                                           Background="Transparent" Margin="6"
-                                          BaseStylesheet="body{color:#eee;} a { color:#89b3ff; }"
+                                          BaseStylesheet="body{color:#eee;} a { color:#009e99; }"
                                           Text="{Binding SelectedWebNotice.Article}"/>
                     <!-- Game Settings -->
                     <Grid Visibility="{Binding IsViewingConfig,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}"
@@ -333,17 +332,20 @@
             </Grid.ColumnDefinitions>
             <!-- Link -->
             <Button Grid.Column="0" Margin="3,3,0,3"
-                    Content="Guide"
                     Style="{StaticResource ButtonBaseImageStyle}"
                     FontSize="{StaticResource FontSizeXLarge}"
                     Command="{Binding CommandOpenLink}"
-                    CommandParameter="https://www.google.com/"/>
+                    CommandParameter="https://www.google.com/">
+                <TextBlock Text="Guide"
+                           Foreground="#015f5c"/>
+            </Button>
             <!-- Start Game -->
             <Button Grid.Column="1" Margin="0,-4,0,0"
                     Style="{StaticResource ButtonBaseImageStyle}"
                     Command="{Binding CommandStartGame}"
                     Visibility="{Binding CanStartGame,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}">
                 <TextBlock Text="Play" Margin="0,-3,0,0"
+                           Foreground="#015f5c"
                            FontSize="{StaticResource FontSizeXXLarge}"/>
             </Button>
             <!-- Patch Progress -->
@@ -357,15 +359,15 @@
                             HorizontalAlignment="Center"
                             VerticalAlignment="Center">
                     <TextBlock Text="Applying Patch.."
-                               Foreground="{StaticResource ForegroundMainBrush}"
+                               Foreground="#015f5c"
                                FontFamily="{StaticResource AmaranteRegular}"
                                FontSize="{StaticResource FontSizeLarge}"/>
                     <TextBlock Text="{Binding UpdatingPercentage}"
-                               Foreground="{StaticResource ForegroundMainBrush}"
+                               Foreground="#015f5c"
                                FontFamily="{StaticResource AmaranteRegular}"
                                FontSize="{StaticResource FontSizeLarge}"/>
                     <TextBlock Text="%"
-                               Foreground="{StaticResource ForegroundMainBrush}"
+                               Foreground="#015f5c"
                                FontFamily="{StaticResource AmaranteRegular}"
                                FontSize="{StaticResource FontSizeLarge}"/>
                 </StackPanel>
@@ -376,7 +378,8 @@
                     FontSize="{StaticResource FontSizeXLarge}"
                     Command="{Binding CommandOpenLink}"
                     CommandParameter="https://www.google.com/">
-                Register
+                <TextBlock Text="Register"
+                           Foreground="#015f5c"/>
             </Button>
         </Grid>
     </Grid>

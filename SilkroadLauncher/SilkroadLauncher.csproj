@@ -213,10 +213,10 @@
     <Resource Include="Resources\Images\Silkroad.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\BackgroundBorder.png" />
     <Resource Include="Resources\Images\BackgroundAnimated.gif" />
     <Resource Include="Resources\Images\ProgressBarEmpty.png" />
     <Resource Include="Resources\Images\ProgressBarFull.png" />
-    <Resource Include="Resources\Images\Background.png" />
     <Resource Include="Resources\Images\ButtonBase.png" />
     <Resource Include="Resources\Images\ButtonBaseHover.png" />
     <Content Include="Pk2Writer.dll">
