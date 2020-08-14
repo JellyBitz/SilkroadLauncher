@@ -1,6 +1,6 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-                    xmlns:local="clr-namespace:SilkroadLauncher">
+                    xmlns:local="clr-namespace:SilkroadLauncher" xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero">
     <!-- CheckBox for base application  -->
     <Style x:Key="CheckBoxFocusVisual">
         <Setter Property="Control.Template">
@@ -25,7 +25,7 @@
         <Setter Property="VerticalContentAlignment" Value="Center"/>
         <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate TargetType="CheckBox">
+                <ControlTemplate TargetType="{x:Type CheckBox}">
                     <BulletDecorator Background="Transparent">
                         <BulletDecorator.Bullet>
                             <Border x:Name="Border"
@@ -67,4 +67,58 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    
+    <!-- Toggle Button Modern Style -->
+    <LinearGradientBrush x:Key="ButtonToggleBackground" EndPoint="0,1" StartPoint="0,0">
+        <GradientStop Color="#D3D3D3" Offset="0"/>
+        <GradientStop Color="#CBCBCB" Offset="0.5"/>
+        <GradientStop Color="#BBB" Offset="0.5"/>
+        <GradientStop Color="#ADADAD" Offset="1"/>
+    </LinearGradientBrush>
+    <Style x:Key="ToggleButtonModernStyle" TargetType="{x:Type ToggleButton}">
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="Padding" Value="1"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ToggleButton}">
+                    <Grid HorizontalAlignment="Left" 
+                              VerticalAlignment="Top"
+                              Height="16" Width="28">
+                        <Rectangle x:Name="Back"
+                                       Fill="#C91010"
+                                   Margin="2,0"
+                                       HorizontalAlignment="Left" VerticalAlignment="Center"
+                                       Height="8" Width="24"
+                                       RadiusY="3" RadiusX="3"/>
+                        <Ellipse x:Name="Dot" Fill="#DDD"
+                                     HorizontalAlignment="Left" 
+                                     Height="16" Width="16" 
+                                     VerticalAlignment="Center">
+                        </Ellipse>
+                        <ContentPresenter Content="{TemplateBinding Content}"
+                                          x:Name="_Content"
+                                          HorizontalAlignment="Left"
+                                          Margin="1,-2,0,0"
+                                          VerticalAlignment="Center"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter TargetName="Dot" Property="HorizontalAlignment" Value="Right"/>
+                            <Setter TargetName="_Content" Property="HorizontalAlignment" Value="Right"/>
+                            <Setter TargetName="Back" Property="Fill" Value="#009680"/>
+                        </Trigger>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand" />
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
 </ResourceDictionary>

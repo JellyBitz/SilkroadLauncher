@@ -1,6 +1,10 @@
-# Visual Studio cache
+# Visual studio cache
 .vs/
 
+# Packages
+packages/*
+!packages/build/
+
 # Debugging data generated
-SilkroadLauncher/bin/
-SilkroadLauncher/obj/
+SilkroadLauncher/bin/*
+SilkroadLauncher/obj/*

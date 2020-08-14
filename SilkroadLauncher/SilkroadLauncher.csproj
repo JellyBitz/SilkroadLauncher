@@ -86,15 +86,15 @@
     <Reference Include="WindowsBase" />
     <Reference Include="PresentationCore" />
     <Reference Include="PresentationFramework" />
-    <Reference Include="WpfAnimatedGif, Version=2.0.0.0, Culture=neutral, PublicKeyToken=9e7cd3b544a090dc, processorArchitecture=MSIL">
-      <HintPath>..\packages\WpfAnimatedGif.2.0.0\lib\net40\WpfAnimatedGif.dll</HintPath>
-    </Reference>
   </ItemGroup>
   <ItemGroup>
     <ApplicationDefinition Include="App.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Compile Include="Controls\VideoBackground.xaml.cs">
+      <DependentUpon>VideoBackground.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Network\DownloadModule.cs" />
     <Compile Include="Network\GatewayModule.cs" />
     <Compile Include="Network\PacketHandler.cs" />
@@ -127,6 +127,10 @@
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
     <Compile Include="ViewModels\Base\RelayParameterizedCommand.cs" />
     <Compile Include="ViewModels\Application\LauncherViewModel.cs" />
+    <Page Include="Controls\VideoBackground.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="MainWindow.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -209,12 +213,12 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\Logo.png" />
     <Resource Include="Resources\Images\Silkroad.ico" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\BackgroundBorder.png" />
-    <Resource Include="Resources\Images\BackgroundAnimated.gif" />
+    <Resource Include="Resources\Images\Logo.png" />
+    <Resource Include="Resources\Images\Background.png" />
+    <None Include="Resources\Videos\Background.mp4" />
     <Resource Include="Resources\Images\ProgressBarEmpty.png" />
     <Resource Include="Resources\Images\ProgressBarFull.png" />
     <Resource Include="Resources\Images\ButtonBase.png" />
