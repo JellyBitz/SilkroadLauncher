@@ -1,13 +1,8 @@
-﻿using SilkroadSecurityAPI;
-using System;
-using System.IO;
-using System.IO.Compression;
-using System.Text;
-using System.Windows;
+﻿using System.Windows;
 using System.Windows.Input;
 namespace SilkroadLauncher
 {
-    public partial class MainWindow : Window
+    public partial class MainWindow : Window, IWindow
     {
         /// <summary>
         /// Default constructor
@@ -19,6 +14,24 @@ namespace SilkroadLauncher
             LauncherViewModel.Instance.SetWindow(this);
             DataContext = LauncherViewModel.Instance;
         }
+
+        #region Interface Implementation
+        public new WindowState WindowState {
+            get => base.WindowState;
+            set => base.WindowState = value;
+        }
+        public void ShowMessage(string Text, string Title)
+        {
+            Dispatcher.Invoke(() => {
+                MessageBox.Show(this, Text, Title, MessageBoxButton.OK);
+            });
+        }
+        public new void Close()
+        {
+            base.Close();
+        }
+        #endregion
+
 
         #region Events about UI behavior only
         /// <summary>

@@ -119,6 +119,7 @@
     <Compile Include="ValueConverters\BooleanToVisibilityGoneConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModels\Application\ConfigViewModel.cs" />
+    <Compile Include="ViewModels\Application\IWindow.cs" />
     <Compile Include="ViewModels\Application\WebNoticeViewModel.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\Base\RelayCommand.cs" />

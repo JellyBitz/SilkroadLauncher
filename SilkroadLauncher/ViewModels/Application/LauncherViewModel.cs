@@ -1,6 +1,5 @@
 ﻿using Pk2ReaderAPI;
 using SilkroadLauncher.Network;
-using SilkroadLauncher.SilkroadCommon;
 using SilkroadLauncher.Utility;
 using System;
 using System.Collections.Generic;
@@ -31,7 +30,7 @@ namespace SilkroadLauncher
         /// <summary>
         /// The window this view model controls
         /// </summary>
-        private Window m_Window;
+        private IWindow m_Window;
         /// <summary>
         /// Division info
         /// </summary>
@@ -402,19 +401,18 @@ namespace SilkroadLauncher
         /// <summary>
         /// Set the window this view model controls
         /// </summary>
-        public void SetWindow(Window Window)
+        public void SetWindow(IWindow Window)
         {
-            // Just save reference
+            // Just save a reference
             m_Window = Window;
+
         }
         /// <summary>
         /// Show message to the user
         /// </summary>
         public void ShowMessage(string Text)
         {
-            m_Window?.Dispatcher.Invoke(() => {
-                MessageBox.Show(m_Window, Text, Title, MessageBoxButton.OK);
-            });
+            m_Window?.ShowMessage(Text,Title);
         }
         /// <summary>
         /// Check and loads the patch updates
