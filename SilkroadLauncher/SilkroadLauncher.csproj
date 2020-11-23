@@ -61,12 +61,6 @@
     <Prefer32Bit>true</Prefer32Bit>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="HtmlRenderer, Version=1.5.0.5, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlRenderer.Core.1.5.0.5\lib\net45\HtmlRenderer.dll</HintPath>
-    </Reference>
-    <Reference Include="HtmlRenderer.WPF, Version=1.5.0.6, Culture=neutral, processorArchitecture=MSIL">
-      <HintPath>..\packages\HtmlRenderer.WPF.1.5.0.6\lib\net45\HtmlRenderer.WPF.dll</HintPath>
-    </Reference>
     <Reference Include="PresentationFramework.Aero" />
     <Reference Include="System" />
     <Reference Include="System.Data" />
@@ -101,6 +95,98 @@
     <Compile Include="Pk2ReaderAPI\Pk2Reader.cs" />
     <Compile Include="Pk2WriterAPI\Pk2Writer.cs" />
     <Compile Include="LauncherSettings.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\Adapters\BrushAdapter.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\Adapters\ContextMenuAdapter.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\Adapters\ControlAdapter.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\Adapters\FontAdapter.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\Adapters\FontFamilyAdapter.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\Adapters\GraphicsAdapter.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\Adapters\GraphicsPathAdapter.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\Adapters\ImageAdapter.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\Adapters\PenAdapter.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\Adapters\WpfAdapter.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\HtmlContainer.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\HtmlControl.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\HtmlLabel.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\HtmlPanel.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\HtmlRender.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\RoutedEventArgs.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\Utilities\ClipboardHelper.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\Utilities\Utils.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\Entities\RColor.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\Entities\RDashStyle.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\Entities\RFontStyle.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\Entities\RKeyEvent.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\Entities\RMouseEvent.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\Entities\RPoint.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\Entities\RRect.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\Entities\RSize.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\RAdapter.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\RBrush.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\RContextMenu.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\RControl.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\RFont.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\RFontFamily.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\RGraphics.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\RGraphicsPath.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\RImage.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Adapters\RPen.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\CssData.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\CssDefaults.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Dom\Border.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Dom\CssBox.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Dom\CssBoxFrame.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Dom\CssBoxHr.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Dom\CssBoxImage.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Dom\CssBoxProperties.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Dom\CssLayoutEngine.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Dom\CssLayoutEngineTable.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Dom\CssLength.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Dom\CssLineBox.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Dom\CssRect.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Dom\CssRectImage.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Dom\CssRectWord.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Dom\CssSpacingBox.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Dom\CssUnit.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Dom\HoverBoxBlock.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Dom\HtmlTag.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Entities\CssBlock.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Entities\CssBlockSelectorItem.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Entities\HtmlGenerationStyle.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Entities\HtmlImageLoadEventArgs.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Entities\HtmlLinkClickedEventArgs.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Entities\HtmlLinkClickedException.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Entities\HtmlRefreshEventArgs.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Entities\HtmlRenderErrorEventArgs.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Entities\HtmlRenderErrorType.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Entities\HtmlScrollEventArgs.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Entities\HtmlStylesheetLoadEventArgs.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Entities\LinkElementData.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Handlers\BackgroundImageDrawHandler.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Handlers\BordersDrawHandler.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Handlers\ContextMenuHandler.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Handlers\FontsHandler.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Handlers\ImageDownloader.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Handlers\ImageLoadHandler.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Handlers\SelectionHandler.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Handlers\StylesheetLoadHandler.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\HtmlContainerInt.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\HtmlRendererUtils.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Parse\CssParser.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Parse\CssValueParser.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Parse\DomParser.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Parse\HtmlParser.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Parse\RegexParserHelper.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Parse\RegexParserUtils.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\ArgChecker.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\CommonUtils.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\CssConstants.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\CssUtils.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\DomUtils.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\HtmlConstants.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\HtmlUtils.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\RenderUtils.cs" />
+    <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\SubString.cs" />
     <Compile Include="SilkroadCommon\SilkCfg.cs" />
     <Compile Include="SilkroadCommon\Download\FileEntry.cs" />
     <Compile Include="SilkroadCommon\Setting\SROptionSet.cs" />
@@ -116,7 +202,7 @@
     <Compile Include="Utility\Pk2ReaderHelpers.cs" />
     <Compile Include="Utility\SocketHelpers.cs" />
     <Compile Include="Utility\TaskHelpers.cs" />
-    <Compile Include="ValueConverters\BooleanToVisibilityGoneConverter.cs" />
+    <Compile Include="ValueConverters\BaseValueConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModels\Application\ConfigViewModel.cs" />
     <Compile Include="ViewModels\Application\IWindow.cs" />
@@ -142,6 +228,10 @@
       <SubType>Designer</SubType>
     </Page>
     <Page Include="Styles\ProgressBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
+    <Page Include="Styles\Slider.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </Page>
@@ -192,7 +282,6 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
-    <None Include="packages.config" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -211,6 +300,8 @@
     <Resource Include="Resources\Images\Silkroad.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\ImageError.png" />
+    <Resource Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\ImageLoad.png" />
     <Resource Include="Resources\Images\ProgressBarEmpty.png" />
     <Resource Include="Resources\Images\ProgressBarFull.png" />
     <Resource Include="Resources\Images\Background.png" />
