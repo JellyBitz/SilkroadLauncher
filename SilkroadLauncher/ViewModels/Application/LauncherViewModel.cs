@@ -62,7 +62,7 @@ namespace SilkroadLauncher
         /// <summary>
         /// Game bsic config
         /// </summary>
-        private ConfigViewModel m_Config = new ConfigViewModel();
+        private ConfigViewModel m_Config;
         /// <summary>
         /// The initial connection to server
         /// </summary>
@@ -391,9 +391,8 @@ namespace SilkroadLauncher
             });
             #endregion
 
-            // Loading stuffs
-            LoadConfig();
-            LoadPk2();
+            // Init stuffs
+            Initialize();
         }
         #endregion
 
@@ -405,7 +404,6 @@ namespace SilkroadLauncher
         {
             // Just save a reference
             m_Window = Window;
-
         }
         /// <summary>
         /// Show message to the user
@@ -417,7 +415,7 @@ namespace SilkroadLauncher
         /// <summary>
         /// Check and loads the patch updates
         /// </summary>
-        public async void CheckUpdatesAsync()
+        public async Task CheckUpdatesAsync()
         {
             // Avoid connection
             if (!IsLoaded)
@@ -482,9 +480,9 @@ namespace SilkroadLauncher
 
         #region Private Helpers
         /// <summary>
-        /// Try to loads all required everything to create the connection to server
+        /// Initialize all stuffs required for the connection and settings
         /// </summary>
-        private void LoadPk2()
+        private void Initialize()
         {
             Pk2Reader pk2Reader = null;
             try
@@ -492,8 +490,9 @@ namespace SilkroadLauncher
                 // Load pk2 reader
                 pk2Reader = new Pk2Reader(LauncherSettings.PATH_PK2_MEDIA,LauncherSettings.CLIENT_BLOWFISH_KEY);
 
-                // Try to load Type.txt
-                m_Config.LoadTypeFile(pk2Reader);
+                // Load settings
+                m_Config = new ConfigViewModel();
+                m_Config.Load(pk2Reader);
 
                 // Extract essential stuffs for the process
                 if (pk2Reader.TryGetDivisionInfo(out m_DivisionInfo) 
@@ -512,25 +511,6 @@ namespace SilkroadLauncher
             {
                 pk2Reader?.Close();
             }
-        }
-        /// <summary>
-        /// Try to loads the config or create a new one
-        /// </summary>
-        private void LoadConfig()
-        {
-            bool createNew = false;
-            m_Config = new ConfigViewModel();
-            // Try to load configs or create a new one
-            if (!m_Config.LoadSilkCfg()){
-                m_Config.ResetSilkCfg();
-                createNew = true;
-            }
-            if (!m_Config.LoadSROptionSet()){
-                m_Config.ResetSROptionSet();
-                createNew = true;
-            }
-            if (createNew)
-                m_Config.Save();
         }
         #endregion
     }

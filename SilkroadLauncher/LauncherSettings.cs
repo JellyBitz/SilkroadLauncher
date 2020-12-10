@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace SilkroadLauncher
+﻿namespace SilkroadLauncher
 {
     /// <summary>
     /// Global class for a quick usage setup
@@ -28,8 +26,6 @@ namespace SilkroadLauncher
             CLIENT_BLOWFISH_KEY = "169841";
 
         public static string
-            PATH_SILKCFG = "SilkCfg.dat",
-            PATH_SROPTIONSET = "Setting\\SROptionSet.dat",
             PATH_PK2_MEDIA = "Media.pk2";
     }
 }

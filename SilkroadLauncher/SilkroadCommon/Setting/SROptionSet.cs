@@ -3,7 +3,6 @@ namespace SilkroadLauncher.SilkroadCommon.Setting
 {
     /// <summary>
     /// SROptinoSet.dat file structure
-    /// <para>https://github.com/DummkopfOfHachtenduden/SilkroadDoc/wiki/SROptionSet</para>
     /// </summary>
     public class SROptionSet
     {

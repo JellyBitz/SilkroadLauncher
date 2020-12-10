@@ -6,20 +6,70 @@ using SilkroadLauncher.SilkroadCommon.Setting;
 using System.Text.RegularExpressions;
 using Pk2ReaderAPI;
 using Pk2WriterAPI;
+using System.Runtime.InteropServices;
+using System.Windows.Forms;
 
 namespace SilkroadLauncher
 {
     public class ConfigViewModel : BaseViewModel
     {
+        #region WinAPI Methods
+        /// <summary>
+        /// Enum the list of availables video modes availables on the current system
+        /// </summary>
+        [DllImport("user32.dll")]
+        private static extern bool EnumDisplaySettings(string DeviceName, int ModeNum, ref DEVMODE DevMode);
+        [StructLayout(LayoutKind.Sequential)]
+        private struct DEVMODE
+        {
+            private const int CCHDEVICENAME = 0x20;
+            private const int CCHFORMNAME = 0x20;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 0x20)]
+            public string dmDeviceName;
+            public short dmSpecVersion;
+            public short dmDriverVersion;
+            public short dmSize;
+            public short dmDriverExtra;
+            public int dmFields;
+            public int dmPositionX;
+            public int dmPositionY;
+            public ScreenOrientation dmDisplayOrientation;
+            public int dmDisplayFixedOutput;
+            public short dmColor;
+            public short dmDuplex;
+            public short dmYResolution;
+            public short dmTTOption;
+            public short dmCollate;
+            [MarshalAs(UnmanagedType.ByValTStr, SizeConst = 0x20)]
+            public string dmFormName;
+            public short dmLogPixels;
+            public int dmBitsPerPel;
+            public int dmPelsWidth;
+            public int dmPelsHeight;
+            public int dmDisplayFlags;
+            public int dmDisplayFrequency;
+            public int dmICMMethod;
+            public int dmICMIntent;
+            public int dmMediaType;
+            public int dmDitherType;
+            public int dmReserved1;
+            public int dmReserved2;
+            public int dmPanningWidth;
+            public int dmPanningHeight;
+        }
+        #endregion
+
         #region Private Members
         /// <summary>
         /// The basic config used to start the client
         /// </summary>
         private SilkCfg m_SilkCfg;
+        private readonly string PATH_SILKCFG = "SilkCfg.dat";
         /// <summary>
-        /// The basic settings used by the client
+        /// Settings used by the client
         /// </summary>
         private SROptionSet m_SROptionSet;
+        private readonly string PATH_SROPTIONSET = "Setting\\SROptionSet.dat";
         /// <summary>
         /// The type file as raw of text
         /// </summary>
@@ -48,6 +98,8 @@ namespace SilkroadLauncher
             set
             {
                 m_SilkCfg.Resolution = value;
+                m_SROptionSet.Options[SROptionSet.OptionID.Graphic01_Width] = value.Width;
+                m_SROptionSet.Options[SROptionSet.OptionID.Graphic01_Height] = value.Height;
                 OnPropertyChanged(nameof(Resolution));
             }
         }
@@ -65,6 +117,7 @@ namespace SilkroadLauncher
             set
             {
                 m_SilkCfg.BrightnessType = value;
+                m_SROptionSet.Options[SROptionSet.OptionID.Graphic01_Brightness] = (byte)value;
                 OnPropertyChanged(nameof(Brightness));
             }
         }
@@ -132,18 +185,22 @@ namespace SilkroadLauncher
         {
             // Set default SilkCfg.dat
             m_SilkCfg = new SilkCfg();
-            SupportedResolutions = new List<SilkCfg.WindowResolution>(){
-                new SilkCfg.WindowResolution(800,600),
-                new SilkCfg.WindowResolution(1024,768),
-                new SilkCfg.WindowResolution(1280,720),
-                new SilkCfg.WindowResolution(1280,800),
-                new SilkCfg.WindowResolution(1280,1024),
-                new SilkCfg.WindowResolution(1366,768),
-                new SilkCfg.WindowResolution(1440,900),
-                new SilkCfg.WindowResolution(1600,900),
-                new SilkCfg.WindowResolution(1680,1050),
-                new SilkCfg.WindowResolution(1920,1080)
-            };
+
+            // Load available resolutions to display
+            SupportedResolutions = new List<SilkCfg.WindowResolution>();
+            DEVMODE mode = new DEVMODE();
+            var minPixels = 800 * 600;
+            for (int i = 0; EnumDisplaySettings(null, i, ref mode); i++)
+            {
+                // Avoid lowest resolutions
+                if (mode.dmPelsWidth * mode.dmPelsHeight < minPixels)
+                    continue;
+                // Add only one per resolution
+                var resolution = new SilkCfg.WindowResolution((uint)mode.dmPelsWidth, (uint)mode.dmPelsHeight);
+                if (!SupportedResolutions.Contains(resolution))
+                    SupportedResolutions.Add(resolution);
+            }
+            // Default brightness
             SupportedBrightness = new List<SilkCfg.Brightness>(){
                 SilkCfg.Brightness.VeryDark,
                 SilkCfg.Brightness.Dark,
@@ -151,6 +208,7 @@ namespace SilkroadLauncher
                 SilkCfg.Brightness.Bright,
                 SilkCfg.Brightness.VeryBright
             };
+            // Default graphics
             SupportedGraphics = new List<SilkCfg.Graphic>()
             {
                 SilkCfg.Graphic.Low,
@@ -166,16 +224,62 @@ namespace SilkroadLauncher
 
         #region Public Methods
         /// <summary>
+        /// Load settings or create a new one
+        /// </summary>
+        public void Load(Pk2Reader pk2Reader)
+        {
+            // Loads language from pk2
+            LoadTypeFile(pk2Reader);
+
+            // Try to load configs or create a new one
+            bool createNew = false;
+            if (!LoadSilkCfg())
+            {
+                m_SilkCfg = new SilkCfg();
+                createNew = true;
+            }
+            if (!LoadSROptionSet())
+            {
+                m_SROptionSet = new SROptionSet();
+                createNew = true;
+            }
+            BindConfigs();
+
+            // Save changes created
+            if (createNew)
+                Save();
+        }
+        /// <summary>
+        /// Save the current settings
+        /// </summary>
+        public void Save()
+        {
+            SaveTypeFile();
+            SaveSilkCfg();
+            SaveSROptionSet();
+        }
+        #endregion
+
+        #region Private Helpers
+        /// <summary>
+        /// Set launcher configs to reflect game settings
+        /// </summary>
+        private void BindConfigs()
+        {
+            m_SilkCfg.Resolution = new SilkCfg.WindowResolution((uint)m_SROptionSet.Options[SROptionSet.OptionID.Graphic01_Width], (uint)m_SROptionSet.Options[SROptionSet.OptionID.Graphic01_Height]);
+            m_SilkCfg.BrightnessType = (SilkCfg.Brightness)m_SROptionSet.Options[SROptionSet.OptionID.Graphic01_Brightness];
+        }
+        /// <summary>
         /// Try to load the SilkCfg file
         /// </summary>
-        public bool LoadSilkCfg()
+        private bool LoadSilkCfg()
         {
-            if (File.Exists(LauncherSettings.PATH_SILKCFG))
+            if (File.Exists(PATH_SILKCFG))
             {
                 BinaryReader reader = null;
                 try
                 {
-                    reader = new BinaryReader(new FileStream(LauncherSettings.PATH_SILKCFG, FileMode.Open, FileAccess.Read));
+                    reader = new BinaryReader(new FileStream(PATH_SILKCFG, FileMode.Open, FileAccess.Read));
                     // Read config structure by version
                     m_SilkCfg.Version = reader.ReadUInt32();
                     if (m_SilkCfg.Version < 4)
@@ -203,38 +307,35 @@ namespace SilkroadLauncher
                             if (gIndex == 2 && SupportedGraphics.Contains(g2))
                                 m_SilkCfg.GraphicType = g2;
                         }
+                        m_SilkCfg.unkByte03 = reader.ReadByte();
                     }
-                } catch (Exception e) {
+                    return true;
+                }
+                catch (Exception e)
+                {
                     System.Diagnostics.Debug.WriteLine(e.Message);
-                    return false;
-                } finally {
+                }
+                finally
+                {
                     reader?.Close();
                 }
-                return true;
             }
             return false;
         }
         /// <summary>
-        /// Reset the SilkCfg setting
-        /// </summary>
-        public void ResetSilkCfg()
-        {
-            m_SilkCfg = new SilkCfg();
-        }
-        /// <summary>
         /// Save the SilkCfg setting
         /// </summary>
-        public void SaveSilkCfg()
+        private void SaveSilkCfg()
         {
             BinaryWriter writer = null;
             try
             {
                 // Create location
-                string dir = Path.GetDirectoryName(LauncherSettings.PATH_SILKCFG);
+                string dir = Path.GetDirectoryName(PATH_SILKCFG);
                 if (dir != string.Empty && !Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
 
-                writer = new BinaryWriter(new FileStream(LauncherSettings.PATH_SILKCFG, FileMode.Create, FileAccess.Write));
+                writer = new BinaryWriter(new FileStream(PATH_SILKCFG, FileMode.Create, FileAccess.Write));
                 // Write config structure by version
                 writer.Write(m_SilkCfg.Version);
                 if (m_SilkCfg.Version < 4)
@@ -256,83 +357,84 @@ namespace SilkroadLauncher
                         // Graphics choosen always set #1
                         writer.Write((byte)1);
                     }
+                    writer.Write(m_SilkCfg.unkByte03);
                 }
-            } catch (Exception e) {
+            }
+            catch (Exception e)
+            {
                 System.Diagnostics.Debug.WriteLine(e.Message);
-            } finally {
+            }
+            finally
+            {
                 writer?.Close();
             }
         }
         /// <summary>
         /// Try to load the SROptionSet file
         /// </summary>
-        public bool LoadSROptionSet()
+        private bool LoadSROptionSet()
         {
-            if (File.Exists(LauncherSettings.PATH_SROPTIONSET))
+            if (File.Exists(PATH_SROPTIONSET))
             {
                 BinaryReader reader = null;
                 try
                 {
-                    reader = new BinaryReader(new FileStream(LauncherSettings.PATH_SROPTIONSET, FileMode.Open, FileAccess.Read));
+                    reader = new BinaryReader(new FileStream(PATH_SROPTIONSET, FileMode.Open, FileAccess.Read));
                     // Read config structure by version
                     m_SROptionSet.Version = reader.ReadUInt32();
                     m_SROptionSet.unkByte01 = reader.ReadByte();
                     m_SROptionSet.unkUInt01 = reader.ReadUInt32();
 
-                    while(reader.BaseStream.Position < reader.BaseStream.Length){
+                    while (reader.BaseStream.Position < reader.BaseStream.Length)
+                    {
                         SROptionSet.OptionID id = (SROptionSet.OptionID)reader.ReadUInt32();
-                        if(m_SROptionSet.Options.TryGetValue(id,out object value)){
+                        if (m_SROptionSet.Options.TryGetValue(id, out object value))
+                        {
                             if (value is bool) value = reader.ReadBoolean();
                             else if (value is byte) value = reader.ReadByte();
                             else if (value is ushort) value = reader.ReadUInt16();
                             else if (value is uint) value = reader.ReadUInt32();
+                            // Update the saved value
+                            m_SROptionSet.Options[id] = value;
                         }
                         else
                         {
-                            System.Diagnostics.Debug.WriteLine($"SROptionSet: ID [{id}] not found");
+                            System.Diagnostics.Debug.WriteLine($"SROptionSet: ID [{id}] not found, loading aborted!");
                             break;
                         }
                     }
+                    return true;
                 }
                 catch (Exception e)
                 {
                     System.Diagnostics.Debug.WriteLine(e.Message);
-                    return false;
                 }
                 finally
                 {
                     reader?.Close();
                 }
-                return true;
             }
             return false;
         }
         /// <summary>
-        /// Reset the SROptionSet setting
-        /// </summary>
-        public void ResetSROptionSet()
-        {
-            m_SROptionSet = new SROptionSet();
-        }
-        /// <summary>
         /// Save the SROptionSet setting
         /// </summary>
-        public void SaveSROptionSet()
+        private void SaveSROptionSet()
         {
             BinaryWriter writer = null;
             try
             {
                 // Create location
-                string dir = Path.GetDirectoryName(LauncherSettings.PATH_SROPTIONSET);
+                string dir = Path.GetDirectoryName(PATH_SROPTIONSET);
                 if (dir != string.Empty && !Directory.Exists(dir))
                     Directory.CreateDirectory(dir);
 
-                writer = new BinaryWriter(new FileStream(LauncherSettings.PATH_SROPTIONSET, FileMode.Create, FileAccess.Write));
+                writer = new BinaryWriter(new FileStream(PATH_SROPTIONSET, FileMode.Create, FileAccess.Write));
                 // Write config structure by version
                 writer.Write(m_SROptionSet.Version);
                 writer.Write(m_SROptionSet.unkByte01);
                 writer.Write(m_SROptionSet.unkUInt01);
-                foreach(var k_v in m_SROptionSet.Options)
+                foreach (var k_v in m_SROptionSet.Options)
                 {
                     // ID
                     writer.Write((uint)k_v.Key);
@@ -357,7 +459,7 @@ namespace SilkroadLauncher
         /// </summary>
         /// <param name="Pk2Reader">Pk2 used to search</param>
         /// <returns>Return success</returns>
-        public bool LoadTypeFile(Pk2Reader Pk2Reader)
+        private bool LoadTypeFile(Pk2Reader Pk2Reader)
         {
             var temp = Pk2Reader.GetFileText("Type.txt");
             // Check if file has been found
@@ -377,16 +479,16 @@ namespace SilkroadLauncher
         /// <summary>
         /// Save the type file but only if has been loaded before
         /// </summary>
-        public void SaveTypeFile()
+        private void SaveTypeFile()
         {
             if (m_TypeFile != null)
             {
                 // Replace value
-                m_TypeFile = Regex.Replace(m_TypeFile,"Language[ ]{0,1}=[ ]{0,1}[\"]{0,1}([a-zA-Z]*)[\"]{0,1}", "Language = \""+ Language + "\"");
+                m_TypeFile = Regex.Replace(m_TypeFile, "Language[ ]{0,1}=[ ]{0,1}[\"]{0,1}([a-zA-Z]*)[\"]{0,1}", "Language = \"" + Language + "\"");
                 // Import to Pk2
                 if (Pk2Writer.Initialize("GFXFileManager.dll"))
                 {
-                    if(Pk2Writer.Open(LauncherSettings.PATH_PK2_MEDIA, LauncherSettings.CLIENT_BLOWFISH_KEY))
+                    if (Pk2Writer.Open(LauncherSettings.PATH_PK2_MEDIA, LauncherSettings.CLIENT_BLOWFISH_KEY))
                     {
                         // Create a temporary file
                         if (!Directory.Exists("Temp"))
@@ -402,15 +504,6 @@ namespace SilkroadLauncher
                     }
                 }
             }
-        }
-        /// <summary>
-        /// Save the current settings
-        /// </summary>
-        public void Save()
-        {
-            SaveSilkCfg();
-            SaveSROptionSet();
-            SaveTypeFile();
         }
         #endregion
     }

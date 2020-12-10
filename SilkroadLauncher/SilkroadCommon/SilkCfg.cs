@@ -14,6 +14,7 @@ namespace SilkroadLauncher.SilkroadCommon
         public byte unkByte01 { get; set; } = 1;
         public bool IsSoundEnabled { get; set; } = true;
         public byte unkByte02 { get; set; } = 0;
+        public byte unkByte03 { get; set; } = 1;
         /// <summary>
         /// Graphic visual type
         /// </summary>

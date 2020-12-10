@@ -37,11 +37,11 @@ namespace SilkroadLauncher
         /// <summary>
         /// Window fully loaded
         /// </summary>
-        private void Window_Loaded(object sender, RoutedEventArgs e)
+        private async void Window_Loaded(object sender, RoutedEventArgs e)
         {
             // Start loading updates
             if (DataContext is LauncherViewModel launcher)
-                launcher.CheckUpdatesAsync();
+                await launcher.CheckUpdatesAsync();
 
             // Force to the top
             Topmost = true;
