@@ -51,7 +51,7 @@ namespace SilkroadLauncher.Network
 
             // Continue adding bytes to the file
             byte[] buffer = p.GetBytes();
-            m_FileStream.WriteAsync(buffer, 0, buffer.Length);
+            m_FileStream.Write(buffer, 0, buffer.Length);
 
             LauncherViewModel.Instance.UpdatingBytesDownloading += (uint)buffer.Length;
         }
@@ -71,13 +71,15 @@ namespace SilkroadLauncher.Network
             // Process the file
             if (file.ImportToPk2)
             {
-                // Get the Pk2 to open
-                int pk2FileNameLength = file.Path.IndexOf("\\");
-                string pk2FileName = file.Path.Remove(pk2FileNameLength);
+                // Get the Pk2 to be open
+                string pk2Name = file.Path.Remove(file.Path.IndexOf("\\"));
                 // Open the Pk2 and insert the file
-                if (Pk2Writer.Open(pk2FileName, LauncherSettings.CLIENT_BLOWFISH_KEY))
+                if (Pk2Writer.Open(pk2Name + ".pk2", LauncherSettings.CLIENT_BLOWFISH_KEY))
                 {
-                    if (Pk2Writer.ImportFile(file.Path.Substring(pk2FileNameLength + 1) + "\\" + file.Name, "Temp\\" + file.ID))
+                    DecompressFile("Temp\\" + file.ID);
+                    // Set pk2 path to be used
+                    var pk2Path = file.Path.Substring(pk2Name.Length + 1) + "\\" + file.Name;
+                    if (Pk2Writer.ImportFile(pk2Path, "Temp\\" + file.ID))
                         System.Diagnostics.Debug.WriteLine($"File {file.Name} imported into the Pk2");
                     // Close the Pk2
                     Pk2Writer.Close();
@@ -87,22 +89,7 @@ namespace SilkroadLauncher.Network
             }
             else
             {
-                // Create an empty file to decompress (zlib)
-                using (FileStream outFileStream = File.Create("Temp\\" + file.Name))
-                {
-                    using (FileStream inFileStream = new FileStream("Temp\\" + file.ID, FileMode.Open, FileAccess.Read))
-                    {
-                        // Read past unknown bytes (4) and zlib header bytes (2)
-                        inFileStream.Seek(6, SeekOrigin.Begin);
-
-                        using (DeflateStream zlib = new DeflateStream(inFileStream, CompressionMode.Decompress))
-                        {
-                            zlib.CopyTo(outFileStream);
-                        }
-                    }
-                    // Delete decompressed file
-                    File.Delete("Temp\\" + file.ID);
-                }
+                DecompressFile("Temp\\" + file.ID);
 
                 // Check file path
                 if (file.Path != string.Empty) {
@@ -117,12 +104,12 @@ namespace SilkroadLauncher.Network
                 var launcherFilename = Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
                 if (file.Path == string.Empty && file.Name.Equals(launcherFilename, StringComparison.InvariantCultureIgnoreCase))
                 {
-                    ForceMovingFile("Temp\\" + file.Name, "Temp\\_" + file.Name);
+                    ForceMovingFile("Temp\\" + file.ID, "Temp\\_" + file.Name);
                 }
                 else
                 {
                     // Move or replace from Temp to the folder required
-                    ForceMovingFile("Temp\\" + file.Name, file.Path + file.Name);
+                    ForceMovingFile("Temp\\" + file.ID, file.Path + file.Name);
                 }
             }
 
@@ -243,6 +230,29 @@ namespace SilkroadLauncher.Network
             if (File.Exists(destFileName))
                 File.Delete(destFileName);
             File.Move(sourceFileName, destFileName);
+        }
+        /// <summary>
+        /// Decompress the file with zlib
+        /// </summary>
+        private static void DecompressFile(string Path)
+        {
+            ForceMovingFile(Path, Path + ".tmp");
+            // Create an empty file to decompress (zlib)
+            using (FileStream outFileStream = File.Create(Path))
+            {
+                using (FileStream inFileStream = new FileStream(Path + ".tmp", FileMode.Open, FileAccess.Read))
+                {
+                    // Read past unknown bytes (4) and zlib header bytes (2)
+                    inFileStream.Seek(6, SeekOrigin.Begin);
+
+                    using (DeflateStream zlib = new DeflateStream(inFileStream, CompressionMode.Decompress))
+                    {
+                        zlib.CopyTo(outFileStream);
+                    }
+                }
+                // Delete decompressed file
+                File.Delete(Path + ".tmp");
+            }
         }
         #endregion
     }
