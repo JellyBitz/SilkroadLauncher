@@ -22,6 +22,6 @@ Customizable launcher writted on C# (WPF) for Silkroad Online (vSRO 1.188)
 > - Drew "pushedx" Benton for his past work and sources!
 > - DaxterSoul for his help with file structures
 >
-> ##### Created on Microsoft Visual Studio 2017
-> - .NET Framework 4.7 Platform
+> ##### Created on Microsoft Visual Studio 2019
+> - .NET Framework 4.7.2 Platform
 > - HTMLRenderer
