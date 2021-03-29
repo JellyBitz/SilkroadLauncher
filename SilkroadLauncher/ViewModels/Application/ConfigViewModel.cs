@@ -78,6 +78,10 @@ namespace SilkroadLauncher
         /// Language found on type file
         /// </summary>
         private string m_Language = "Unknown";
+        /// <summary>
+        /// Language index currently selected
+        /// </summary>
+        private int m_SupportedLanguageIndex;
         #endregion
 
         #region Public Properties
@@ -167,15 +171,29 @@ namespace SilkroadLauncher
         /// </summary>
         public List<string> SupportedLanguages { get; }
         /// <summary>
-        /// In game language
+        /// Internal game language
         /// </summary>
         public string Language
         {
             get { return m_Language; }
-            set
+            private set
             {
                 m_Language = value;
                 OnPropertyChanged(nameof(Language));
+            }
+        }
+        /// <summary>
+        /// Language index selected by user
+        /// </summary>
+        public int SupportedLanguageIndex
+        {
+            get { return m_SupportedLanguageIndex; }
+            set
+            {
+                m_SupportedLanguageIndex = value;
+                OnPropertyChanged(nameof(SupportedLanguageIndex));
+                // Set the language internally
+                Language = LauncherSettings.CLIENT_LANGUAGE_SUPPORTED[value];
             }
         }
         #endregion
@@ -218,7 +236,7 @@ namespace SilkroadLauncher
             // Set default SROptionSet.dat
             m_SROptionSet = new SROptionSet();
             // Set languages supported
-            SupportedLanguages = new List<string>(LauncherSettings.CLIENT_LANGUAGE_SUPPORTED);
+            SupportedLanguages = new List<string>(LauncherSettings.CLIENT_LANGUAGE_SUPPORTED_MASK);
         }
         #endregion
 
@@ -469,9 +487,16 @@ namespace SilkroadLauncher
                 var match = Regex.Match(temp, "Language[ ]{0,1}=[ ]{0,1}[\"]{0,1}([a-zA-Z]*)[\"]{0,1}");
                 if (match.Success)
                 {
-                    m_TypeFile = temp;
-                    m_Language = match.Groups[1].Value;
-                    return true;
+                    // Try to find the index selected
+                    foreach (var lang in LauncherSettings.CLIENT_LANGUAGE_SUPPORTED)
+                    {
+                        if (lang == match.Groups[1].Value)
+                        {
+                            m_TypeFile = temp;
+                            m_Language = match.Groups[1].Value;
+                            return true;
+                        }
+                    }
                 }
             }
             return false;

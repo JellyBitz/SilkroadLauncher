@@ -20,6 +20,11 @@
                 "Vietnam",
                 "English",
             };
+        public static string[]
+            CLIENT_LANGUAGE_SUPPORTED_MASK = new string[]{
+                "International",
+                "English",
+            };
 
         public static string
             CLIENT_EXECUTABLE = "sro_client.exe",

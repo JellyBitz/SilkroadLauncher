@@ -40,9 +40,13 @@ namespace SilkroadLauncher
         /// </summary>
         private ushort m_Gateport;
         /// <summary>
-        /// Client version
+        /// Client version handled internally by game
         /// </summary>
         private uint m_Version;
+        /// <summary>
+        /// Client version shown to the user
+        /// </summary>
+        private string m_ClientVersion = string.Empty;
         /// <summary>
         /// Locale type
         /// </summary>
@@ -132,7 +136,7 @@ namespace SilkroadLauncher
             }
         }
         /// <summary>
-        /// Client Version
+        /// Client version handled internally
         /// </summary>
         public uint Version
         {
@@ -143,6 +147,23 @@ namespace SilkroadLauncher
                 m_Version = value;
                 // notify event
                 OnPropertyChanged(nameof(Version));
+                // Set as string
+                var strVer = (1000 + m_Version).ToString();
+                ClientVersion = strVer.Substring(0, 1) + "." + strVer.Substring(1);
+            }
+        }
+        /// <summary>
+        /// Client version shown to the user
+        /// </summary>
+        public string ClientVersion 
+        {
+            get { return m_ClientVersion; }
+            private set
+            {
+                // set new value
+                m_ClientVersion = value;
+                // notify event
+                OnPropertyChanged(nameof(ClientVersion));
             }
         }
         /// <summary>
@@ -151,7 +172,7 @@ namespace SilkroadLauncher
         public bool IsLoaded
         {
             get { return m_IsLoaded; }
-            set
+            private set
             {
                 // set new value
                 m_IsLoaded = value;
@@ -465,7 +486,6 @@ namespace SilkroadLauncher
                 ShowMessage(LauncherSettings.MSG_INSPECTION);
             }
         }
-
         /// <summary>
         /// Exit from Launcher
         /// </summary>
@@ -501,6 +521,8 @@ namespace SilkroadLauncher
                     && pk2Reader.TryGetLocale(out m_Locale))
                 {
                     IsLoaded = true;
+                    // Force string to be updated
+                    Version = m_Version;
                 }
             }
             catch (Exception ex)
