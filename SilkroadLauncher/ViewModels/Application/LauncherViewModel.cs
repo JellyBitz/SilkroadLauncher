@@ -443,7 +443,7 @@ namespace SilkroadLauncher
                 {
                     // Try to connect to the address
                     System.Diagnostics.Debug.WriteLine("Starting Session..");
-                    connectionSolved = await Task.Run(() => m_GatewaySession.Start(division.Value[i], m_Gateport, 10000));
+                    connectionSolved = await Task.Run(() => m_GatewaySession.Start(division.Value[i], m_Gateport, 5000));
                     if (connectionSolved)
                     {
                         hostIndex = i;
