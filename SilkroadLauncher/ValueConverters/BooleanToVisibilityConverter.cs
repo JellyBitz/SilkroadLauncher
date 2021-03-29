@@ -1,21 +1,24 @@
 ﻿using System;
 using System.Windows;
-using System.Windows.Data;
+using System.Globalization;
 namespace SilkroadLauncher
 {
-    [ValueConversion(typeof(bool), typeof(Visibility))]
-    public class BooleanToVisibilityConverter : IValueConverter
+    /// <summary>
+    /// A converter that takes in a boolean and returns a <see cref="Visibility"/>
+    /// </summary>
+    public class BooleanToVisibilityConverter : BaseValueConverter<BooleanToVisibilityConverter>
     {
-        public static BooleanToVisibilityConverter Instance = new BooleanToVisibilityConverter();
-        #region IValueConverter Members
-        public object Convert(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public override object Convert(object value, Type targetType, object parameter, CultureInfo culture)
         {
-           return (bool)value ? Visibility.Visible : Visibility.Hidden;
+            if (parameter == null)
+                return (bool)value ? Visibility.Visible : Visibility.Collapsed;
+
+            // If parameter is specified, then inverse his behavior
+            return (bool)value ? Visibility.Collapsed : Visibility.Visible;
         }
-        public object ConvertBack(object value, Type targetType, object parameter, System.Globalization.CultureInfo culture)
+        public override object ConvertBack(object value, Type targetType, object parameter, CultureInfo culture)
         {
-            throw new NotSupportedException();
+            throw new NotImplementedException();
         }
-        #endregion
     }
 }

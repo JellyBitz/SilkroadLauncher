@@ -173,12 +173,12 @@
                     CornerRadius="6,6,0,0">
                 <Grid>
                     <!-- Notice Message (HTML) -->
-                    <htmlrender:HtmlPanel Visibility="{Binding IsViewingConfig,Converter={x:Static local:BooleanToVisibilityGoneConverter.Instance}}"
+                    <htmlrender:HtmlPanel Visibility="{Binding IsViewingConfig,Converter={local:BooleanToVisibilityConverter},ConverterParameter=True}"
                                           Background="Transparent" Margin="6"
                                           BaseStylesheet="body{color:#eee;} a { color:#89b3ff; }"
                                           Text="{Binding SelectedWebNotice.Article}"/>
                     <!-- Game Settings -->
-                    <Grid Visibility="{Binding IsViewingConfig,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}"
+                    <Grid Visibility="{Binding IsViewingConfig,Converter={local:BooleanToVisibilityConverter}}"
                           Margin="40,45,40,25">
                         <Grid.RowDefinitions>
                             <RowDefinition Height="Auto"></RowDefinition>
@@ -338,13 +338,13 @@
             <Button Grid.Column="1" Margin="0,-4,0,0"
                     Style="{StaticResource ButtonBaseImageStyle}"
                     Command="{Binding CommandStartGame}"
-                    Visibility="{Binding CanStartGame,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}">
+                    Visibility="{Binding CanStartGame,Converter={local:BooleanToVisibilityConverter}}">
                 <TextBlock Text="Play" Margin="0,-3,0,0"
                            FontSize="{StaticResource FontSizeXXLarge}"/>
             </Button>
             <!-- Patch Progress -->
             <Grid Grid.Column="1"  Margin="0,-4,0,0"
-                  Visibility="{Binding IsUpdating,Converter={x:Static local:BooleanToVisibilityConverter.Instance}}">
+                  Visibility="{Binding IsUpdating,Converter={local:BooleanToVisibilityConverter}}">
                 <ProgressBar Style="{StaticResource ProgressBarImageFill}"
                              Value="{Binding UpdatingPercentage}">
                 </ProgressBar>
