@@ -171,18 +171,6 @@ namespace SilkroadLauncher
         /// </summary>
         public List<string> SupportedLanguages { get; }
         /// <summary>
-        /// Internal game language
-        /// </summary>
-        public string Language
-        {
-            get { return m_Language; }
-            private set
-            {
-                m_Language = value;
-                OnPropertyChanged(nameof(Language));
-            }
-        }
-        /// <summary>
         /// Language index selected by user
         /// </summary>
         public int SupportedLanguageIndex
@@ -193,7 +181,7 @@ namespace SilkroadLauncher
                 m_SupportedLanguageIndex = value;
                 OnPropertyChanged(nameof(SupportedLanguageIndex));
                 // Set the language internally
-                Language = LauncherSettings.CLIENT_LANGUAGE_SUPPORTED[value];
+                m_Language = LauncherSettings.CLIENT_LANGUAGE_SUPPORTED[value];
             }
         }
         #endregion
@@ -488,12 +476,12 @@ namespace SilkroadLauncher
                 if (match.Success)
                 {
                     // Try to find the index selected
-                    foreach (var lang in LauncherSettings.CLIENT_LANGUAGE_SUPPORTED)
+                    for (int i = 0; i < LauncherSettings.CLIENT_LANGUAGE_SUPPORTED.Length; i++)
                     {
-                        if (lang == match.Groups[1].Value)
+                        if (LauncherSettings.CLIENT_LANGUAGE_SUPPORTED[i] == match.Groups[1].Value)
                         {
                             m_TypeFile = temp;
-                            m_Language = match.Groups[1].Value;
+                            SupportedLanguageIndex = i;
                             return true;
                         }
                     }
@@ -509,7 +497,7 @@ namespace SilkroadLauncher
             if (m_TypeFile != null)
             {
                 // Replace value
-                m_TypeFile = Regex.Replace(m_TypeFile, "Language[ ]{0,1}=[ ]{0,1}[\"]{0,1}([a-zA-Z]*)[\"]{0,1}", "Language = \"" + Language + "\"");
+                m_TypeFile = Regex.Replace(m_TypeFile, "Language[ ]{0,1}=[ ]{0,1}[\"]{0,1}([a-zA-Z]*)[\"]{0,1}", "Language = \"" + m_Language + "\"");
                 // Import to Pk2
                 if (Pk2Writer.Initialize("GFXFileManager.dll"))
                 {
