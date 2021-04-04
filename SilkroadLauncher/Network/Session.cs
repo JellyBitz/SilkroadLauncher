@@ -7,7 +7,7 @@ using System.Net.Sockets;
 namespace SilkroadLauncher.Network
 {
     /// <summary>
-    /// Class to handle the client session. Receiving synchronized and sending asynchronized.
+    /// Class to handle the client session on asynchronized state.
     /// </summary>
     public class Session
     {
@@ -19,10 +19,6 @@ namespace SilkroadLauncher.Network
         /// Packet handlers by opcode
         /// </summary>
         private Dictionary<ushort, List<PacketHandler>> m_PacketHandlers;
-        /// <summary>
-        /// Used to synchronize the incoming packets
-        /// </summary>
-        private readonly object lockHandlers = new object();
         #endregion
 
         #region Constructor
@@ -192,14 +188,10 @@ namespace SilkroadLauncher.Network
 
                 if (m_PacketHandlers.TryGetValue(p.Opcode, out List<PacketHandler> handlers))
                 {
-                    // lock it to read it by sequence!
-                    lock (lockHandlers)
+                    // Execute every packet handler
+                    foreach (var handler in handlers)
                     {
-                        // Execute every packet handler
-                        foreach (var handler in handlers)
-                        {
-                            handler.Execute(p, this);
-                        }
+                        handler.Execute(p, this);
                     }
                 }
             }

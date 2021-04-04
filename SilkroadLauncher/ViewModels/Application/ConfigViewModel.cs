@@ -78,6 +78,10 @@ namespace SilkroadLauncher
         /// Language found on type file
         /// </summary>
         private string m_Language = "Unknown";
+        /// <summary>
+        /// Language index currently selected
+        /// </summary>
+        private int m_SupportedLanguageIndex;
         #endregion
 
         #region Public Properties
@@ -167,15 +171,17 @@ namespace SilkroadLauncher
         /// </summary>
         public List<string> SupportedLanguages { get; }
         /// <summary>
-        /// In game language
+        /// Language index selected by user
         /// </summary>
-        public string Language
+        public int SupportedLanguageIndex
         {
-            get { return m_Language; }
+            get { return m_SupportedLanguageIndex; }
             set
             {
-                m_Language = value;
-                OnPropertyChanged(nameof(Language));
+                m_SupportedLanguageIndex = value;
+                OnPropertyChanged(nameof(SupportedLanguageIndex));
+                // Set the language internally
+                m_Language = LauncherSettings.CLIENT_LANGUAGE_SUPPORTED[value];
             }
         }
         #endregion
@@ -218,7 +224,7 @@ namespace SilkroadLauncher
             // Set default SROptionSet.dat
             m_SROptionSet = new SROptionSet();
             // Set languages supported
-            SupportedLanguages = new List<string>(LauncherSettings.CLIENT_LANGUAGE_SUPPORTED);
+            SupportedLanguages = new List<string>(LauncherSettings.CLIENT_LANGUAGE_SUPPORTED_MASK);
         }
         #endregion
 
@@ -469,9 +475,16 @@ namespace SilkroadLauncher
                 var match = Regex.Match(temp, "Language[ ]{0,1}=[ ]{0,1}[\"]{0,1}([a-zA-Z]*)[\"]{0,1}");
                 if (match.Success)
                 {
-                    m_TypeFile = temp;
-                    m_Language = match.Groups[1].Value;
-                    return true;
+                    // Try to find the index selected
+                    for (int i = 0; i < LauncherSettings.CLIENT_LANGUAGE_SUPPORTED.Length; i++)
+                    {
+                        if (LauncherSettings.CLIENT_LANGUAGE_SUPPORTED[i] == match.Groups[1].Value)
+                        {
+                            m_TypeFile = temp;
+                            SupportedLanguageIndex = i;
+                            return true;
+                        }
+                    }
                 }
             }
             return false;
@@ -484,7 +497,7 @@ namespace SilkroadLauncher
             if (m_TypeFile != null)
             {
                 // Replace value
-                m_TypeFile = Regex.Replace(m_TypeFile, "Language[ ]{0,1}=[ ]{0,1}[\"]{0,1}([a-zA-Z]*)[\"]{0,1}", "Language = \"" + Language + "\"");
+                m_TypeFile = Regex.Replace(m_TypeFile, "Language[ ]{0,1}=[ ]{0,1}[\"]{0,1}([a-zA-Z]*)[\"]{0,1}", "Language = \"" + m_Language + "\"");
                 // Import to Pk2
                 if (Pk2Writer.Initialize("GFXFileManager.dll"))
                 {

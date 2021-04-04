@@ -12,6 +12,7 @@
 
 using System;
 using System.Globalization;
+using System.Reflection;
 using System.Windows;
 using System.Windows.Media;
 using System.Windows.Media.Imaging;
@@ -122,7 +123,7 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
 
             if (width <= 0)
             {
-                var formattedText = new FormattedText(str, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, ((FontAdapter)font).Font, 96d / 72d * font.Size, Brushes.Red);
+                var formattedText = new FormattedText(str, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, ((FontAdapter)font).Font, 96d / 72d * font.Size, Brushes.Red, GetDPI().PixelsPerDip);
                 return new RSize(formattedText.WidthIncludingTrailingWhitespace, formattedText.Height);
             }
 
@@ -164,7 +165,7 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
 
             if (!handled)
             {
-                var formattedText = new FormattedText(str, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, ((FontAdapter)font).Font, 96d / 72d * font.Size, Brushes.Red);
+                var formattedText = new FormattedText(str, CultureInfo.CurrentCulture, FlowDirection.LeftToRight, ((FontAdapter)font).Font, 96d / 72d * font.Size, Brushes.Red, GetDPI().PixelsPerDip);
                 charFit = str.Length;
                 charFitWidth = formattedText.WidthIncludingTrailingWhitespace;
             }
@@ -200,14 +201,14 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
                     point.X += rtl ? 96d / 72d * font.Size * width : 0;
 
                     glyphRendered = true;
-                    var glyphRun = new GlyphRun(glyphTypeface, rtl ? 1 : 0, false, 96d / 72d * font.Size, glyphs, Utils.ConvertRound(point), widths, null, null, null, null, null, null);
+                    var glyphRun = new GlyphRun(glyphTypeface, rtl ? 1 : 0, false, 96d / 72d * font.Size, (float)GetDPI().PixelsPerDip, glyphs, Utils.ConvertRound(point), widths, null, null, null, null, null, null);
                     _g.DrawGlyphRun(colorConv, glyphRun);
                 }
             }
 
             if (!glyphRendered)
             {
-                var formattedText = new FormattedText(str, CultureInfo.CurrentCulture, rtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight, ((FontAdapter)font).Font, 96d / 72d * font.Size, colorConv);
+                var formattedText = new FormattedText(str, CultureInfo.CurrentCulture, rtl ? FlowDirection.RightToLeft : FlowDirection.LeftToRight, ((FontAdapter)font).Font, 96d / 72d * font.Size, colorConv, GetDPI().PixelsPerDip);
                 point.X += rtl ? formattedText.Width : 0;
                 _g.DrawText(formattedText, Utils.ConvertRound(point));
             }
@@ -316,6 +317,19 @@ namespace TheArtOfDev.HtmlRenderer.WPF.Adapters
             }
         }
 
+        #endregion
+
+        #region Quick Helper
+        private DpiScale GetDPI()
+        {
+            var dpiXProperty = typeof(SystemParameters).GetProperty("DpiX", BindingFlags.NonPublic | BindingFlags.Static);
+            var dpiYProperty = typeof(SystemParameters).GetProperty("Dpi", BindingFlags.NonPublic | BindingFlags.Static);
+
+            var dpiX = (int)dpiXProperty.GetValue(null, null);
+            var dpiY = (int)dpiYProperty.GetValue(null, null);
+
+            return new DpiScale(dpiX, dpiY);
+        }
         #endregion
     }
 }
