@@ -72,13 +72,14 @@ namespace SilkroadLauncher.Network
             if (file.ImportToPk2)
             {
                 // Get the Pk2 to be open
-                string pk2Name = file.Path.Remove(file.Path.IndexOf("\\"));
+                var pk2NameIndex = file.Path.IndexOf("\\");
+                string pk2Name = pk2NameIndex == -1 ? file.Path : file.Path.Remove(pk2NameIndex);
                 // Open the Pk2 and insert the file
                 if (Pk2Writer.Open(pk2Name + ".pk2", LauncherSettings.CLIENT_BLOWFISH_KEY))
                 {
                     DecompressFile("Temp\\" + file.ID);
                     // Set pk2 path to be used
-                    var pk2Path = file.Path.Substring(pk2Name.Length + 1) + "\\" + file.Name;
+                    var pk2Path = (pk2NameIndex == -1 ? "" : file.Path.Substring(pk2Name.Length + 1) + "\\") + file.Name;
                     if (Pk2Writer.ImportFile(pk2Path, "Temp\\" + file.ID))
                         System.Diagnostics.Debug.WriteLine($"File {file.Name} imported into the Pk2");
                     // Close the Pk2
@@ -109,7 +110,11 @@ namespace SilkroadLauncher.Network
                 else
                 {
                     // Move or replace from Temp to the folder required
-                    ForceMovingFile("Temp\\" + file.ID, file.Path + file.Name);
+                    if (!ForceMovingFile("Temp\\" + file.ID, file.Path + file.Name))
+                    {
+                        LauncherViewModel.Instance.ShowMessage("Fatal error updating \"" + file.Name + "\"!");
+                        LauncherViewModel.Instance.Exit();
+                    };
                 }
             }
 
@@ -225,11 +230,32 @@ namespace SilkroadLauncher.Network
         /// <summary>
         /// Move a file. The destination file will be replaced if exists.
         /// </summary>
-        private static void ForceMovingFile(string sourceFileName, string destFileName)
+        private static bool ForceMovingFile(string sourceFileName, string destFileName)
         {
             if (File.Exists(destFileName))
-                File.Delete(destFileName);
+            {
+                try
+                {
+                    File.Delete(destFileName);
+                }
+                catch (UnauthorizedAccessException)
+                {
+                    // File is being used probably, just try to move it
+                    var newFilePath = Path.GetTempFileName();
+                    try
+                    {
+                        File.Delete(newFilePath);
+                        File.Move(destFileName, newFilePath);
+                    }
+                    catch
+                    {
+                        /* Give up with this file... */
+                        return false;
+                    }
+                }
+            }
             File.Move(sourceFileName, destFileName);
+            return true;
         }
         /// <summary>
         /// Decompress the file with zlib

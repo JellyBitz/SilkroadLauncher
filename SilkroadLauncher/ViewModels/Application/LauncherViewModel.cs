@@ -407,8 +407,12 @@ namespace SilkroadLauncher
                 IsViewingConfig = !IsViewingConfig;
             });
             CommandSaveConfig = new RelayCommand(() => {
-                Config.Save();
-                IsViewingConfig = false;
+                // Make sure pk2 it's not being used
+                if (!IsUpdating)
+                {
+                    Config.Save();
+                    IsViewingConfig = false;
+                }
             });
             #endregion
 
