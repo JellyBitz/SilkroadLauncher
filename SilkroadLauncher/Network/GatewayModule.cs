@@ -53,6 +53,7 @@ namespace SilkroadLauncher.Network
             {
                 case 1:
                     LauncherViewModel.Instance.CanStartGame = true;
+                    LauncherViewModel.Instance.UpdatingPercentage = 100;
                     break;
                 case 2:
                     byte errorCode = p.ReadByte();
