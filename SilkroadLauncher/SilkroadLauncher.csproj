@@ -296,6 +296,7 @@
     <Resource Include="Resources\Images\Silkroad.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\NoticeSelected.png" />
     <Resource Include="Resources\Images\Link.png" />
     <Resource Include="Resources\Images\LinkOnHover.png" />
     <Resource Include="Resources\Images\bg_1.jpg" />

@@ -14,13 +14,24 @@
         Background="Transparent"
         Loaded="Window_Loaded">
     <!-- Main layout -->
-    <Grid Background="{StaticResource LauncherBackground01ImageBrush}">
+    <Grid>
         <Grid.RowDefinitions>
+            <!-- Header -->
             <RowDefinition Height="48"/>
+            <!-- Body -->
+            <RowDefinition/>
+            <!-- Main buttons -->
+            <RowDefinition Height="78"/>
         </Grid.RowDefinitions>
 
+        <!-- Background draggable -->
+        <Border Grid.RowSpan="3"
+                MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow"
+                Background="{StaticResource LauncherBackground01ImageBrush}"/>
+
         <!-- Header -->
-        <Grid Background="#00FFFFFF">
+        <Grid Grid.Row="0"
+              Margin="15 10">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition/>
                 <ColumnDefinition Width="Auto"/>
@@ -28,7 +39,6 @@
 
             <!-- Version -->
             <StackPanel Grid.Column="0"
-                        Margin="15 10"
                         Orientation="Horizontal"
                         VerticalAlignment="Bottom">
                 <TextBlock Text="ver "
@@ -42,11 +52,73 @@
             <!-- Link -->
             <Button Grid.Column="1"
                     Style="{StaticResource ButtonWebsiteLinkStyle}"
-                    Margin="15 10"
                     Command="{Binding CommandOpenLink}"
                     CommandParameter="www.silkroadonline.net">
             </Button>
         </Grid>
+
+        <!-- Body -->
+        <Grid Grid.Row="1"
+              Margin="4 3">
+            <!-- Announcements, Notices & Language -->
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="21*"/>
+            </Grid.ColumnDefinitions>
+            
+            <!-- Announcements -->
+            <Grid Grid.Column="0"
+                  Margin="1"/>
+
+            <!-- Notices & Language -->
+            <Grid Grid.Column="1">
+                <Grid.RowDefinitions>
+                    <RowDefinition/>
+                    <RowDefinition Height="62"/>
+                </Grid.RowDefinitions>
+                
+                <!-- Notices -->
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="20*"/>
+                        <RowDefinition Height="43*"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Subject -->
+                    <Grid Grid.Row="0"
+                          Margin="2 25 4 3">
+                        <ListBox Style="{StaticResource NoticeListBox}"
+                                 ItemsSource="{Binding WebNotices}"
+                                 SelectedItem="{Binding SelectedWebNotice}"
+                                 Foreground="#FAE9B6"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Hidden">
+                        </ListBox>
+                    </Grid>
+
+                    <!-- Article -->
+                    <Grid Grid.Row="1">
+                        <!-- Notice Message (HTML) -->
+                        <htmlrender:HtmlPanel Background="Transparent" Margin="6"
+                                              BaseStylesheet="body{color:#eee;} a { color:#009e99; }"
+                                              Text="{Binding SelectedWebNotice.Article}"/>
+                    </Grid>
+                </Grid>
+                
+                <!-- Language -->
+                <Grid Grid.Row="1">
+
+                </Grid>
+                
+            </Grid>
+
+        </Grid>
         
+        <!-- Main buttons -->
+        <Grid Grid.Row="2"
+              Margin="6 3 6 42">
+
+        </Grid>
+
     </Grid>
 </Window>

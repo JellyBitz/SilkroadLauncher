@@ -7,7 +7,7 @@
     {
         public static string
             APP_TITLE = "Silkroad Online Launcher",
-            APP_WEBNOTICE_TIME_FORMAT = "dd MMMM yyyy";
+            APP_WEBNOTICE_TIME_FORMAT = "dd.MM";
 
         public static string
             MSG_INSPECTION = "The server is undergoing inspection or updates.\nConnect to https://SilkroadOnline.com/ for more information.",

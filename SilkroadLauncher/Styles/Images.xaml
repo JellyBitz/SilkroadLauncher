@@ -2,9 +2,14 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:SilkroadLauncher">
 
+    <!-- Backgrounds -->
     <ImageBrush x:Key="LauncherBackground01ImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/bg_1.jpg" Stretch="Fill"/>
 
+    <!-- Assets -->
     <ImageBrush x:Key="ButtonWebsiteImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/Link.png" Stretch="Fill"/>
     <ImageBrush x:Key="ButtonWebsiteOnHoverImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/LinkOnHover.png" Stretch="Fill"/>
+
+    <ImageBrush x:Key="NoticeSelectedIconImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/NoticeSelected.png" Stretch="Fill"/>
+
 
 </ResourceDictionary>
