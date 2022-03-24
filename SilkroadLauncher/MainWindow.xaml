@@ -7,7 +7,6 @@
         xmlns:local="clr-namespace:SilkroadLauncher"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        AllowsTransparency="True"
         WindowStyle="None" ResizeMode="NoResize"
         Title="{Binding Title}"
         Width="758" Height="473"
@@ -100,7 +99,7 @@
                     <Grid Grid.Row="1">
                         <!-- Notice Message (HTML) -->
                         <htmlrender:HtmlPanel Background="Transparent" Margin="6"
-                                              BaseStylesheet="body{color:#eee;} a { color:#009e99; }"
+                                              BaseStylesheet="body{color:#eee; font-size:13px} a { color:#009e99; }"
                                               Text="{Binding SelectedWebNotice.Article}"/>
                     </Grid>
                 </Grid>
