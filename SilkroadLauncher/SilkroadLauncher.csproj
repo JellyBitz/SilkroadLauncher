@@ -293,17 +293,14 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\Logo.png" />
     <Resource Include="Resources\Images\Silkroad.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\Link.png" />
+    <Resource Include="Resources\Images\LinkOnHover.png" />
+    <Resource Include="Resources\Images\bg_1.jpg" />
     <Resource Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\ImageError.png" />
     <Resource Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\ImageLoad.png" />
-    <Resource Include="Resources\Images\ProgressBarEmpty.png" />
-    <Resource Include="Resources\Images\ProgressBarFull.png" />
-    <Resource Include="Resources\Images\Background.png" />
-    <Resource Include="Resources\Images\ButtonBase.png" />
-    <Resource Include="Resources\Images\ButtonBaseHover.png" />
     <Content Include="Pk2Writer.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

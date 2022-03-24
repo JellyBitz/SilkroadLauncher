@@ -3,34 +3,91 @@
                     xmlns:local="clr-namespace:SilkroadLauncher">
     
     <!-- Buttons for application  -->
-    <Style x:Key="ButtonBaseStyle" TargetType="{x:Type Button}">
-        <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBaseBrush}"/>
-        <Setter Property="Foreground" Value="{StaticResource ForegroundMainBrush}"/>
-        <Setter Property="Background" Value="{StaticResource ButtonBackgroundBaseBrush}"/>
+    
+    <!-- Clean and clickable button Layer -->
+    <Style x:Key="ButtonCleanStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Opacity" Value="0.9"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="xBorder"
-                            Background="{StaticResource ButtonBackgroundBaseBrush}" 
+                            Background="{TemplateBinding Background}" 
                             BorderBrush="{TemplateBinding BorderBrush}"
-                            CornerRadius="6"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Padding="6,3">
+                            BorderThickness="{TemplateBinding BorderThickness}">
                         <ContentPresenter Content="{TemplateBinding Content}" 
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"/>
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Cursor" Value="Hand" />
-                            <Setter TargetName="xBorder" Property="BorderBrush" Value="#80FFFFFF" />
+                            <Setter Property="Opacity" Value="1" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+
+    <!-- Website link button -->
+    <Style x:Key="ButtonWebsiteLinkStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid x:Name="BackgroundEffect"
+                          Background="{TemplateBinding Background}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <!-- Top -->
+                        <StackPanel Grid.Row="0"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Right">
+                            <Border x:Name="LinkMark"
+                                    Background="{StaticResource ButtonWebsiteImageBrush}"
+                                    Width="11" Height="11"
+                                    Margin="0 0 5 0"/>
+                            <TextBlock Text="Silkroad Home"
+                                       Style="{StaticResource TextBlockBaseStyle}"
+                                       FontSize="{StaticResource FontSizeRegular}"
+                                       HorizontalAlignment="Right"
+                                       FontWeight="Bold"/>
+                        </StackPanel>
+                        <!-- Bottom -->
+                        <TextBlock Grid.Row="1"
+                                   Text="www.silkroadonline.net"
+                                   Style="{StaticResource TextBlockBaseStyle}"
+                                   FontSize="{StaticResource FontSizeRegular}"
+                                   FontWeight="DemiBold"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <!-- Change mark -->
+                            <Setter TargetName="LinkMark" Property="Background" Value="{StaticResource ButtonWebsiteOnHoverImageBrush}"/>
+                            <!-- Drop glow -->
+                            <Setter TargetName="BackgroundEffect" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="White" BlurRadius="10" ShadowDepth="0"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+
 
     <Style x:Key="ButtonBaseImageStyle" TargetType="{x:Type Button}">
         <Setter Property="FontFamily" Value="{StaticResource AmaranteRegular}"/>

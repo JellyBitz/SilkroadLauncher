@@ -22,11 +22,11 @@
     <FontFamily x:Key="AmaranteRegular">/SilkroadLauncher;component/Resources/Fonts/#Amarante Regular</FontFamily>
     
     <!-- Font sizes-->
-    <system:Double x:Key="FontSizeSmaller">10</system:Double>
-    <system:Double x:Key="FontSizeSmall">12</system:Double>
-    <system:Double x:Key="FontSizeRegular">14</system:Double>
-    <system:Double x:Key="FontSizeLarge">18</system:Double>
-    <system:Double x:Key="FontSizeXLarge">24</system:Double>
-    <system:Double x:Key="FontSizeXXLarge">40</system:Double>
+    <system:Double x:Key="FontSizeSmaller">9</system:Double>
+    <system:Double x:Key="FontSizeSmall">10</system:Double>
+    <system:Double x:Key="FontSizeRegular">12</system:Double>
+    <system:Double x:Key="FontSizeLarge">14</system:Double>
+    <system:Double x:Key="FontSizeXLarge">16</system:Double>
+    <system:Double x:Key="FontSizeXXLarge">20</system:Double>
 
 </ResourceDictionary>
