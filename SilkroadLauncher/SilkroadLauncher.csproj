@@ -300,6 +300,9 @@
     <Resource Include="Resources\Images\Silkroad.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\SaveOptionsButton.png" />
+    <Resource Include="Resources\Images\SaveOptionsButtonOnHover.png" />
+    <Resource Include="Resources\Images\SaveOptionsButtonOnPressed.png" />
     <Resource Include="Resources\Images\ComboBoxArrow.png" />
     <Resource Include="Resources\Images\ComboBoxArrowOnHover.png" />
     <Resource Include="Resources\Images\ComboBoxArrowOnPressed.png" />

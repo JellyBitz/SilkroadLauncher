@@ -221,4 +221,27 @@
         </Style.Triggers>
     </Style>
 
+    <!-- Button Options Save -->
+    <Style x:Key="ButtonOptionsSaveImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource OptionsSaveImageBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Background"  Value="{StaticResource OptionsSaveOnHoverImageBrush}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{StaticResource OptionsSaveOnPressedImageBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
 </ResourceDictionary>

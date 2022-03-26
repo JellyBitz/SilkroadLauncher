@@ -168,7 +168,12 @@
                                               ItemsSource="{Binding Config.SupportedGraphics}"
                                               SelectedItem="{Binding Config.Graphics}"/>
                                 </StackPanel>
-
+                                
+                                <!-- Save Button -->
+                                <Button Grid.Row="2" Grid.Column="2"
+                                        Style="{StaticResource ButtonOptionsSaveImageStyle}"
+                                        Width="56" Height="29"
+                                        Command="{Binding CommandSaveConfig}"/>
                             </Grid>
                         </Grid>
                     </Grid>

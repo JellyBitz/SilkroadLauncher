@@ -55,5 +55,9 @@
     <ImageBrush x:Key="OptionsComboBoxArrowOnHoverImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/ComboBoxArrowOnHover.png" Stretch="Fill"/>
     <ImageBrush x:Key="OptionsComboBoxArrowOnPressedImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/ComboBoxArrowOnPressed.png" Stretch="Fill"/>
 
+    <ImageBrush x:Key="OptionsSaveImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/SaveOptionsButton.png" Stretch="Fill"/>
+    <ImageBrush x:Key="OptionsSaveOnHoverImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/SaveOptionsButtonOnHover.png" Stretch="Fill"/>
+    <ImageBrush x:Key="OptionsSaveOnPressedImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/SaveOptionsButtonOnPressed.png" Stretch="Fill"/>
+
 
 </ResourceDictionary>
