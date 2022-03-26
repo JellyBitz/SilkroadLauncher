@@ -5,11 +5,11 @@
     <!-- Backgrounds -->
     <ImageBrush x:Key="LauncherBackground01ImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/LauncherBackground01.jpg" Stretch="Fill"/>
 
-    <!-- Assets -->
+    <!-- Website Mark -->
     <ImageBrush x:Key="ButtonWebsiteImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/Link.png" Stretch="Fill"/>
     <ImageBrush x:Key="ButtonWebsiteOnHoverImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/LinkOnHover.png" Stretch="Fill"/>
 
-    <!-- Notice stuffs -->
+    <!-- Notice assets -->
     <ImageBrush x:Key="NoticeSelectedIconImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/NoticeSelected.png" Stretch="Fill"/>
 
     <ImageBrush x:Key="NoticeScrollBarBackgroundImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/ScrollBarBackground.png" Stretch="Fill"/>
@@ -28,11 +28,10 @@
     <ImageBrush x:Key="LanguageSelectBackgroundImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/LanguageSelectBackground.png" Stretch="Fill"/>
 
     <!-- Main buttons -->
-    <ImageBrush x:Key="ButtonOptionImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/OptionButton.png" Stretch="None"
-                RenderOptions.BitmapScalingMode="NearestNeighbor"/>
+    <ImageBrush x:Key="ButtonOptionImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/OptionButton.png" Stretch="Fill"/>
     <ImageBrush x:Key="ButtonOptionOnHoverImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/OptionButtonOnHover.png" Stretch="Fill"/>
     <ImageBrush x:Key="ButtonOptionOnPressedImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/OptionButtonOnPressed.png" Stretch="Fill"/>
-    
+
     <ImageBrush x:Key="ButtonGuideImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/GuideButton.png" Stretch="Fill"/>
     <ImageBrush x:Key="ButtonGuideOnHoverImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/GuideButtonOnHover.png" Stretch="Fill"/>
     <ImageBrush x:Key="ButtonGuideOnPressedImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/GuideButtonOnPressed.png" Stretch="Fill"/>
@@ -49,5 +48,12 @@
     <ImageBrush x:Key="ButtonStartOnHoverImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/StartButtonOnHover.png" Stretch="Fill"/>
     <ImageBrush x:Key="ButtonStartOnPressedImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/StartButtonOnPressed.png" Stretch="Fill"/>
 
-    
+    <!-- Options assets -->
+    <ImageBrush x:Key="OptionsHeaderImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/OptionsHeader.png" Stretch="Fill"/>
+    <ImageBrush x:Key="OptionsComboboxBackgroundImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/ComboBoxBackground.png" Stretch="Fill"/>
+    <ImageBrush x:Key="OptionsComboBoxArrowImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/ComboBoxArrow.png" Stretch="Fill"/>
+    <ImageBrush x:Key="OptionsComboBoxArrowOnHoverImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/ComboBoxArrowOnHover.png" Stretch="Fill"/>
+    <ImageBrush x:Key="OptionsComboBoxArrowOnPressedImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/ComboBoxArrowOnPressed.png" Stretch="Fill"/>
+
+
 </ResourceDictionary>

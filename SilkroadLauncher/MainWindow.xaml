@@ -66,9 +66,10 @@
                 <ColumnDefinition Width="21*"/>
             </Grid.ColumnDefinitions>
             
-            <!-- Announcements -->
+            <!-- News & announcements -->
             <Grid Grid.Column="0"
-                  Margin="1"/>
+                  Margin="1">
+            </Grid>
 
             <!-- Notices & Language -->
             <Grid Grid.Column="1">
@@ -99,6 +100,7 @@
                     <!-- Article -->
                     <Grid Grid.Row="1"
                           Margin="4">
+                        <!-- Scroller -->
                         <ScrollViewer Style="{StaticResource NoticeScrollViewer}"
                                       HorizontalScrollBarVisibility="Disabled"
                                       VerticalScrollBarVisibility="Auto">
@@ -107,9 +109,72 @@
                                                   BaseStylesheet="body{color:#eee; font-size:13px} a{color:#009e99;} b{color:#ffff00;}"
                                                   Text="{Binding SelectedWebNotice.Article}"/>
                         </ScrollViewer>
+
+                        <!-- Game options -->
+                        <Grid Visibility="{Binding IsViewingConfig,Converter={local:BooleanToVisibilityConverter}}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+                            
+                            <!-- Header -->
+                            <Border Grid.Row="0"
+                                    Background="{StaticResource OptionsHeaderImageBrush}"
+                                    Height="23" Width="323"
+                                    Margin="0 5"/>
+                            
+                            <!-- Options -->
+                            <Grid Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+                                
+                                <!-- Resolution -->
+                                <StackPanel Grid.Row="0" Grid.Column="0"
+                                            Width="112">
+                                    <TextBlock Text="Set Resolution"
+                                               Style="{StaticResource TextBlockBaseStyle}"
+                                               FontSize="{StaticResource FontSizeRegular}"
+                                               Margin="3 0 0 3"/>
+                                    <ComboBox Style="{StaticResource ComboBoxBaseStyle}"
+                                              ItemsSource="{Binding Config.SupportedResolutions}"
+                                              SelectedItem="{Binding Config.Resolution}"/>
+                                </StackPanel>
+                                <!-- Brightness -->
+                                <StackPanel Grid.Row="0" Grid.Column="1"
+                                            Width="112">
+                                    <TextBlock Text="Set Brightness"
+                                               Style="{StaticResource TextBlockBaseStyle}"
+                                               FontSize="{StaticResource FontSizeRegular}"
+                                               Margin="3 0 0 3"/>
+                                    <ComboBox Style="{StaticResource ComboBoxBaseStyle}"
+                                              ItemsSource="{Binding Config.SupportedBrightness}"
+                                              SelectedItem="{Binding Config.Brightness}"/>
+                                </StackPanel>
+                                <!-- Graphics -->
+                                <StackPanel Grid.Row="1" Grid.Column="0"
+                                            Width="112">
+                                    <TextBlock Text="Set Graphic"
+                                               Style="{StaticResource TextBlockBaseStyle}"
+                                               FontSize="{StaticResource FontSizeRegular}"
+                                               Margin="3 0 0 3"/>
+                                    <ComboBox Style="{StaticResource ComboBoxBaseStyle}"
+                                              ItemsSource="{Binding Config.SupportedGraphics}"
+                                              SelectedItem="{Binding Config.Graphics}"/>
+                                </StackPanel>
+
+                            </Grid>
+                        </Grid>
                     </Grid>
+
                 </Grid>
-                
+
                 <!-- Language Selection -->
                 <Grid Grid.Row="1">
                     <Grid.ColumnDefinitions>
@@ -150,7 +215,8 @@
             <!-- Options -->
             <Button Grid.Column="0"
                     Style="{StaticResource ButtonOptionImageStyle}"
-                    Width="122" Height="24"/>
+                    Width="122" Height="24"
+                    Command="{Binding CommandToggleConfig}"/>
             <!-- Wiki link -->
             <Button Grid.Column="1"
                     Style="{StaticResource ButtonGuideImageStyle}"

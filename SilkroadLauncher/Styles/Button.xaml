@@ -101,6 +101,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
+            	<Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="Background"  Value="{StaticResource ButtonLanguageSelectOnHoverImageBrush}"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
@@ -123,6 +124,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
+            	<Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="Background"  Value="{StaticResource ButtonOptionOnHoverImageBrush}"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
@@ -144,6 +146,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
+            	<Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="Background"  Value="{StaticResource ButtonGuideOnHoverImageBrush}"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
@@ -165,6 +168,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
+            	<Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="Background"  Value="{StaticResource ButtonMovieOnHoverImageBrush}"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
@@ -186,6 +190,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
+            	<Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="Background"  Value="{StaticResource ButtonExitOnHoverImageBrush}"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="True">
@@ -207,6 +212,7 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
+            	<Setter Property="Cursor" Value="Hand"/>
                 <Setter Property="Background"  Value="{StaticResource ButtonStartOnHoverImageBrush}"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="True">

@@ -300,6 +300,11 @@
     <Resource Include="Resources\Images\Silkroad.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\ComboBoxArrow.png" />
+    <Resource Include="Resources\Images\ComboBoxArrowOnHover.png" />
+    <Resource Include="Resources\Images\ComboBoxArrowOnPressed.png" />
+    <Resource Include="Resources\Images\ComboBoxBackground.png" />
+    <Resource Include="Resources\Images\OptionsHeader.png" />
     <Resource Include="Resources\Images\ScrollBarDownArrow.png" />
     <Resource Include="Resources\Images\ScrollBarDownArrowOnHover.png" />
     <Resource Include="Resources\Images\ScrollBarDownArrowOnPressed.png" />
