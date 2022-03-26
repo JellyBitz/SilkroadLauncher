@@ -87,13 +87,9 @@
         </Setter>
     </Style>
 
-
-
-    <Style x:Key="ButtonBaseImageStyle" TargetType="{x:Type Button}">
-        <Setter Property="FontFamily" Value="{StaticResource AmaranteRegular}"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Background" Value="{StaticResource ButtonBaseImageBrush}"/>
-        <Setter Property="Foreground" Value="{StaticResource ForegroundMainBrush}"/>
+    <!-- Button Language Select -->
+    <Style x:Key="ButtonLanguageSelectImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource ButtonLanguageSelectImageBrush}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -105,8 +101,118 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background"  Value="{StaticResource ButtonBaseHoverImageBrush}"/>
+                <Setter Property="Background"  Value="{StaticResource ButtonLanguageSelectOnHoverImageBrush}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{StaticResource ButtonLanguageSelectOnPressedImageBrush}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <!-- Button Option -->
+    <Style x:Key="ButtonOptionImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource ButtonOptionImageBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background"  Value="{StaticResource ButtonOptionOnHoverImageBrush}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{StaticResource ButtonOptionOnPressedImageBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!-- Button Guide -->
+    <Style x:Key="ButtonGuideImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource ButtonGuideImageBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background"  Value="{StaticResource ButtonGuideOnHoverImageBrush}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{StaticResource ButtonGuideOnPressedImageBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!-- Button Movie -->
+    <Style x:Key="ButtonMovieImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource ButtonMovieImageBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background"  Value="{StaticResource ButtonMovieOnHoverImageBrush}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{StaticResource ButtonMovieOnPressedImageBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!-- Button Exit -->
+    <Style x:Key="ButtonExitImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource ButtonExitImageBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background"  Value="{StaticResource ButtonExitOnHoverImageBrush}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{StaticResource ButtonExitOnPressedImageBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!-- Button Start -->
+    <Style x:Key="ButtonStartImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource ButtonStartImageBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Background"  Value="{StaticResource ButtonStartOnHoverImageBrush}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{StaticResource ButtonStartOnPressedImageBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
 </ResourceDictionary>

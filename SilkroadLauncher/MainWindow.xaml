@@ -11,6 +11,7 @@
         Title="{Binding Title}"
         Width="758" Height="473"
         Background="Transparent"
+        UseLayoutRounding="True"
         Loaded="Window_Loaded">
     <!-- Main layout -->
     <Grid>
@@ -58,7 +59,7 @@
 
         <!-- Body -->
         <Grid Grid.Row="1"
-              Margin="4 3">
+              Margin="5 3">
             <!-- Announcements, Notices & Language -->
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="25*"/>
@@ -79,8 +80,8 @@
                 <!-- Notices -->
                 <Grid Grid.Row="0">
                     <Grid.RowDefinitions>
-                        <RowDefinition Height="20*"/>
-                        <RowDefinition Height="43*"/>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="191"/>
                     </Grid.RowDefinitions>
 
                     <!-- Subject -->
@@ -96,16 +97,38 @@
                     </Grid>
 
                     <!-- Article -->
-                    <Grid Grid.Row="1">
-                        <!-- Notice Message (HTML) -->
-                        <htmlrender:HtmlPanel Background="Transparent" Margin="6"
-                                              BaseStylesheet="body{color:#eee; font-size:13px} a { color:#009e99; }"
-                                              Text="{Binding SelectedWebNotice.Article}"/>
+                    <Grid Grid.Row="1"
+                          Margin="4">
+                        <ScrollViewer Style="{StaticResource NoticeScrollViewer}"
+                                      HorizontalScrollBarVisibility="Disabled"
+                                      VerticalScrollBarVisibility="Auto">
+                            <!-- Notice Message (HTML) -->
+                            <htmlrender:HtmlPanel Background="Transparent"
+                                                  BaseStylesheet="body{color:#eee; font-size:13px} a{color:#009e99;} b{color:#ffff00;}"
+                                                  Text="{Binding SelectedWebNotice.Article}"/>
+                        </ScrollViewer>
                     </Grid>
                 </Grid>
                 
-                <!-- Language -->
+                <!-- Language Selection -->
                 <Grid Grid.Row="1">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+                    
+                    <Button Grid.Column="1"
+                            Style="{StaticResource ButtonLanguageSelectImageStyle}"
+                            Width="233" Height="63"/>
+
+                    <Border Background="{StaticResource LanguageSelectBackgroundImageBrush}">
+                        <TextBlock Text="{Binding Config.Language}"
+                                   Style="{StaticResource TextBlockBaseStyle}"
+                                   VerticalAlignment="Center" HorizontalAlignment="Center"
+                                   Foreground="#FFD200"
+                                   FontWeight="Bold"
+                                   FontSize="{StaticResource FontSizeLarge}"/>
+                    </Border>
 
                 </Grid>
                 
@@ -116,6 +139,42 @@
         <!-- Main buttons -->
         <Grid Grid.Row="2"
               Margin="6 3 6 42">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="167"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Options -->
+            <Button Grid.Column="0"
+                    Style="{StaticResource ButtonOptionImageStyle}"
+                    Width="122" Height="24"/>
+            <!-- Wiki link -->
+            <Button Grid.Column="1"
+                    Style="{StaticResource ButtonGuideImageStyle}"
+                    Width="128" Height="24"
+                    Command="{Binding CommandOpenLink}"
+                    CommandParameter="www.google.com"/>
+            <!-- Youtube link -->
+            <Button Grid.Column="2"
+                    Style="{StaticResource ButtonMovieImageStyle}"
+                    Width="129" Height="24"
+                    Command="{Binding CommandOpenLink}"
+                    CommandParameter="www.youtube.com"/>
+            <!-- Exit -->
+            <Button Grid.Column="3"
+                    Style="{StaticResource ButtonExitImageStyle}"
+                    Width="163" Height="24"
+                    Command="{Binding CommandClose}"/>
+
+            <!-- Start button -->
+            <Button Grid.Column="4"
+                    Visibility="{Binding CanStartGame,Converter={local:BooleanToVisibilityConverter}}"
+                    Style="{StaticResource ButtonStartImageStyle}"
+                    Width="167" Height="30"
+                    Command="{Binding CommandStartGame}"/>
 
         </Grid>
 

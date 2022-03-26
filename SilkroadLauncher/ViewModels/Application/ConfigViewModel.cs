@@ -82,6 +82,10 @@ namespace SilkroadLauncher
         /// Language index currently selected
         /// </summary>
         private int m_SupportedLanguageIndex;
+        /// <summary>
+        /// Language mask currently selected
+        /// </summary>
+        private int m_SupportedLanguageMask;
         #endregion
 
         #region Public Properties
@@ -165,7 +169,6 @@ namespace SilkroadLauncher
                 OnPropertyChanged(nameof(IsWindowMode));
             }
         }
-
         /// <summary>
         /// All languages supported by the game
         /// </summary>
@@ -182,7 +185,16 @@ namespace SilkroadLauncher
                 OnPropertyChanged(nameof(SupportedLanguageIndex));
                 // Set the language internally
                 m_Language = LauncherSettings.CLIENT_LANGUAGE_SUPPORTED[value];
+                // Raise event
+                OnPropertyChanged(nameof(Language));
             }
+        }
+        /// <summary>
+        /// Language mask selected by user
+        /// </summary>
+        public string Language
+        {
+            get { return LauncherSettings.CLIENT_LANGUAGE_SUPPORTED_MASK[SupportedLanguageIndex]; }
         }
         #endregion
 

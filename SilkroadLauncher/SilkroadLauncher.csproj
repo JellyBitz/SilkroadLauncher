@@ -224,6 +224,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Styles\ScrollBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\CheckBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -296,10 +300,37 @@
     <Resource Include="Resources\Images\Silkroad.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\ScrollBarDownArrow.png" />
+    <Resource Include="Resources\Images\ScrollBarDownArrowOnHover.png" />
+    <Resource Include="Resources\Images\ScrollBarDownArrowOnPressed.png" />
+    <Resource Include="Resources\Images\ScrollBarUpArrow.png" />
+    <Resource Include="Resources\Images\ScrollBarUpArrowOnHover.png" />
+    <Resource Include="Resources\Images\ScrollBarUpArrowOnPressed.png" />
+    <Resource Include="Resources\Images\ScrollBarBackground.png" />
+    <Resource Include="Resources\Images\ScrollBarThumb.png" />
+    <Resource Include="Resources\Images\OptionButton.png" />
+    <Resource Include="Resources\Images\OptionButtonOnHover.png" />
+    <Resource Include="Resources\Images\OptionButtonOnPressed.png" />
+    <Resource Include="Resources\Images\GuideButton.png" />
+    <Resource Include="Resources\Images\GuideButtonOnHover.png" />
+    <Resource Include="Resources\Images\GuideButtonOnPressed.png" />
+    <Resource Include="Resources\Images\MovieButton.png" />
+    <Resource Include="Resources\Images\MovieButtonOnHover.png" />
+    <Resource Include="Resources\Images\MovieButtonOnPressed.png" />
+    <Resource Include="Resources\Images\ExitButton.png" />
+    <Resource Include="Resources\Images\ExitButtonOnHover.png" />
+    <Resource Include="Resources\Images\ExitButtonOnPressed.png" />
+    <Resource Include="Resources\Images\StartButton.png" />
+    <Resource Include="Resources\Images\StartButtonOnHover.png" />
+    <Resource Include="Resources\Images\StartButtonOnPressed.png" />
+    <Resource Include="Resources\Images\LanguageSelectBackground.png" />
+    <Resource Include="Resources\Images\LanguageSelectButton.png" />
+    <Resource Include="Resources\Images\LanguageSelectButtonOnHover.png" />
+    <Resource Include="Resources\Images\LanguageSelectButtonOnPressed.png" />
     <Resource Include="Resources\Images\NoticeSelected.png" />
     <Resource Include="Resources\Images\Link.png" />
     <Resource Include="Resources\Images\LinkOnHover.png" />
-    <Resource Include="Resources\Images\bg_1.jpg" />
+    <Resource Include="Resources\Images\LauncherBackground01.jpg" />
     <Resource Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\ImageError.png" />
     <Resource Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\ImageLoad.png" />
     <Content Include="Pk2Writer.dll">
