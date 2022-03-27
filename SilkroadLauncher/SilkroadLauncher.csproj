@@ -204,6 +204,7 @@
     <Compile Include="Utility\SocketHelpers.cs" />
     <Compile Include="Utility\TaskHelpers.cs" />
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
+    <Compile Include="ValueConverters\BooleanToInverseConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModels\Application\ConfigViewModel.cs" />
     <Compile Include="ViewModels\Application\IWindow.cs" />
@@ -300,6 +301,8 @@
     <Resource Include="Resources\Images\Silkroad.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\OptionsCheckBox.png" />
+    <Resource Include="Resources\Images\OptionsCheckBoxChecked.png" />
     <Resource Include="Resources\Images\SaveOptionsButton.png" />
     <Resource Include="Resources\Images\SaveOptionsButtonOnHover.png" />
     <Resource Include="Resources\Images\SaveOptionsButtonOnPressed.png" />

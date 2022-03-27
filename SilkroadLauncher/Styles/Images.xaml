@@ -59,5 +59,8 @@
     <ImageBrush x:Key="OptionsSaveOnHoverImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/SaveOptionsButtonOnHover.png" Stretch="Fill"/>
     <ImageBrush x:Key="OptionsSaveOnPressedImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/SaveOptionsButtonOnPressed.png" Stretch="Fill"/>
 
+    <ImageBrush x:Key="OptionsCheckBoxImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/OptionsCheckBox.png" Stretch="Fill"/>
+    <ImageBrush x:Key="OptionsCheckBoxCheckedImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/OptionsCheckBoxChecked.png" Stretch="Fill"/>
+
 
 </ResourceDictionary>

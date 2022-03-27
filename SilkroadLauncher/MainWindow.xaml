@@ -168,6 +168,33 @@
                                               ItemsSource="{Binding Config.SupportedGraphics}"
                                               SelectedItem="{Binding Config.Graphics}"/>
                                 </StackPanel>
+                                <!-- Sound -->
+                                <StackPanel Grid.Row="1" Grid.Column="1"
+                                            Width="112">
+                                    <TextBlock Text="Set Sound"
+                                               Style="{StaticResource TextBlockBaseStyle}"
+                                               FontSize="{StaticResource FontSizeRegular}"
+                                               Margin="3 0 0 3"/>
+                                    <!-- On / Off-->
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <RadioButton Grid.Column="0"
+                                                     HorizontalAlignment="Center"
+                                                     Style="{DynamicResource RadioButtonBaseStyle}"
+                                                     IsChecked="{Binding Config.IsSoundEnabled}">
+                                            <TextBlock Text="On"/>
+                                        </RadioButton>
+                                        <RadioButton Grid.Column="1"
+                                                     HorizontalAlignment="Center"
+                                                     Style="{DynamicResource RadioButtonBaseStyle}"
+                                                     IsChecked="{Binding Config.IsSoundEnabled,Converter={local:BooleanToInverseConverter},Mode=OneWay}">
+                                            <TextBlock Text="Off"/>
+                                        </RadioButton>
+                                    </Grid>
+                                </StackPanel>
                                 
                                 <!-- Save Button -->
                                 <Button Grid.Row="2" Grid.Column="2"
