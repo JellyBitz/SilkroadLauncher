@@ -301,6 +301,17 @@
     <Resource Include="Resources\Images\Silkroad.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\LanguageCancelButton.png" />
+    <Resource Include="Resources\Images\LanguageCancelButtonOnHover.png" />
+    <Resource Include="Resources\Images\LanguageCancelButtonOnPressed.png" />
+    <Resource Include="Resources\Images\LanguageOkButton.png" />
+    <Resource Include="Resources\Images\LanguageOkButtonOnHover.png" />
+    <Resource Include="Resources\Images\LanguageOkButtonOnPressed.png" />
+    <Resource Include="Resources\Images\sf_radiobutton.png" />
+    <Resource Include="Resources\Images\sf_radiobutton_checked.png" />
+    <Resource Include="Resources\Images\sf_language_select_frame_bottom.png" />
+    <Resource Include="Resources\Images\sf_language_select_frame_mid.png" />
+    <Resource Include="Resources\Images\sf_language_select_frame_top.png" />
     <Resource Include="Resources\Images\OptionsCheckBox.png" />
     <Resource Include="Resources\Images\OptionsCheckBoxChecked.png" />
     <Resource Include="Resources\Images\SaveOptionsButton.png" />

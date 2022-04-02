@@ -102,6 +102,7 @@
                           Margin="4">
                         <!-- Scroller -->
                         <ScrollViewer Style="{StaticResource NoticeScrollViewer}"
+                                      Visibility="{Binding IsViewingConfig,Converter={local:BooleanToVisibilityConverter},ConverterParameter=True}"
                                       HorizontalScrollBarVisibility="Disabled"
                                       VerticalScrollBarVisibility="Auto">
                             <!-- Notice Message (HTML) -->
@@ -228,11 +229,54 @@
                     </Border>
 
                 </Grid>
+            </Grid>
+
+            <!-- Language Selection Popup -->
+            <Grid Grid.ColumnSpan="2"
+                  Width="339"
+                  VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="46"/>
+                </Grid.RowDefinitions>
+
                 
+                <!-- Header -->
+                <Border Grid.Row="0"
+                        Background="{StaticResource LanguagePopupFrameTopSelectImageBrush}">
+
+                </Border>
+
+                <!-- Languages availables -->
+                <ListBox Grid.Row="1"
+                         Style="{StaticResource LanguageListBoxStyle}"
+                         Background="{StaticResource LanguagePopupFrameMidSelectImageBrush}"
+                         VerticalAlignment="Center"
+                         SelectionMode="Single"
+                         Padding="20 3"
+                         ItemsSource="{Binding Config.SupportedLanguages}"
+                         SelectedIndex="{Binding Config.SupportedLanguageIndex}"/>
+                
+                <!-- Ok & Cancel -->
+                <Grid Grid.Row="2"
+                      Background="{StaticResource LanguagePopupFrameBottomSelectImageBrush}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0"
+                            Style="{StaticResource ButtonLanguageSaveImageStyle}"
+                            Width="88" Height="24"/>
+                    <Button Grid.Column="1"
+                            Style="{StaticResource ButtonLanguageCancelImageStyle}"
+                            Width="88" Height="24"/>
+                </Grid>
+
             </Grid>
 
         </Grid>
-        
+
         <!-- Main buttons -->
         <Grid Grid.Row="2"
               Margin="6 3 6 42">

@@ -244,4 +244,49 @@
         </Style.Triggers>
     </Style>
 
+    <!-- Button Language Save -->
+    <Style x:Key="ButtonLanguageSaveImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource ButtonLanguageSaveImageBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Background"  Value="{StaticResource ButtonLanguageSaveOnHoverImageBrush}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{StaticResource ButtonLanguageSaveOnPressedImageBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!-- Button Language Cancel -->
+    <Style x:Key="ButtonLanguageCancelImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{StaticResource ButtonLanguageCancelImageBrush}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Background"  Value="{StaticResource ButtonLanguageCancelOnHoverImageBrush}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{StaticResource ButtonLanguageCancelOnPressedImageBrush}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
 </ResourceDictionary>

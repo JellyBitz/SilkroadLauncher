@@ -2,21 +2,45 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:SilkroadLauncher"
                     xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero">
-    <!-- RadioButton Base Style -->
-    <SolidColorBrush x:Key="CheckBoxStroke" Color="#8E8F8F"/>
-    <Style x:Key="CheckRadioFocusVisual">
-        <Setter Property="Control.Template">
+
+    <!-- Checkbox Base Style -->
+    <SolidColorBrush x:Key="CheckBoxFillNormal" Color="#F4F4F4"/>
+    <Style x:Key="CheckBoxBaseStyle" TargetType="{x:Type CheckBox}">
+        <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
+        <Setter Property="Background" Value="{StaticResource CheckBoxFillNormal}"/>
+        <Setter Property="BorderBrush" Value="{StaticResource CheckBoxStroke}"/>
+        <Setter Property="BorderThickness" Value="1"/>
+        <Setter Property="Template">
             <Setter.Value>
-                <ControlTemplate>
-                    <Rectangle StrokeDashArray="1 2"
-                               StrokeThickness="1"
-                               Stroke="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"
-                               SnapsToDevicePixels="true"
-                               Margin="14,0,0,0"/>
+                <ControlTemplate TargetType="{x:Type CheckBox}">
+                    <!-- CheckBox Mark -->
+                    <StackPanel Orientation="Horizontal">
+                        <Border x:Name="xCheck"
+                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                Background="{StaticResource CheckBoxBaseImageBrush}"
+                                Width="16" Height="16"/>
+                        <ContentPresenter x:Name="xContent"
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          Margin="{TemplateBinding Padding}"
+                                          RecognizesAccessKey="True"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                    </StackPanel>
+                    <!-- Events -->
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsChecked" Value="true">
+                            <Setter TargetName="xCheck" Property="Background" Value="{StaticResource CheckBoxBaseCheckedImageBrush}"/>
+                        </Trigger>
+                        <Trigger Property="HasContent" Value="true">
+                            <Setter TargetName="xContent" Property="Margin" Value="4 2 0 0"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <!-- RadioButton Base Style -->
+    <SolidColorBrush x:Key="CheckBoxStroke" Color="#8E8F8F"/>
     <Style x:Key="RadioButtonBaseStyle" TargetType="{x:Type RadioButton}">
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderBrush" Value="{StaticResource CheckBoxStroke}"/>
@@ -36,13 +60,12 @@
                                           RecognizesAccessKey="True"
                                           VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </StackPanel>
-                    
+                    <!-- Events -->
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="true">
                             <Setter TargetName="xCheck" Property="Background" Value="{StaticResource OptionsCheckBoxCheckedImageBrush}"/>
                         </Trigger>
                         <Trigger Property="HasContent" Value="true">
-                            <Setter Property="FocusVisualStyle" Value="{StaticResource CheckRadioFocusVisual}"/>
                             <Setter TargetName="xContent" Property="Margin" Value="4 2 0 0"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
@@ -50,4 +73,5 @@
             </Setter.Value>
         </Setter>
     </Style>
+
 </ResourceDictionary>

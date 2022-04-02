@@ -60,4 +60,41 @@
             </Setter.Value>
         </Setter>
     </Style>
+    
+    <!-- Language ListBox -->
+    <Style x:Key="LanguageListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="OverridesDefaultStyle" Value="True" />
+        <Setter Property="SnapsToDevicePixels" Value="True" />
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <Border BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" Background="{TemplateBinding Background}" Padding="{TemplateBinding Padding}" SnapsToDevicePixels="true">
+                        <StackPanel Orientation="Horizontal">
+                            <!-- Checkbox Mark -->
+                            <CheckBox x:Name="xSelectionMark"
+                                      Margin="6 3"
+                                      Style="{StaticResource CheckBoxBaseStyle}"
+                                      IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSelected, Mode=TwoWay}"/>
+                            <ContentPresenter Margin="0 3" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
+                        </StackPanel>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <Style x:Key="LanguageListBoxStyle" TargetType="{x:Type ListBox}">
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource LanguageListBoxItemStyle}"/>
+        <Setter Property="ItemsPanel">
+            <Setter.Value>
+                <!-- Items overflow -->
+                <ItemsPanelTemplate>
+                    <UniformGrid Columns="3"/>
+                </ItemsPanelTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
 </ResourceDictionary>

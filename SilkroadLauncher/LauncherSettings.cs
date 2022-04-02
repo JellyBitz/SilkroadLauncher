@@ -26,13 +26,14 @@
                 //"Thailand", // 9
                 //"Russia", // 10
                 "Turkey", // 11
-                //"Spain", // 12
+                "Spain", // 12
                 //"Arabic", // 13
             };
         public static string[]
             CLIENT_LANGUAGE_SUPPORTED_MASK = new string[]{
                 "English",
                 "Türkçe",
+                "Español",
             };
 
         public static string

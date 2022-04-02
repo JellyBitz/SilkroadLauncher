@@ -11,8 +11,6 @@
     <Color x:Key="ComboBoxOutsideColor">#292113</Color>
     <SolidColorBrush x:Key="ComboBoxOutsideBorderBrush" Color="{StaticResource ComboBoxOutsideColor}"/>
 
-
-
     <Style x:Key="ComboBoxFocusVisual">
         <Setter Property="Control.Template">
             <Setter.Value>
@@ -22,9 +20,7 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
     <Geometry x:Key="DownArrowGeometry">M 0 0 L 3.5 4 L 7 0 Z</Geometry>
-    
     <!-- Combobox Rectangle -->
     <Style x:Key="ComboBoxReadonlyToggleButton" TargetType="{x:Type ToggleButton}">
         <Setter Property="BorderBrush" Value="{StaticResource ComboBoxOutsideBorderBrush}"/>
@@ -176,6 +172,7 @@
             </Trigger>
         </ControlTemplate.Triggers>
     </ControlTemplate>
+
     <Style x:Key="ComboBoxBaseStyle" TargetType="{x:Type ComboBox}">
         <Setter Property="BorderBrush" Value="{StaticResource ComboBoxOutsideBorderBrush}"/>
         <Setter Property="Background" Value="Black"/>
@@ -225,7 +222,7 @@
                                       BorderBrush="{TemplateBinding BorderBrush}"
                                       Background="{TemplateBinding Background}"
                                       IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
-                        
+
                         <ContentPresenter ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                           ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                           Content="{TemplateBinding SelectionBoxItem}"
@@ -271,5 +268,4 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-
 </ResourceDictionary>

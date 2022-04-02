@@ -1,9 +1,8 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:SilkroadLauncher">
-
-    
     <!-- Scrollbar for application  -->
+    
     <!-- Brushes used in Styling of ScrollViewer -->
     <SolidColorBrush x:Key="StandardBorderBrush" Color="#888" />
     <SolidColorBrush x:Key="StandardBackgroundBrush" Color="#FFF" />
@@ -174,8 +173,7 @@
         </Setter>
     </Style>
 
-    <ControlTemplate x:Key="VerticalScrollBar"
-            TargetType="{x:Type ScrollBar}">
+    <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
         <Grid >
             <Grid.RowDefinitions>
                 <RowDefinition Height="18"/>
@@ -261,7 +259,7 @@
     </ControlTemplate>
     
     <!-- Style for overall  ScrollBar -->
-    <Style x:Key="{x:Type ScrollBar}" TargetType="{x:Type ScrollBar}">
+    <Style x:Key="NoticeScrollBar" TargetType="{x:Type ScrollBar}">
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="OverridesDefaultStyle" Value="true"/>
         <Style.Triggers>
@@ -298,13 +296,15 @@
 
                         <ScrollContentPresenter Grid.Column="0" Grid.Row="0"/>
 
-                        <ScrollBar Name="PART_VerticalScrollBar"
+                        <ScrollBar Style="{StaticResource NoticeScrollBar}"
+                                   Name="PART_VerticalScrollBar"
                                    Grid.Row="0" Grid.Column="1"
                                    Value="{TemplateBinding VerticalOffset}"
                                    Maximum="{TemplateBinding ScrollableHeight}"
                                    ViewportSize="{TemplateBinding ViewportHeight}"
                                    Visibility="{TemplateBinding ComputedVerticalScrollBarVisibility}"/>
-                        <ScrollBar Name="PART_HorizontalScrollBar"
+                        <ScrollBar Style="{StaticResource NoticeScrollBar}"
+                                   Name="PART_HorizontalScrollBar"
                                    Orientation="Horizontal"
                                    Grid.Row="1" Grid.Column="1"
                                    Value="{TemplateBinding HorizontalOffset}"

@@ -27,6 +27,21 @@
     <ImageBrush x:Key="ButtonLanguageSelectOnPressedImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/LanguageSelectButtonOnPressed.png" Stretch="Fill"/>
     <ImageBrush x:Key="LanguageSelectBackgroundImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/LanguageSelectBackground.png" Stretch="Fill"/>
 
+    <ImageBrush x:Key="LanguagePopupFrameTopSelectImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/sf_language_select_frame_top.png" Stretch="Fill"/>
+    <ImageBrush x:Key="LanguagePopupFrameMidSelectImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/sf_language_select_frame_mid.png" Stretch="Fill"/>
+    <ImageBrush x:Key="LanguagePopupFrameBottomSelectImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/sf_language_select_frame_bottom.png" Stretch="Fill"/>
+
+    <ImageBrush x:Key="CheckBoxBaseImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/sf_radiobutton.png" Stretch="Fill"/>
+    <ImageBrush x:Key="CheckBoxBaseCheckedImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/sf_radiobutton_checked.png" Stretch="Fill"/>
+
+    <ImageBrush x:Key="ButtonLanguageSaveImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/LanguageOkButton.png" Stretch="Fill"/>
+    <ImageBrush x:Key="ButtonLanguageSaveOnHoverImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/LanguageOkButtonOnHover.png" Stretch="Fill"/>
+    <ImageBrush x:Key="ButtonLanguageSaveOnPressedImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/LanguageOkButtonOnPressed.png" Stretch="Fill"/>
+
+    <ImageBrush x:Key="ButtonLanguageCancelImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/LanguageCancelButton.png" Stretch="Fill"/>
+    <ImageBrush x:Key="ButtonLanguageCancelOnHoverImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/LanguageCancelButtonOnHover.png" Stretch="Fill"/>
+    <ImageBrush x:Key="ButtonLanguageCancelOnPressedImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/LanguageCancelButtonOnPressed.png" Stretch="Fill"/>
+
     <!-- Main buttons -->
     <ImageBrush x:Key="ButtonOptionImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/OptionButton.png" Stretch="Fill"/>
     <ImageBrush x:Key="ButtonOptionOnHoverImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/OptionButtonOnHover.png" Stretch="Fill"/>
@@ -61,6 +76,5 @@
 
     <ImageBrush x:Key="OptionsCheckBoxImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/OptionsCheckBox.png" Stretch="Fill"/>
     <ImageBrush x:Key="OptionsCheckBoxCheckedImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/OptionsCheckBoxChecked.png" Stretch="Fill"/>
-
 
 </ResourceDictionary>
