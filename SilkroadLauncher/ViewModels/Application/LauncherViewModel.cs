@@ -68,6 +68,14 @@ namespace SilkroadLauncher
         /// </summary>
         private ConfigViewModel m_Config;
         /// <summary>
+        /// Indicates if the user is viewing language options
+        /// </summary>
+        private bool m_IsViewingLangConfig;
+        /// <summary>
+        /// Language temporally being selected as language option
+        /// </summary>
+        private int m_LangConfigIndex;
+        /// <summary>
         /// The initial connection to server
         /// </summary>
         private Session m_GatewaySession;
@@ -206,6 +214,34 @@ namespace SilkroadLauncher
                 m_Config = value;
                 // notify event
                 OnPropertyChanged(nameof(Config));
+            }
+        }
+        /// <summary>
+        /// Check if the launcher is on game language config window
+        /// </summary>
+        public bool IsViewingLangConfig
+        {
+            get { return m_IsViewingLangConfig; }
+            set
+            {
+                // set new value
+                m_IsViewingLangConfig = value;
+                // notify event
+                OnPropertyChanged(nameof(IsViewingLangConfig));
+            }
+        }
+        /// <summary>
+        /// Language temporally selected as new option
+        /// </summary>
+        public int LangConfigIndex
+        {
+            get { return m_LangConfigIndex; }
+            set
+            {
+                // set new value
+                m_LangConfigIndex = value;
+                // notify event
+                OnPropertyChanged(nameof(LangConfigIndex));
             }
         }
         /// <summary>
@@ -365,9 +401,17 @@ namespace SilkroadLauncher
         /// </summary>
         public ICommand CommandToggleConfig { get; set; }
         /// <summary>
+        /// Set the language window viewing state
+        /// </summary>
+        public ICommand CommandToggleLangConfig { get; set; }
+        /// <summary>
         /// Save the config file
         /// </summary>
         public ICommand CommandSaveConfig { get; set; }
+        /// <summary>
+        /// Save the config file
+        /// </summary>
+        public ICommand CommandSaveLangConfig { get; set; }
         #endregion
 
         #region Constructor
@@ -412,6 +456,22 @@ namespace SilkroadLauncher
                 {
                     Config.Save();
                     IsViewingConfig = false;
+                }
+            });
+            CommandToggleLangConfig = new RelayCommand(() => {
+                // Update language selected currently
+                if (!IsViewingLangConfig)
+                    LangConfigIndex = Config.SupportedLanguageIndex;
+                IsViewingLangConfig = !IsViewingLangConfig;
+            });
+            CommandSaveLangConfig = new RelayCommand(() => {
+                // Make sure pk2 it's not being used
+                if (!IsUpdating)
+                {
+                    // Set new language selected
+                    Config.SupportedLanguageIndex = LangConfigIndex;
+                    Config.Save();
+                    IsViewingLangConfig = false;
                 }
             });
             #endregion
