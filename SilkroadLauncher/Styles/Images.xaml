@@ -77,4 +77,8 @@
     <ImageBrush x:Key="OptionsCheckBoxImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/OptionsCheckBox.png" Stretch="Fill"/>
     <ImageBrush x:Key="OptionsCheckBoxCheckedImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/OptionsCheckBoxChecked.png" Stretch="Fill"/>
 
+    <!-- Loading Bar -->
+    <ImageBrush x:Key="LoadingBackgroundImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/gauge_back.png" Stretch="Fill"/>
+    <ImageBrush x:Key="LoadingNoticeBackgroundImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/patch.png" Stretch="Fill"/>
+    
 </ResourceDictionary>

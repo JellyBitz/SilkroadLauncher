@@ -112,6 +112,14 @@ namespace SilkroadLauncher
         /// </summary>
         private int m_UpdatingPercentage;
         /// <summary>
+        /// The current file path being updated
+        /// </summary>
+        private string m_UpdatingFilePath;
+        /// <summary>
+        /// The current file progress updating percentage
+        /// </summary>
+        private int m_UpdatingFilePercentage;
+        /// <summary>
         /// Indicates if the game can be started
         /// </summary>
         private bool m_CanStartGame;
@@ -314,20 +322,6 @@ namespace SilkroadLauncher
             }
         }
         /// <summary>
-        /// Get the current percentage from patch download
-        /// </summary>
-        public int UpdatingPercentage
-        {
-            get { return m_UpdatingPercentage; }
-            set {
-                if (m_UpdatingPercentage == value)
-                    return;
-
-                m_UpdatingPercentage = value;
-                OnPropertyChanged(nameof(UpdatingPercentage));
-            }
-        }
-        /// <summary>
         /// Get or sets the max. bytes quantity to be downloaded to apply patch
         /// </summary>
         public ulong UpdatingBytesMaxDownloading
@@ -357,6 +351,45 @@ namespace SilkroadLauncher
                 // Set percentage
                 if(m_UpdatingBytesMaxDownloading != 0)
                     UpdatingPercentage = (int)(m_UpdatingBytesDownloading * 100ul / m_UpdatingBytesMaxDownloading);
+            }
+        }
+        /// <summary>
+        /// Get the current percentage from patch download
+        /// </summary>
+        public int UpdatingPercentage
+        {
+            get { return m_UpdatingPercentage; }
+            set
+            {
+                if (m_UpdatingPercentage == value)
+                    return;
+
+                m_UpdatingPercentage = value;
+                OnPropertyChanged(nameof(UpdatingPercentage));
+            }
+        }
+        /// <summary>
+        /// The current file being downloaded and imported
+        /// </summary>
+        public string UpdatingFilePath
+        {
+            get { return m_UpdatingFilePath; }
+            set
+            {
+                m_UpdatingFilePath = value;
+                OnPropertyChanged(nameof(UpdatingFilePath));
+            }
+        }
+        /// <summary>
+        /// Get the current file percentage being updated
+        /// </summary>
+        public int UpdatingFilePercentage
+        {
+            get { return m_UpdatingFilePercentage; }
+            set
+            {
+                m_UpdatingFilePercentage = value;
+                OnPropertyChanged(nameof(UpdatingFilePercentage));
             }
         }
         /// <summary>

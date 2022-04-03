@@ -9,10 +9,7 @@
                 <ControlTemplate TargetType="{x:Type ProgressBar}">
                     <Grid x:Name="TemplateRoot"
                           SnapsToDevicePixels="true">
-                        <Image x:Name="PART_Track" 
-                               Stretch="Fill"
-                               Source="/SilkroadLauncher;component/Resources/Images/ProgressBarEmpty.png"/>
-
+                        <Border x:Name="PART_Track" Background="{TemplateBinding Background}"/>
                         <Canvas Name="PART_Indicator"
                                 ClipToBounds="True"
                                 HorizontalAlignment="Left">
@@ -20,7 +17,7 @@
                                    Width="{Binding Path=ActualWidth, ElementName=PART_Track}" 
                                    Height="{Binding Path=ActualHeight, ElementName=PART_Track}" 
                                    Stretch="Fill"
-                                   Source="/SilkroadLauncher;component/Resources/Images/ProgressBarFull.png"/>
+                                   Source="/SilkroadLauncher;component/Resources/Images/gauge.png"/>
                         </Canvas>
                     </Grid>
                 </ControlTemplate>

@@ -21,11 +21,13 @@
             <!-- Body -->
             <RowDefinition/>
             <!-- Main buttons -->
-            <RowDefinition Height="78"/>
+            <RowDefinition Height="35"/>
+            <!-- Updating Bar -->
+            <RowDefinition Height="40"/>
         </Grid.RowDefinitions>
 
         <!-- Background draggable -->
-        <Border Grid.RowSpan="3"
+        <Border Grid.RowSpan="4"
                 MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow"
                 Background="{StaticResource LauncherBackground01ImageBrush}"/>
 
@@ -75,7 +77,7 @@
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
                     <RowDefinition/>
-                    <RowDefinition Height="62"/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
 
                 <!-- Notices -->
@@ -107,7 +109,7 @@
                                       VerticalScrollBarVisibility="Auto">
                             <!-- Notice Message (HTML) -->
                             <htmlrender:HtmlPanel Background="Transparent"
-                                                  BaseStylesheet="body{color:#eee; font-size:13px} a{color:#009e99;} b{color:#ffff00;}"
+                                                  BaseStylesheet="body{color:#eee; font-size:12px; line-height:22px; font-family:arial;} a{color:#009e99;} b{color:#ffff00;}"
                                                   Text="{Binding SelectedWebNotice.Article}"/>
                         </ScrollViewer>
 
@@ -209,7 +211,8 @@
                 </Grid>
 
                 <!-- Language Selection -->
-                <Grid Grid.Row="1">
+                <Grid Grid.Row="1"
+                      Margin="0 0 0 3">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition Width="Auto"/>
@@ -236,7 +239,7 @@
 
         <!-- Main buttons -->
         <Grid Grid.Row="2"
-              Margin="6 3 6 42">
+              Margin="6 0 6 2">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
                 <ColumnDefinition Width="Auto"/>
@@ -268,15 +271,72 @@
                     Width="163" Height="24"
                     Command="{Binding CommandClose}"/>
 
-            <!-- Start button -->
-            <Button Grid.Column="4"
-                    Visibility="{Binding CanStartGame,Converter={local:BooleanToVisibilityConverter}}"
+            <!-- Start / Updating -->
+            <Grid Grid.Column="4"
+                  Width="167" Height="30"
+                  Margin="0 0 0 1">
+                <!-- Updating text notice -->
+                <Border Visibility="{Binding IsUpdating,Converter={local:BooleanToVisibilityConverter}}"
+                        Background="{StaticResource LoadingNoticeBackgroundImageBrush}"/>
+                <!-- Start button -->
+                <Button Visibility="{Binding CanStartGame,Converter={local:BooleanToVisibilityConverter}}"
                     Style="{StaticResource ButtonStartImageStyle}"
-                    Width="167" Height="30"
                     Command="{Binding CommandStartGame}"/>
-
+            </Grid>
         </Grid>
 
+        <!-- Updating Bar -->
+        <Grid Background="{StaticResource LoadingBackgroundImageBrush}"
+              Grid.Row="3"
+              Visibility="{Binding IsUpdating,Converter={local:BooleanToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <!-- Top bar loading-->
+                <RowDefinition/>
+                <!-- Bottom bar loading -->
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!-- Top bar loading as progress bar -->
+            <ProgressBar Grid.Row="0"
+                         Style="{StaticResource ProgressBarImageFill}"
+                         Background="#60000000"
+                         Height="11"
+                         Margin="6 4 6 0"
+                         Value="{Binding UpdatingPercentage}"/>
+            <!-- Top bar loading as text -->
+            <StackPanel Grid.Row="0"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="6 5 6 0">
+                <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                           FontSize="11"
+                           Text="{Binding UpdatingPercentage}"/>
+                <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                           FontSize="11"
+                           Text="%"/>
+            </StackPanel>
+
+            <!-- Bottom bar loading -->
+            <ProgressBar Grid.Row="1"
+                         Style="{StaticResource ProgressBarImageFill}"
+                         Background="#60000000"
+                         Height="11"
+                         Margin="6 0 6 4"
+                         Value="{Binding UpdatingFilePercentage}"/>
+            <!-- Bottom bar loading as text -->
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="6 0 6 4">
+                <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                           FontSize="11"
+                           Text="{Binding UpdatingFilePath}"/>
+            </StackPanel>
+
+        </Grid>
+        
         <!-- Language Selection Popup -->
         <Border Grid.Row="1" Grid.RowSpan="2"
                 Background="Transparent"

@@ -301,6 +301,9 @@
     <Resource Include="Resources\Images\Silkroad.ico" />
   </ItemGroup>
   <ItemGroup>
+    <Resource Include="Resources\Images\patch.png" />
+    <Resource Include="Resources\Images\gauge.png" />
+    <Resource Include="Resources\Images\gauge_back.png" />
     <Resource Include="Resources\Images\LanguageCancelButton.png" />
     <Resource Include="Resources\Images\LanguageCancelButtonOnHover.png" />
     <Resource Include="Resources\Images\LanguageCancelButtonOnPressed.png" />

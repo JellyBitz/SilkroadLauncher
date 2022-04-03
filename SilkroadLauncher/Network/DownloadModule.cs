@@ -54,6 +54,8 @@ namespace SilkroadLauncher.Network
             m_FileStream.Write(buffer, 0, buffer.Length);
 
             LauncherViewModel.Instance.UpdatingBytesDownloading += (uint)buffer.Length;
+            // File being downloaded
+            LauncherViewModel.Instance.UpdatingFilePercentage = (int)(m_FileStream.Length * 100L / DownloadFiles[0].Size);
         }
         public static void Server_FileCompleted(Packet p, Session s)
         {
@@ -175,6 +177,10 @@ namespace SilkroadLauncher.Network
             response.WriteUInt(file.ID);
             response.WriteUInt(0);
             s.Send(response);
+
+            // File being downloaded
+            LauncherViewModel.Instance.UpdatingFilePath = file.Path + "\\" + file.Name;
+            LauncherViewModel.Instance.UpdatingFilePercentage = 0;
         }
         /// <summary>
         /// Updates the SV.T file with the newer version
