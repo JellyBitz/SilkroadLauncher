@@ -19,7 +19,7 @@
             CLIENT_LANGUAGE_SUPPORTED = new string[]{
                 //"Korean", // 3
                 //"Chinese", // 4
-                //"Taiwan", // 5
+                "Taiwan", // 5
                 //"Japan", // 6
                 //"English", // 7
                 "Vietnam", // 8
@@ -27,18 +27,24 @@
                 //"Russia", // 10
                 "Turkey", // 11
                 "Spain", // 12
-                //"Arabic", // 13
+                "Arabic", // 13
             };
         public static string[]
             CLIENT_LANGUAGE_SUPPORTED_MASK = new string[]{
+                "Deutsch",
                 "English",
                 "Türkçe",
                 "Español",
+                "العربية"
             };
 
         public static string
             CLIENT_EXECUTABLE = "sro_client.exe",
             CLIENT_BLOWFISH_KEY = "169841";
+        public static string[]
+            CLIENT_VERIFY_HOST = new string[] {
+                
+            };
 
         public static string
             PATH_PK2_MEDIA = "Media.pk2";

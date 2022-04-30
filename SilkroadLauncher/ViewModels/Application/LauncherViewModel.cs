@@ -559,6 +559,9 @@ namespace SilkroadLauncher
             {
                 for (int i = 0; i < division.Value.Count; i++)
                 {
+                    // Check host it's correct or continue searching
+                    if (!VerifyHost(division.Value[i]))
+                        continue;
                     // Try to connect to the address
                     System.Diagnostics.Debug.WriteLine("Starting Session..");
                     connectionSolved = await Task.Run(() => m_GatewaySession.Start(division.Value[i], m_Gateport, 5000));
@@ -570,6 +573,7 @@ namespace SilkroadLauncher
                 }
                 if (connectionSolved)
                 {
+                    // Set client args
                     m_SRClientArguments = "0 /" + m_Locale + " " + divIndex + " " + hostIndex;
                     break;
                 }
@@ -630,6 +634,21 @@ namespace SilkroadLauncher
             {
                 pk2Reader?.Close();
             }
+        }
+        /// <summary>
+        /// Verify host used to start the game it's linked to launcher config
+        /// </summary>
+        private bool VerifyHost(string host)
+        {
+            // Verification not required
+            if (LauncherSettings.CLIENT_VERIFY_HOST.Length == 0)
+                return true;
+            // Check host is verified
+            foreach (var h in LauncherSettings.CLIENT_VERIFY_HOST)
+                if (h == host)
+                    return true;
+            // Host not verified
+            return false;
         }
         #endregion
     }
