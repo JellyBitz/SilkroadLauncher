@@ -66,7 +66,7 @@ namespace SilkroadLauncher
         /// <summary>
         /// Game bsic config
         /// </summary>
-        private ConfigViewModel m_Config;
+        private ConfigViewModel m_Config = new ConfigViewModel();
         /// <summary>
         /// Indicates if the user is viewing language options
         /// </summary>
@@ -559,9 +559,6 @@ namespace SilkroadLauncher
             {
                 for (int i = 0; i < division.Value.Count; i++)
                 {
-                    // Check host it's correct or continue searching
-                    if (!VerifyHost(division.Value[i]))
-                        continue;
                     // Try to connect to the address
                     System.Diagnostics.Debug.WriteLine("Starting Session..");
                     connectionSolved = await Task.Run(() => m_GatewaySession.Start(division.Value[i], m_Gateport, 5000));
@@ -609,21 +606,25 @@ namespace SilkroadLauncher
             try
             {
                 // Load pk2 reader
-                pk2Reader = new Pk2Reader(LauncherSettings.PATH_PK2_MEDIA,LauncherSettings.CLIENT_BLOWFISH_KEY);
-
-                // Load settings
-                m_Config = new ConfigViewModel();
-                m_Config.Load(pk2Reader);
+                pk2Reader = new Pk2Reader(LauncherSettings.PATH_PK2_MEDIA, LauncherSettings.CLIENT_BLOWFISH_KEY);
 
                 // Extract essential stuffs for the process
-                if (pk2Reader.TryGetDivisionInfo(out m_DivisionInfo) 
-                    && pk2Reader.TryGetGateport(out m_Gateport) 
-                    && pk2Reader.TryGetVersion(out m_Version)
-                    && pk2Reader.TryGetLocale(out m_Locale))
+                if (pk2Reader.TryGetDivisionInfo(out m_DivisionInfo) && pk2Reader.TryGetGateport(out m_Gateport))
                 {
-                    IsLoaded = true;
-                    // Force string to be updated
-                    Version = m_Version;
+                    // Abort operations if host or port is not verified
+                    if (!VerifyHosts(m_DivisionInfo) || !VerifyPort(m_Gateport))
+                        return;
+
+                    // Load settings
+                    m_Config.Load(pk2Reader);
+                    // continue extracting
+                    if (pk2Reader.TryGetVersion(out m_Version)
+                    && pk2Reader.TryGetLocale(out m_Locale))
+                    {
+                        IsLoaded = true;
+                        // Force string to be updated
+                        Version = m_Version;
+                    }
                 }
             }
             catch (Exception ex)
@@ -638,17 +639,33 @@ namespace SilkroadLauncher
         /// <summary>
         /// Verify host used to start the game it's linked to launcher config
         /// </summary>
-        private bool VerifyHost(string host)
+        private bool VerifyHosts(Dictionary<string, List<string>> divInfo)
         {
             // Verification not required
             if (LauncherSettings.CLIENT_VERIFY_HOST.Length == 0)
                 return true;
-            // Check host is verified
-            foreach (var h in LauncherSettings.CLIENT_VERIFY_HOST)
-                if (h == host)
-                    return true;
-            // Host not verified
-            return false;
+
+            // Check every host from divisions
+            foreach (var div in divInfo.Values)
+            {
+                foreach (var host in div)
+                {
+                    // Check if host is verified
+                    foreach (var h in LauncherSettings.CLIENT_VERIFY_HOST)
+                        if (h != host)
+                            return false;
+                }
+            }
+
+            // All host has been succeed
+            return true;
+        }
+        /// <summary>
+        /// Verify port used to start the game it's linked to launcher config
+        /// </summary>
+        private bool VerifyPort(int port)
+        {
+            return LauncherSettings.CLIENT_VERIFY_PORT == 0 || LauncherSettings.CLIENT_VERIFY_PORT == port;
         }
         #endregion
     }

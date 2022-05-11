@@ -487,16 +487,18 @@ namespace SilkroadLauncher
                 var match = Regex.Match(temp, "Language[ ]{0,1}=[ ]{0,1}[\"]{0,1}([a-zA-Z]*)[\"]{0,1}");
                 if (match.Success)
                 {
+                    m_TypeFile = temp;
                     // Try to find the index selected
                     for (int i = 0; i < LauncherSettings.CLIENT_LANGUAGE_SUPPORTED.Length; i++)
                     {
                         if (LauncherSettings.CLIENT_LANGUAGE_SUPPORTED[i] == match.Groups[1].Value)
                         {
-                            m_TypeFile = temp;
                             SupportedLanguageIndex = i;
                             return true;
                         }
                     }
+                    SupportedLanguageIndex = 0;
+                    return true;
                 }
             }
             return false;

@@ -17,25 +17,29 @@
 
         public static string[]
             CLIENT_LANGUAGE_SUPPORTED = new string[]{
-                //"Korean", // 3
-                //"Chinese", // 4
-                "Taiwan", // 5
-                //"Japan", // 6
-                //"English", // 7
-                "Vietnam", // 8
+                "Korean", // 3
+                "Chinese", // 4
+                "Japan", // 6
+                "English", // 7
+                //"Vietnam", // 8
                 //"Thailand", // 9
-                //"Russia", // 10
                 "Turkey", // 11
                 "Spain", // 12
+                "Taiwan", // 5
+                "Russia", // 10
                 "Arabic", // 13
             };
         public static string[]
             CLIENT_LANGUAGE_SUPPORTED_MASK = new string[]{
-                "Deutsch",
+                "한국어‫",
+                "中文",
+                "日本語‫",
                 "English",
                 "Türkçe",
                 "Español",
-                "العربية"
+                "Deutsch",
+                "Русский",
+                "العربية",
             };
 
         public static string
@@ -43,8 +47,9 @@
             CLIENT_BLOWFISH_KEY = "169841";
         public static string[]
             CLIENT_VERIFY_HOST = new string[] {
-                
+
             };
+        public static ushort CLIENT_VERIFY_PORT = 0;
 
         public static string
             PATH_PK2_MEDIA = "Media.pk2";
