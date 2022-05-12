@@ -29,7 +29,7 @@
         <!-- Background draggable -->
         <Border Grid.RowSpan="4"
                 MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow"
-                Background="{StaticResource LauncherBackground01ImageBrush}"/>
+                Background="{Binding Assets.Background}"/>
 
         <!-- Header -->
         <Grid Grid.Row="0"
@@ -95,8 +95,7 @@
                                  SelectedItem="{Binding SelectedWebNotice}"
                                  Foreground="#FAE9B6"
                                  ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Hidden">
-                        </ListBox>
+                                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"/>
                     </Grid>
 
                     <!-- Article -->
@@ -122,7 +121,7 @@
 
                             <!-- Header -->
                             <Border Grid.Row="0"
-                                    Background="{StaticResource OptionsHeaderImageBrush}"
+                                    Background="{Binding Assets.SettingsFrameTop}"
                                     Height="23" Width="323"
                                     Margin="0 5"/>
 
@@ -223,7 +222,7 @@
                             Width="233" Height="63"
                             Command="{Binding CommandToggleLangConfig}"/>
 
-                    <Border Background="{StaticResource LanguageSelectBackgroundImageBrush}">
+                    <Border Background="{Binding Assets.LanguageDisplayBackground}">
                         <TextBlock Text="{Binding Config.Language}"
                                    Style="{StaticResource TextBlockBaseStyle}"
                                    VerticalAlignment="Center" HorizontalAlignment="Center"
@@ -277,16 +276,16 @@
                   Margin="0 0 0 1">
                 <!-- Updating text notice -->
                 <Border Visibility="{Binding IsUpdating,Converter={local:BooleanToVisibilityConverter}}"
-                        Background="{StaticResource LoadingNoticeBackgroundImageBrush}"/>
+                        Background="{Binding Assets.StartButtonUpdating}"/>
                 <!-- Start button -->
                 <Button Visibility="{Binding CanStartGame,Converter={local:BooleanToVisibilityConverter}}"
-                    Style="{StaticResource ButtonStartImageStyle}"
-                    Command="{Binding CommandStartGame}"/>
+                        Style="{StaticResource ButtonStartImageStyle}"
+                        Command="{Binding CommandStartGame}"/>
             </Grid>
         </Grid>
 
         <!-- Updating Bar -->
-        <Grid Background="{StaticResource LoadingBackgroundImageBrush}"
+        <Grid Background="{Binding Assets.UpdatingBackground}"
               Grid.Row="3"
               Visibility="{Binding IsUpdating,Converter={local:BooleanToVisibilityConverter}}">
             <Grid.RowDefinitions>
@@ -352,12 +351,12 @@
 
                 <!-- Header -->
                 <Border Grid.Row="0"
-                        Background="{StaticResource LanguagePopupFrameTopSelectImageBrush}"/>
+                        Background="{Binding Assets.LanguagePopupFrameTop}"/>
 
                 <!-- Languages availables -->
                 <ListBox Grid.Row="1"
                          Style="{StaticResource LanguageListBoxStyle}"
-                         Background="{StaticResource LanguagePopupFrameMidSelectImageBrush}"
+                         Background="{Binding Assets.LanguagePopupFrameMid}"
                          VerticalAlignment="Center"
                          SelectionMode="Single"
                          Padding="20 3"
@@ -366,7 +365,7 @@
 
                 <!-- Ok & Cancel -->
                 <Grid Grid.Row="2"
-                      Background="{StaticResource LanguagePopupFrameBottomSelectImageBrush}">
+                      Background="{Binding Assets.LanguagePopupFrameBottom}">
                     <Grid.ColumnDefinitions>
                         <ColumnDefinition/>
                         <ColumnDefinition/>

@@ -13,11 +13,10 @@
                         <Canvas Name="PART_Indicator"
                                 ClipToBounds="True"
                                 HorizontalAlignment="Left">
-                            <Image x:Name="ImageFill"
-                                   Width="{Binding Path=ActualWidth, ElementName=PART_Track}" 
-                                   Height="{Binding Path=ActualHeight, ElementName=PART_Track}" 
-                                   Stretch="Fill"
-                                   Source="/SilkroadLauncher;component/Resources/Images/gauge.png"/>
+                            <Border x:Name="ImageFill"
+                                    Width="{Binding Path=ActualWidth, ElementName=PART_Track}" 
+                                    Height="{Binding Path=ActualHeight, ElementName=PART_Track}"
+                                    Background="{Binding Assets.UpdatingBar}"/>
                         </Canvas>
                     </Grid>
                 </ControlTemplate>

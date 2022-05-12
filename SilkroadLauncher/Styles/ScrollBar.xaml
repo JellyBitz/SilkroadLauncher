@@ -100,7 +100,7 @@
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="OverridesDefaultStyle" Value="true"/>
         <Setter Property="Focusable" Value="false"/>
-        <Setter Property="Background" Value="{StaticResource NoticeScrollBarUpArrowImageBrush}"/>
+        <Setter Property="Background" Value="{Binding Assets.NoticeScrollArrowUp}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
@@ -118,10 +118,10 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="true">
-                <Setter Property="Background" Value="{StaticResource NoticeScrollBarUpArrowOnHoverImageBrush}" />
+                <Setter Property="Background" Value="{Binding Assets.NoticeScrollArrowUpOnHover}"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="true">
-                <Setter Property="Background" Value="{StaticResource NoticeScrollBarUpArrowOnPressedImageBrush}" />
+                <Setter Property="Background" Value="{Binding Assets.NoticeScrollArrowUpOnPressed}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -130,7 +130,7 @@
         <Setter Property="SnapsToDevicePixels" Value="True"/>
         <Setter Property="OverridesDefaultStyle" Value="true"/>
         <Setter Property="Focusable" Value="false"/>
-        <Setter Property="Background" Value="{StaticResource NoticeScrollBarDownArrowImageBrush}"/>
+        <Setter Property="Background" Value="{Binding Assets.NoticeScrollArrowDown}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type RepeatButton}">
@@ -148,10 +148,10 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="true">
-                <Setter Property="Background" Value="{StaticResource NoticeScrollBarDownArrowOnHoverImageBrush}" />
+                <Setter Property="Background" Value="{Binding Assets.NoticeScrollArrowDownOnHover}"/>
             </Trigger>
             <Trigger Property="IsPressed" Value="true">
-                <Setter Property="Background" Value="{StaticResource NoticeScrollBarDownArrowOnPressedImageBrush}" />
+                <Setter Property="Background" Value="{Binding Assets.NoticeScrollArrowDownOnPressed}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
@@ -166,8 +166,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Border Background="{StaticResource NoticeScrollBarThumbImageBrush}"
-                            BorderThickness="0"/>
+                    <Image Source="{Binding Assets.NoticeScrollThumb}"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -181,8 +180,8 @@
                 <RowDefinition Height="18"/>
             </Grid.RowDefinitions>
             <!-- Scroll Background -->
-            <Border Grid.Row="0" Grid.RowSpan="3"
-                    Background="{StaticResource NoticeScrollBarBackgroundImageBrush}"/>
+            <Image Grid.Row="0" Grid.RowSpan="3"
+                   Source="{Binding Assets.NoticeScrollBackground}"/>
             <!-- Button UP -->
             <RepeatButton Grid.Row="0"
                           Style="{StaticResource NoticeScrollViewerUpButton}"

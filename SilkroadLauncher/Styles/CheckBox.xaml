@@ -5,7 +5,7 @@
 
     <!-- Checkbox Base Style -->
     <SolidColorBrush x:Key="CheckBoxFillNormal" Color="#F4F4F4"/>
-    <Style x:Key="CheckBoxBaseStyle" TargetType="{x:Type CheckBox}">
+    <Style x:Key="CheckBoxLanguageStyle" TargetType="{x:Type CheckBox}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Background" Value="{StaticResource CheckBoxFillNormal}"/>
         <Setter Property="BorderBrush" Value="{StaticResource CheckBoxStroke}"/>
@@ -17,7 +17,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Border x:Name="xCheck"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                Background="{StaticResource CheckBoxBaseImageBrush}"
+                                Background="{Binding DataContext.Assets.LanguagePopupCheckbox,RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}"
                                 Width="16" Height="16"/>
                         <ContentPresenter x:Name="xContent"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -28,7 +28,7 @@
                     <!-- Events -->
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="true">
-                            <Setter TargetName="xCheck" Property="Background" Value="{StaticResource CheckBoxBaseCheckedImageBrush}"/>
+                            <Setter TargetName="xCheck" Property="Background" Value="{Binding DataContext.Assets.LanguagePopupCheckboxChecked,RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}"/>
                         </Trigger>
                         <Trigger Property="HasContent" Value="true">
                             <Setter TargetName="xContent" Property="Margin" Value="4 2 0 0"/>
@@ -52,7 +52,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Border x:Name="xCheck"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                Background="{StaticResource OptionsCheckBoxImageBrush}"
+                                Background="{Binding Assets.SettingsCheckbox}"
                                 Width="20" Height="20"/>
                         <ContentPresenter x:Name="xContent"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -63,7 +63,7 @@
                     <!-- Events -->
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="true">
-                            <Setter TargetName="xCheck" Property="Background" Value="{StaticResource OptionsCheckBoxCheckedImageBrush}"/>
+                            <Setter TargetName="xCheck" Property="Background" Value="{Binding Assets.SettingsCheckboxChecked}"/>
                         </Trigger>
                         <Trigger Property="HasContent" Value="true">
                             <Setter TargetName="xContent" Property="Margin" Value="4 2 0 0"/>

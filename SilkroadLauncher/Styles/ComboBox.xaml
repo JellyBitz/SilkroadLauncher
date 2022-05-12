@@ -39,23 +39,19 @@
                             SnapsToDevicePixels="true">
                         <!-- Toggle Button Background -->
                         <Grid>
-                            <Border BorderThickness="{TemplateBinding BorderThickness}"
-                                    BorderBrush="{StaticResource ComboBoxInsideBorderBrush}"
-                                    Margin="1 1 20 1"/>
-                            <Border BorderThickness="{TemplateBinding BorderThickness}" 
-                                    BorderBrush="{StaticResource ComboBoxOutsideBorderBrush}"
-                                    Margin="0 0 20 0"/>
+                            <Border Background="{Binding Assets.SettingsComboboxBackground}"
+                                    Margin="0 0 19 0"/>
                             <Border x:Name="xToggle" HorizontalAlignment="Right"
-                                    Background="{StaticResource OptionsComboBoxArrowImageBrush}"
+                                    Background="{Binding Assets.SettingsComboboxArrow}"
                                     Width="20" Height="20"/>
                         </Grid>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="true">
-                            <Setter TargetName="xToggle" Property="Background" Value="{StaticResource OptionsComboBoxArrowOnHoverImageBrush}"/>
+                            <Setter TargetName="xToggle" Property="Background" Value="{Binding Assets.SettingsComboboxArrowOnHover}"/>
                         </Trigger>
                         <Trigger Property="IsPressed" Value="true">
-                            <Setter TargetName="xToggle" Property="Background" Value="{StaticResource OptionsComboBoxArrowOnPressedImageBrush}"/>
+                            <Setter TargetName="xToggle" Property="Background" Value="{Binding Assets.SettingsComboboxArrowOnPressed}"/>
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -175,7 +171,7 @@
 
     <Style x:Key="ComboBoxBaseStyle" TargetType="{x:Type ComboBox}">
         <Setter Property="BorderBrush" Value="{StaticResource ComboBoxOutsideBorderBrush}"/>
-        <Setter Property="Background" Value="Black"/>
+        <Setter Property="Background" Value="{Binding Assets.SettingsComboboxBackground}"/>
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="FontSize" Value="11"/>
         <Setter Property="Padding" Value="0 2 0 0"/>
@@ -201,14 +197,15 @@
                             <Themes:SystemDropShadowChrome x:Name="Shdw" Color="Transparent" MaxHeight="{TemplateBinding MaxDropDownHeight}" MinWidth="{Binding ActualWidth, ElementName=MainGrid}">
                                 <Border x:Name="DropDownBorder"
                                         BorderBrush="{StaticResource ComboBoxInsideBorderBrush}"
+                                        Background="Black"
                                         BorderThickness="1"
-                                        Background="{TemplateBinding Background}"
                                         Margin="0 1 0 0">
                                     <ScrollViewer x:Name="DropDownScrollViewer">
                                         <Grid RenderOptions.ClearTypeHint="Enabled">
                                             <Canvas HorizontalAlignment="Left" Height="0" VerticalAlignment="Top" Width="0">
                                                 <Rectangle x:Name="OpaqueRect" Fill="{Binding Background, ElementName=DropDownBorder}"
-                                                           Height="{Binding ActualHeight, ElementName=DropDownBorder}" Width="{Binding ActualWidth, ElementName=DropDownBorder}"/>
+                                                           Height="{Binding ActualHeight, ElementName=DropDownBorder}"
+                                                           Width="{Binding ActualWidth, ElementName=DropDownBorder}"/>
                                             </Canvas>
                                             <ItemsPresenter x:Name="ItemsPresenter" KeyboardNavigation.DirectionalNavigation="Contained" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}"/>
                                         </Grid>
@@ -222,7 +219,6 @@
                                       BorderBrush="{TemplateBinding BorderBrush}"
                                       Background="{TemplateBinding Background}"
                                       IsChecked="{Binding IsDropDownOpen, Mode=TwoWay, RelativeSource={RelativeSource TemplatedParent}}"/>
-
                         <ContentPresenter ContentTemplate="{TemplateBinding SelectionBoxItemTemplate}"
                                           ContentTemplateSelector="{TemplateBinding ItemTemplateSelector}"
                                           Content="{TemplateBinding SelectionBoxItem}"

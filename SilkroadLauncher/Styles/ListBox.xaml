@@ -14,10 +14,10 @@
                                 Background="Transparent"
                                 Orientation="Horizontal">
                         <Border x:Name="xSelectedMark"
-                                    Opacity="0"
-                                    Background="{StaticResource NoticeSelectedIconImageBrush}"
-                                    Width="9" Height="15"
-                                    Margin="2 1"/>
+                               Opacity="0"
+                               Background="{Binding Assets.NoticeSelectedIcon}"
+                               Width="9" Height="15"
+                               Margin="2 1"/>
                         <ContentPresenter HorizontalAlignment="Stretch"/>
                     </StackPanel>
                     <ControlTemplate.Triggers>
@@ -73,7 +73,7 @@
                             <!-- Checkbox Mark -->
                             <CheckBox x:Name="xSelectionMark"
                                       Margin="6 3"
-                                      Style="{StaticResource CheckBoxBaseStyle}"
+                                      Style="{StaticResource CheckBoxLanguageStyle}"
                                       IsChecked="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=IsSelected, Mode=TwoWay}"/>
                             <ContentPresenter Margin="0 3" HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}" SnapsToDevicePixels="{TemplateBinding SnapsToDevicePixels}" VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                         </StackPanel>
