@@ -166,7 +166,7 @@
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Thumb}">
-                    <Image Source="{Binding Assets.NoticeScrollThumb}"/>
+                    <Image Source="{Binding Assets.NoticeScrollThumb.ImageSource}"/>
                 </ControlTemplate>
             </Setter.Value>
         </Setter>
@@ -181,7 +181,7 @@
             </Grid.RowDefinitions>
             <!-- Scroll Background -->
             <Image Grid.Row="0" Grid.RowSpan="3"
-                   Source="{Binding Assets.NoticeScrollBackground}"/>
+                   Source="{Binding Assets.NoticeScrollBackground.ImageSource}"/>
             <!-- Button UP -->
             <RepeatButton Grid.Row="0"
                           Style="{StaticResource NoticeScrollViewerUpButton}"

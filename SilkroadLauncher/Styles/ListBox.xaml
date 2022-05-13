@@ -15,7 +15,7 @@
                                 Orientation="Horizontal">
                         <Border x:Name="xSelectedMark"
                                Opacity="0"
-                               Background="{Binding Assets.NoticeSelectedIcon}"
+                               Background="{Binding DataContext.Assets.NoticeSelectedIcon,RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}"
                                Width="9" Height="15"
                                Margin="2 1"/>
                         <ContentPresenter HorizontalAlignment="Stretch"/>

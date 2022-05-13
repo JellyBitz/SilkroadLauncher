@@ -53,7 +53,7 @@
                                     Orientation="Horizontal"
                                     HorizontalAlignment="Right">
                             <Border x:Name="LinkMark"
-                                   Background="{Binding Assets.WebsiteIcon}"
+                                   Background="{Binding Assets.HomeIcon}"
                                    Width="11" Height="11"
                                    Margin="0 0 5 0"/>
                             <TextBlock Text="Silkroad Home"
@@ -73,7 +73,7 @@
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Cursor" Value="Hand"/>
                             <!-- Change mark -->
-                            <Setter TargetName="LinkMark" Property="Background" Value="{Binding Assets.WebsiteIconOnHover}"/>
+                            <Setter TargetName="LinkMark" Property="Background" Value="{Binding Assets.HomeIconOnHover}"/>
                             <!-- Drop glow -->
                             <Setter TargetName="BackgroundEffect" Property="Effect">
                                 <Setter.Value>
