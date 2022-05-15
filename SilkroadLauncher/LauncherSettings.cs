@@ -17,17 +17,17 @@
 
         public static string[]
             CLIENT_LANGUAGE_SUPPORTED = new string[]{
-                "Korean", // 3
-                "Chinese", // 4
-                "Japan", // 6
-                "English", // 7
-                //"Vietnam", // 8
-                //"Thailand", // 9
-                "Turkey", // 11
-                "Spain", // 12
-                "Taiwan", // 5
-                "Russia", // 10
-                "Arabic", // 13
+                "Korean", // 2
+                "Chinese", // 3
+                "Japan", // 5
+                "English", // 6
+                //"Vietnam", // 7
+                //"Thailand", // 8
+                "Turkey", // 10
+                "Spain", // 11
+                "Taiwan", // 4
+                "Russia", // 9
+                "Arabic", // 12
             };
         public static string[]
             CLIENT_LANGUAGE_SUPPORTED_MASK = new string[]{
