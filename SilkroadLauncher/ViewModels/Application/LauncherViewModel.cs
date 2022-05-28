@@ -655,67 +655,67 @@ namespace SilkroadLauncher
         /// </summary>
         private void LoadAssets(Pk2Reader reader)
         {
-            Assets.Background = new ImageBrush(reader.GetImage("launcher_wpf/background.png"));
-            Assets.HomeIcon = new ImageBrush(reader.GetImage("launcher_wpf/home_icon.png"));
-            Assets.HomeIconOnHover = new ImageBrush(reader.GetImage("launcher_wpf/home_icon_onhover.png"));
+            Assets.Background = new ImageBrush(reader.GetImage("launcher_wpf/background.dat"));
+            Assets.HomeIcon = new ImageBrush(reader.GetImage("launcher_wpf/home_icon.dat"));
+            Assets.HomeIconOnHover = new ImageBrush(reader.GetImage("launcher_wpf/home_icon_onhover.dat"));
 
-            Assets.OptionButton = new ImageBrush(reader.GetImage("launcher_wpf/option_button.png"));
-            Assets.OptionButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/option_button_onhover.png"));
-            Assets.OptionButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/option_button_onpressed.png"));
-            Assets.GuideButton = new ImageBrush(reader.GetImage("launcher_wpf/guide_button.png"));
-            Assets.GuideButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/guide_button_onhover.png"));
-            Assets.GuideButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/guide_button_onpressed.png"));
-            Assets.MovieButton = new ImageBrush(reader.GetImage("launcher_wpf/movie_button.png"));
-            Assets.MovieButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/movie_button_onhover.png"));
-            Assets.MovieButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/movie_button_onpressed.png"));
-            Assets.ExitButton = new ImageBrush(reader.GetImage("launcher_wpf/exit_button.png"));
-            Assets.ExitButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/exit_button_onhover.png"));
-            Assets.ExitButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/exit_button_onpressed.png"));
-            Assets.StartButton = new ImageBrush(reader.GetImage("launcher_wpf/start_button.png"));
-            Assets.StartButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/start_button_onhover.png"));
-            Assets.StartButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/start_button_onpressed.png"));
-            Assets.StartButtonUpdating = new ImageBrush(reader.GetImage("launcher_wpf/start_button_updating.png"));
+            Assets.OptionButton = new ImageBrush(reader.GetImage("launcher_wpf/option_button.dat"));
+            Assets.OptionButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/option_button_onhover.dat"));
+            Assets.OptionButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/option_button_onpressed.dat"));
+            Assets.GuideButton = new ImageBrush(reader.GetImage("launcher_wpf/guide_button.dat"));
+            Assets.GuideButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/guide_button_onhover.dat"));
+            Assets.GuideButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/guide_button_onpressed.dat"));
+            Assets.MovieButton = new ImageBrush(reader.GetImage("launcher_wpf/movie_button.dat"));
+            Assets.MovieButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/movie_button_onhover.dat"));
+            Assets.MovieButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/movie_button_onpressed.dat"));
+            Assets.ExitButton = new ImageBrush(reader.GetImage("launcher_wpf/exit_button.dat"));
+            Assets.ExitButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/exit_button_onhover.dat"));
+            Assets.ExitButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/exit_button_onpressed.dat"));
+            Assets.StartButton = new ImageBrush(reader.GetImage("launcher_wpf/start_button.dat"));
+            Assets.StartButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/start_button_onhover.dat"));
+            Assets.StartButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/start_button_onpressed.dat"));
+            Assets.StartButtonUpdating = new ImageBrush(reader.GetImage("launcher_wpf/start_button_updating.dat"));
 
-            Assets.UpdatingBackground = new ImageBrush(reader.GetImage("launcher_wpf/updating_background.png"));
-            Assets.UpdatingBar = new ImageBrush(reader.GetImage("launcher_wpf/updating_bar.png"));
+            Assets.UpdatingBackground = new ImageBrush(reader.GetImage("launcher_wpf/updating_background.dat"));
+            Assets.UpdatingBar = new ImageBrush(reader.GetImage("launcher_wpf/updating_bar.dat"));
 
-            Assets.NoticeSelectedIcon = new ImageBrush(reader.GetImage("launcher_wpf/notice/selected_icon.png"));
-            Assets.NoticeScrollBackground = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_background.png"));
-            Assets.NoticeScrollThumb = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_thumb.png"));
-            Assets.NoticeScrollArrowUp = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_up.png"));
-            Assets.NoticeScrollArrowUpOnHover = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_up_onhover.png"));
-            Assets.NoticeScrollArrowUpOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_up_onpressed.png"));
-            Assets.NoticeScrollArrowDown = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_down.png"));
-            Assets.NoticeScrollArrowDownOnHover = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_down_onhover.png"));
-            Assets.NoticeScrollArrowDownOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_down_onpressed.png"));
+            Assets.NoticeSelectedIcon = new ImageBrush(reader.GetImage("launcher_wpf/notice/selected_icon.dat"));
+            Assets.NoticeScrollBackground = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_background.dat"));
+            Assets.NoticeScrollThumb = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_thumb.dat"));
+            Assets.NoticeScrollArrowUp = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_up.dat"));
+            Assets.NoticeScrollArrowUpOnHover = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_up_onhover.dat"));
+            Assets.NoticeScrollArrowUpOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_up_onpressed.dat"));
+            Assets.NoticeScrollArrowDown = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_down.dat"));
+            Assets.NoticeScrollArrowDownOnHover = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_down_onhover.dat"));
+            Assets.NoticeScrollArrowDownOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_down_onpressed.dat"));
 
-            Assets.LanguageDisplayBackground = new ImageBrush(reader.GetImage("launcher_wpf/language_display_background.png"));
-            Assets.LanguageButton = new ImageBrush(reader.GetImage("launcher_wpf/language_button.png"));
-            Assets.LanguageButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/language_button_onhover.png"));
-            Assets.LanguageButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/language_button_onpressed.png"));
+            Assets.LanguageDisplayBackground = new ImageBrush(reader.GetImage("launcher_wpf/language_display_background.dat"));
+            Assets.LanguageButton = new ImageBrush(reader.GetImage("launcher_wpf/language_button.dat"));
+            Assets.LanguageButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/language_button_onhover.dat"));
+            Assets.LanguageButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/language_button_onpressed.dat"));
 
-            Assets.LanguagePopupFrameTop = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/frame_top.png"));
-            Assets.LanguagePopupFrameMid = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/frame_mid.png"));
-            Assets.LanguagePopupFrameBottom = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/frame_bottom.png"));
-            Assets.LanguagePopupCheckbox = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/checkbox.png"));
-            Assets.LanguagePopupCheckboxChecked = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/checkbox_checked.png"));
-            Assets.LanguagePopupAcceptButton = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/accept_button.png"));
-            Assets.LanguagePopupAcceptButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/accept_button_onhover.png"));
-            Assets.LanguagePopupAcceptButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/accept_button_onpressed.png"));
-            Assets.LanguagePopupCancelButton = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/cancel_button.png"));
-            Assets.LanguagePopupCancelButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/cancel_button_onhover.png"));
-            Assets.LanguagePopupCancelButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/cancel_button_onpressed.png"));
+            Assets.LanguagePopupFrameTop = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/frame_top.dat"));
+            Assets.LanguagePopupFrameMid = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/frame_mid.dat"));
+            Assets.LanguagePopupFrameBottom = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/frame_bottom.dat"));
+            Assets.LanguagePopupCheckbox = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/checkbox.dat"));
+            Assets.LanguagePopupCheckboxChecked = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/checkbox_checked.dat"));
+            Assets.LanguagePopupAcceptButton = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/accept_button.dat"));
+            Assets.LanguagePopupAcceptButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/accept_button_onhover.dat"));
+            Assets.LanguagePopupAcceptButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/accept_button_onpressed.dat"));
+            Assets.LanguagePopupCancelButton = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/cancel_button.dat"));
+            Assets.LanguagePopupCancelButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/cancel_button_onhover.dat"));
+            Assets.LanguagePopupCancelButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/cancel_button_onpressed.dat"));
 
-            Assets.SettingsFrameTop = new ImageBrush(reader.GetImage("launcher_wpf/settings/frame_top.png"));
-            Assets.SettingsComboboxBackground = new ImageBrush(reader.GetImage("launcher_wpf/settings/combobox_background.png"));
-            Assets.SettingsComboboxArrow = new ImageBrush(reader.GetImage("launcher_wpf/settings/combobox_arrow.png"));
-            Assets.SettingsComboboxArrowOnHover = new ImageBrush(reader.GetImage("launcher_wpf/settings/combobox_arrow_onhover.png"));
-            Assets.SettingsComboboxArrowOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/settings/combobox_arrow_onpressed.png"));
-            Assets.SettingsSaveButton = new ImageBrush(reader.GetImage("launcher_wpf/settings/save_button.png"));
-            Assets.SettingsSaveButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/settings/save_button_onhover.png"));
-            Assets.SettingsSaveButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/settings/save_button_onpressed.png"));
-            Assets.SettingsCheckbox = new ImageBrush(reader.GetImage("launcher_wpf/settings/checkbox.png"));
-            Assets.SettingsCheckboxChecked = new ImageBrush(reader.GetImage("launcher_wpf/settings/checkbox_checked.png"));
+            Assets.SettingsFrameTop = new ImageBrush(reader.GetImage("launcher_wpf/settings/frame_top.dat"));
+            Assets.SettingsComboboxBackground = new ImageBrush(reader.GetImage("launcher_wpf/settings/combobox_background.dat"));
+            Assets.SettingsComboboxArrow = new ImageBrush(reader.GetImage("launcher_wpf/settings/combobox_arrow.dat"));
+            Assets.SettingsComboboxArrowOnHover = new ImageBrush(reader.GetImage("launcher_wpf/settings/combobox_arrow_onhover.dat"));
+            Assets.SettingsComboboxArrowOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/settings/combobox_arrow_onpressed.dat"));
+            Assets.SettingsSaveButton = new ImageBrush(reader.GetImage("launcher_wpf/settings/save_button.dat"));
+            Assets.SettingsSaveButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/settings/save_button_onhover.dat"));
+            Assets.SettingsSaveButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/settings/save_button_onpressed.dat"));
+            Assets.SettingsCheckbox = new ImageBrush(reader.GetImage("launcher_wpf/settings/checkbox.dat"));
+            Assets.SettingsCheckboxChecked = new ImageBrush(reader.GetImage("launcher_wpf/settings/checkbox_checked.dat"));
         }
         /// <summary>
         /// Verify host used to start the game it's linked to launcher config
