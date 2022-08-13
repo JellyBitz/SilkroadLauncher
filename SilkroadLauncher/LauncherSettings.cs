@@ -22,12 +22,12 @@
                 "Japan", // 5
                 "English", // 6
                 //"Vietnam", // 7
-                //"Thailand", // 8
                 "Turkey", // 10
                 "Spain", // 11
                 "Taiwan", // 4
                 "Russia", // 9
                 "Arabic", // 12
+                "Thailand", // 8
             };
         public static string[]
             CLIENT_LANGUAGE_SUPPORTED_MASK = new string[]{
@@ -40,6 +40,7 @@
                 "Deutsch",
                 "Русский",
                 "العربية",
+                "Portuguese",
             };
 
         public static string
