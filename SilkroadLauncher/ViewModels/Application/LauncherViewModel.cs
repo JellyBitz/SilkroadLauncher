@@ -130,8 +130,9 @@ namespace SilkroadLauncher
         /// <summary>
         /// Application title shown on windows title bar
         /// </summary>
-        public string Title {
-            get { return m_Title; }
+        public string Title
+        {
+            get => m_Title;
             set
             {
                 m_Title = value;
@@ -143,7 +144,7 @@ namespace SilkroadLauncher
         /// </summary>
         public byte Locale
         {
-            get { return m_Locale; }
+            get => m_Locale;
             set
             {
                 // set new value
@@ -157,7 +158,7 @@ namespace SilkroadLauncher
         /// </summary>
         public uint Version
         {
-            get { return m_Version; }
+            get => m_Version;
             set
             {
                 // set new value
@@ -172,9 +173,9 @@ namespace SilkroadLauncher
         /// <summary>
         /// Client version shown to the user
         /// </summary>
-        public string ClientVersion 
+        public string ClientVersion
         {
-            get { return m_ClientVersion; }
+            get => m_ClientVersion;
             private set
             {
                 // set new value
@@ -188,7 +189,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsLoaded
         {
-            get { return m_IsLoaded; }
+            get => m_IsLoaded;
             private set
             {
                 // set new value
@@ -202,7 +203,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsViewingConfig
         {
-            get { return m_IsViewingConfig; }
+            get => m_IsViewingConfig;
             set
             {
                 // set new value
@@ -216,7 +217,7 @@ namespace SilkroadLauncher
         /// </summary>
         public ConfigViewModel Config
         {
-            get { return m_Config; }
+            get => m_Config;
             set
             {
                 // set new value
@@ -230,7 +231,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsViewingLangConfig
         {
-            get { return m_IsViewingLangConfig; }
+            get => m_IsViewingLangConfig;
             set
             {
                 // set new value
@@ -244,7 +245,7 @@ namespace SilkroadLauncher
         /// </summary>
         public int LangConfigIndex
         {
-            get { return m_LangConfigIndex; }
+            get => m_LangConfigIndex;
             set
             {
                 // set new value
@@ -258,7 +259,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsCheckingUpdates
         {
-            get { return m_IsCheckingUpdates; }
+            get => m_IsCheckingUpdates;
             set
             {
                 // set new value
@@ -272,7 +273,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsUnderInspection
         {
-            get { return m_IsUnderInspection; }
+            get => m_IsUnderInspection;
             set
             {
                 // set new value
@@ -286,7 +287,7 @@ namespace SilkroadLauncher
         /// </summary>
         public List<WebNoticeViewModel> WebNotices
         {
-            get { return m_WebNotices; }
+            get => m_WebNotices;
             set
             {
                 m_WebNotices = value;
@@ -299,7 +300,7 @@ namespace SilkroadLauncher
         /// </summary>
         public WebNoticeViewModel SelectedWebNotice
         {
-            get { return m_SelectedWebNotice; }
+            get => m_SelectedWebNotice;
             set
             {
                 // set new value
@@ -313,7 +314,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsUpdating
         {
-            get { return m_IsUpdating; }
+            get => m_IsUpdating;
             set
             {
                 // set new value
@@ -327,7 +328,7 @@ namespace SilkroadLauncher
         /// </summary>
         public ulong UpdatingBytesMaxDownloading
         {
-            get { return m_UpdatingBytesMaxDownloading; }
+            get => m_UpdatingBytesMaxDownloading;
             set
             {
                 // set new value
@@ -341,7 +342,7 @@ namespace SilkroadLauncher
         /// </summary>
         public ulong UpdatingBytesDownloading
         {
-            get { return m_UpdatingBytesDownloading; }
+            get => m_UpdatingBytesDownloading;
             set
             {
                 // set new value
@@ -350,7 +351,7 @@ namespace SilkroadLauncher
                 OnPropertyChanged(nameof(UpdatingBytesDownloading));
 
                 // Set percentage
-                if(m_UpdatingBytesMaxDownloading != 0)
+                if (m_UpdatingBytesMaxDownloading != 0)
                     UpdatingPercentage = (int)(m_UpdatingBytesDownloading * 100ul / m_UpdatingBytesMaxDownloading);
             }
         }
@@ -359,7 +360,7 @@ namespace SilkroadLauncher
         /// </summary>
         public int UpdatingPercentage
         {
-            get { return m_UpdatingPercentage; }
+            get => m_UpdatingPercentage;
             set
             {
                 if (m_UpdatingPercentage == value)
@@ -374,7 +375,7 @@ namespace SilkroadLauncher
         /// </summary>
         public string UpdatingFilePath
         {
-            get { return m_UpdatingFilePath; }
+            get => m_UpdatingFilePath;
             set
             {
                 m_UpdatingFilePath = value;
@@ -386,7 +387,7 @@ namespace SilkroadLauncher
         /// </summary>
         public int UpdatingFilePercentage
         {
-            get { return m_UpdatingFilePercentage; }
+            get => m_UpdatingFilePercentage;
             set
             {
                 m_UpdatingFilePercentage = value;
@@ -398,7 +399,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool CanStartGame
         {
-            get { return m_CanStartGame; }
+            get => m_CanStartGame;
             set
             {
                 // set new value
@@ -553,14 +554,14 @@ namespace SilkroadLauncher
             m_GatewaySession = new Session();
 
             // Add handlers for updating
-            m_GatewaySession.AddHandler(GatewayModule.Opcode.GLOBAL_IDENTIFICATION, new PacketHandler(GatewayModule.Server_GlobalIdentification));
-            m_GatewaySession.AddHandler(GatewayModule.Opcode.SERVER_PATCH_RESPONSE, new PacketHandler(GatewayModule.Server_PatchResponse));
-            m_GatewaySession.AddHandler(GatewayModule.Opcode.SERVER_SHARD_LIST_RESPONSE, new PacketHandler(GatewayModule.Server_ShardListResponse));
-            m_GatewaySession.AddHandler(GatewayModule.Opcode.SERVER_WEB_NOTICE_RESPONSE, new PacketHandler(GatewayModule.Server_WebNoticeResponse));
+            m_GatewaySession.RegisterHandler(GatewayModule.Opcode.GLOBAL_IDENTIFICATION, GatewayModule.Server_GlobalIdentification);
+            m_GatewaySession.RegisterHandler(GatewayModule.Opcode.SERVER_PATCH_RESPONSE, GatewayModule.Server_PatchResponse);
+            m_GatewaySession.RegisterHandler(GatewayModule.Opcode.SERVER_SHARD_LIST_RESPONSE, GatewayModule.Server_ShardListResponse);
+            m_GatewaySession.RegisterHandler(GatewayModule.Opcode.SERVER_WEB_NOTICE_RESPONSE, GatewayModule.Server_WebNoticeResponse);
 
-            m_GatewaySession.Disconnect += new EventHandler((_Session, _Event) => {
+            m_GatewaySession.OnDisconnect += (_s, _e) => {
                 System.Diagnostics.Debug.WriteLine("Gateway: Session disconnected");
-            });
+            };
             bool connectionSolved = false;
             // Save at the same time the connection arguments
             int divIndex = 0, hostIndex = 0;

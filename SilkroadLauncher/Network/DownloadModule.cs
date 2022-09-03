@@ -19,7 +19,9 @@ namespace SilkroadLauncher.Network
 
             SERVER_READY = 0x6005,
             SERVER_FILE_CHUNK = 0x1001,
-            SERVER_FILE_COMPLETED = 0xA004;
+            SERVER_FILE_COMPLETED = 0xA004,
+
+            GLOBAL_IDENTIFICATION = 0x2001;
         }
         /// <summary>
         /// The current file being downloaded
@@ -35,7 +37,7 @@ namespace SilkroadLauncher.Network
         public static uint DownloadVersion { get; set; }
 
         #region Public Methods
-        public static void Server_Ready(Packet p, Session s)
+        public static void Server_Ready(object sender, SessionPacketEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Server_Ready");
 
@@ -43,23 +45,23 @@ namespace SilkroadLauncher.Network
             Directory.CreateDirectory("Temp");
 
             // Create file download from server
-            RequestFileDownload(s);
+            RequestFileDownload((Session)sender);
         }
-        public static void Server_FileChunk(Packet p, Session s)
+        public static void Server_FileChunk(object sender, SessionPacketEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("Server_FileChunk");
 
             // Continue adding bytes to the file
-            byte[] buffer = p.GetBytes();
+            byte[] buffer = e.Packet.GetBytes();
             m_FileStream.Write(buffer, 0, buffer.Length);
 
             LauncherViewModel.Instance.UpdatingBytesDownloading += (uint)buffer.Length;
             // File being downloaded
             LauncherViewModel.Instance.UpdatingFilePercentage = (int)(m_FileStream.Length * 100L / DownloadFiles[0].Size);
         }
-        public static void Server_FileCompleted(Packet p, Session s)
+        public static void Server_FileCompleted(object sender, SessionPacketEventArgs e)
         {
-            byte result = p.ReadByte();
+            byte result = e.Packet.ReadByte();
 
             // File downloaded
             var file = DownloadFiles[0];
@@ -126,7 +128,7 @@ namespace SilkroadLauncher.Network
             // Continue protocol
             if (DownloadFiles.Count > 0)
             {
-                RequestFileDownload(s);
+                RequestFileDownload((Session)sender);
             }
             else
             {
@@ -154,7 +156,7 @@ namespace SilkroadLauncher.Network
                     LauncherViewModel.Instance.CanStartGame = true;
 
                     // Stop connection
-                    s.Stop();
+                    ((Session)sender).Stop();
                 }
             }
         }

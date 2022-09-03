@@ -7,13 +7,13 @@ namespace SilkroadLauncher.Utility
         /// <summary>
         /// Connects the specified socket
         /// </summary>
-        /// <param name="host">The host/IP to connect</param>
-        /// <param name="port">The port</param>
-        /// <param name="timeout">The timeout</param>
-        public static void Connect(this Socket socket, string host, int port, int milisecondsTimeout)
+        /// <param name="host">Host/IP to connect</param>
+        /// <param name="port">Port</param>
+        /// <param name="timeout">Timeout to wait for connection</param>
+        public static void Connect(this Socket socket, string host, int port, int timeout)
         {
             var result = socket.BeginConnect(host, port, null, null);
-            bool success = result.AsyncWaitHandle.WaitOne(milisecondsTimeout, true);
+            result.AsyncWaitHandle.WaitOne(timeout, true);
             if (socket.Connected)
             {
                 socket.EndConnect(result);
