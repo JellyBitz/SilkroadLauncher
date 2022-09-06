@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Reflection;
 using System.Text;
 
 namespace SilkroadLauncher.Network
@@ -39,7 +38,7 @@ namespace SilkroadLauncher.Network
         #region Public Methods
         public static void Server_Ready(object sender, SessionPacketEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Server_Ready");
+            System.Diagnostics.Debug.WriteLine("DownloadModule::Server_Ready");
 
             // Create a temporary directory to allocate the file
             Directory.CreateDirectory("Temp");
@@ -49,7 +48,7 @@ namespace SilkroadLauncher.Network
         }
         public static void Server_FileChunk(object sender, SessionPacketEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Server_FileChunk");
+            System.Diagnostics.Debug.WriteLine("DownloadModule::Server_FileChunk");
 
             // Continue adding bytes to the file
             byte[] buffer = e.Packet.GetBytes();
@@ -97,7 +96,8 @@ namespace SilkroadLauncher.Network
                 DecompressFile("Temp\\" + file.ID);
 
                 // Check file path
-                if (file.Path != string.Empty) {
+                if (file.Path != string.Empty)
+                {
                     // Create directory if doesn't exists
                     if (!Directory.Exists(file.Path))
                         Directory.CreateDirectory(file.Path);
@@ -124,7 +124,7 @@ namespace SilkroadLauncher.Network
 
             // Remove the file and delete it from Temp
             DownloadFiles.RemoveAt(0);
-            
+
             // Continue protocol
             if (DownloadFiles.Count > 0)
             {
@@ -139,12 +139,12 @@ namespace SilkroadLauncher.Network
 
                 // Update done!
                 LauncherViewModel.Instance.IsUpdating = false;
-                
+
                 // Dispose pk2 writer
                 Pk2Writer.Deinitialize();
 
                 // Replace the Launcher if exists
-                if (File.Exists("Temp\\_"+ Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)))
+                if (File.Exists("Temp\\_" + Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)))
                 {
                     // Replace launcher required
                     StartReplacer();
@@ -227,7 +227,7 @@ namespace SilkroadLauncher.Network
             var launcherFilename = Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             var launcherPath = Path.GetFullPath(launcherFilename);
             // Move my current executable to temp
-            ForceMovingFile(launcherPath,"Temp\\" + launcherFilename + ".bkp");
+            ForceMovingFile(launcherPath, "Temp\\" + launcherFilename + ".bkp");
             // Move the new launcher to the folder
             File.Move("Temp\\_" + launcherFilename, launcherPath);
             // Run the new launcher

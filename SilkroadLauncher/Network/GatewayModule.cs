@@ -32,6 +32,8 @@ namespace SilkroadLauncher.Network
         }
         public static void Server_GlobalIdentification(object sender, SessionPacketEventArgs e)
         {
+            System.Diagnostics.Debug.WriteLine("GatewayModule::Server_GlobalIdentification");
+
             string service = e.Packet.ReadAscii();
             if (service == "GatewayServer")
             {
@@ -45,7 +47,7 @@ namespace SilkroadLauncher.Network
         }
         public static void Server_PatchResponse(object sender, SessionPacketEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Server_PatchResponse");
+            System.Diagnostics.Debug.WriteLine("GatewayModule::Server_PatchResponse");
 
             var p = e.Packet;
             LauncherViewModel.Instance.IsCheckingUpdates = false;
@@ -99,17 +101,16 @@ namespace SilkroadLauncher.Network
                                     LauncherViewModel.Instance.IsUpdating = true;
                                     System.Diagnostics.Debug.WriteLine("Downloading updates...");
 
-                                    Session downloaderSession = new Session();
-                                    downloaderSession.RegisterHandler(DownloadModule.Opcode.GLOBAL_IDENTIFICATION, new SessionPacketHandler(Server_GlobalIdentification));
-                                    downloaderSession.RegisterHandler(DownloadModule.Opcode.SERVER_READY, new SessionPacketHandler(DownloadModule.Server_Ready));
-                                    downloaderSession.RegisterHandler(DownloadModule.Opcode.SERVER_FILE_CHUNK, new SessionPacketHandler(DownloadModule.Server_FileChunk));
-                                    downloaderSession.RegisterHandler(DownloadModule.Opcode.SERVER_FILE_COMPLETED, new SessionPacketHandler(DownloadModule.Server_FileCompleted));
+                                    Session downloadSession = new Session();
+                                    downloadSession.RegisterHandler(DownloadModule.Opcode.SERVER_READY, DownloadModule.Server_Ready);
+                                    downloadSession.RegisterHandler(DownloadModule.Opcode.SERVER_FILE_CHUNK, DownloadModule.Server_FileChunk);
+                                    downloadSession.RegisterHandler(DownloadModule.Opcode.SERVER_FILE_COMPLETED, DownloadModule.Server_FileCompleted);
 
-                                    downloaderSession.OnDisconnect += (_s, _e) => {
+                                    downloadSession.OnDisconnect += (_s, _e) => {
                                         System.Diagnostics.Debug.WriteLine("Download: Session disconnected");
                                     };
 
-                                    System.Threading.Tasks.Task.Run(() => downloaderSession.Start(DownloadServerIP, DownloadServerPort, 10000));
+                                    System.Threading.Tasks.Task.Run(() => downloadSession.Start(DownloadServerIP, DownloadServerPort, 10000));
                                 }
                                 else
                                 {
@@ -147,7 +148,7 @@ namespace SilkroadLauncher.Network
         }
         public static void Server_WebNoticeResponse(object sender, SessionPacketEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Server_WebNoticeResponse");
+            System.Diagnostics.Debug.WriteLine("GatewayModule::Server_WebNoticeResponse");
 
             var p = e.Packet;
             byte noticeCount = p.ReadByte();
@@ -178,7 +179,7 @@ namespace SilkroadLauncher.Network
 
         public static void Server_ShardListResponse(object sender, SessionPacketEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Server_ShardListResponse");
+            System.Diagnostics.Debug.WriteLine("GatewayModule::Server_ShardListResponse");
 
             var p = e.Packet;
             while (p.ReadByte() == 1)
@@ -195,7 +196,7 @@ namespace SilkroadLauncher.Network
                 bool isAvailable = p.ReadByte() == 1;
                 p.SkipRead(1); // farmID
 
-                System.Diagnostics.Debug.WriteLine($"#{serverID} {serverName} - {playerCounter}/{playerLimit} - "+(isAvailable?"Online":"Offline"));
+                System.Diagnostics.Debug.WriteLine($"#{serverID} {serverName} - {playerCounter}/{playerLimit} - " + (isAvailable ? "Online" : "Offline"));
             }
         }
     }

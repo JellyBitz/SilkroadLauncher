@@ -38,7 +38,7 @@ namespace SilkroadLauncher.Network
                 m_Buffer = new TransferBuffer(8192);
                 m_Security = new Security();
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _OnDisconnect(ex);
                 return false;
@@ -150,14 +150,14 @@ namespace SilkroadLauncher.Network
 
                             BeginReceiveAsync();
                         }
-                        catch(Exception ex)
+                        catch (Exception ex)
                         {
                             _OnDisconnect(ex);
                         }
 
                     }, null);
             }
-            catch(Exception ex)
+            catch (Exception ex)
             {
                 _OnDisconnect(ex);
             }
@@ -188,7 +188,7 @@ namespace SilkroadLauncher.Network
             // Just in case
             if (Packets == null)
                 return;
-            
+
             foreach (var p in Packets)
             {
                 System.Diagnostics.Debug.WriteLine("[" + p.Opcode.ToString("X2") + "]");
@@ -197,7 +197,7 @@ namespace SilkroadLauncher.Network
                 {
                     // Execute every packet handler
                     foreach (var handler in handlers)
-                        handler.Invoke(this,new SessionPacketEventArgs(p));
+                        handler.Invoke(this, new SessionPacketEventArgs(p));
                 }
             }
         }
@@ -211,7 +211,7 @@ namespace SilkroadLauncher.Network
         public delegate void DisconnectEventHandler(object sender, DisconnectEventArgs e);
         public class DisconnectEventArgs : EventArgs
         {
-            public Exception Exception {get; }
+            public Exception Exception { get; }
             public DisconnectEventArgs(Exception ex)
             {
                 Exception = ex;
