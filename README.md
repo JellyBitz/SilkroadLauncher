@@ -9,7 +9,8 @@ Customizable launcher writted on C# (WPF) for Silkroad Online (vSRO 1.188)
 - Self replacer if is required
 - Downloading and update progress
 - Settings (even window mode has been added)
-- Client language switch support
+- Client language switch support, [read more..](README.LANGUAGES.md)
+- 
 
 ---
 > ### Do you like this project ? 
