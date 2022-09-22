@@ -4,10 +4,8 @@ using SilkroadLauncher.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
-using System.Windows.Media;
 
 namespace SilkroadLauncher
 {
@@ -55,7 +53,7 @@ namespace SilkroadLauncher
         /// <summary>
         /// Arguments used to start the game client
         /// </summary>
-        private string m_SRClientArguments;
+        private string m_ClientArgs;
         /// <summary>
         /// Indicates if the Pk2 has been loaded correctly
         /// </summary>
@@ -79,7 +77,7 @@ namespace SilkroadLauncher
         /// <summary>
         /// The initial connection to server
         /// </summary>
-        private Session m_GatewaySession;
+        private Client m_GatewaySession;
         /// <summary>
         /// Indicates if the launcher is checking for updates
         /// </summary>
@@ -130,8 +128,9 @@ namespace SilkroadLauncher
         /// <summary>
         /// Application title shown on windows title bar
         /// </summary>
-        public string Title {
-            get { return m_Title; }
+        public string Title
+        {
+            get => m_Title;
             set
             {
                 m_Title = value;
@@ -143,7 +142,7 @@ namespace SilkroadLauncher
         /// </summary>
         public byte Locale
         {
-            get { return m_Locale; }
+            get => m_Locale;
             set
             {
                 // set new value
@@ -157,7 +156,7 @@ namespace SilkroadLauncher
         /// </summary>
         public uint Version
         {
-            get { return m_Version; }
+            get => m_Version;
             set
             {
                 // set new value
@@ -172,9 +171,9 @@ namespace SilkroadLauncher
         /// <summary>
         /// Client version shown to the user
         /// </summary>
-        public string ClientVersion 
+        public string ClientVersion
         {
-            get { return m_ClientVersion; }
+            get => m_ClientVersion;
             private set
             {
                 // set new value
@@ -188,7 +187,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsLoaded
         {
-            get { return m_IsLoaded; }
+            get => m_IsLoaded;
             private set
             {
                 // set new value
@@ -202,7 +201,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsViewingConfig
         {
-            get { return m_IsViewingConfig; }
+            get => m_IsViewingConfig;
             set
             {
                 // set new value
@@ -216,7 +215,7 @@ namespace SilkroadLauncher
         /// </summary>
         public ConfigViewModel Config
         {
-            get { return m_Config; }
+            get => m_Config;
             set
             {
                 // set new value
@@ -230,7 +229,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsViewingLangConfig
         {
-            get { return m_IsViewingLangConfig; }
+            get => m_IsViewingLangConfig;
             set
             {
                 // set new value
@@ -244,7 +243,7 @@ namespace SilkroadLauncher
         /// </summary>
         public int LangConfigIndex
         {
-            get { return m_LangConfigIndex; }
+            get => m_LangConfigIndex;
             set
             {
                 // set new value
@@ -258,7 +257,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsCheckingUpdates
         {
-            get { return m_IsCheckingUpdates; }
+            get => m_IsCheckingUpdates;
             set
             {
                 // set new value
@@ -272,7 +271,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsUnderInspection
         {
-            get { return m_IsUnderInspection; }
+            get => m_IsUnderInspection;
             set
             {
                 // set new value
@@ -286,7 +285,7 @@ namespace SilkroadLauncher
         /// </summary>
         public List<WebNoticeViewModel> WebNotices
         {
-            get { return m_WebNotices; }
+            get => m_WebNotices;
             set
             {
                 m_WebNotices = value;
@@ -299,7 +298,7 @@ namespace SilkroadLauncher
         /// </summary>
         public WebNoticeViewModel SelectedWebNotice
         {
-            get { return m_SelectedWebNotice; }
+            get => m_SelectedWebNotice;
             set
             {
                 // set new value
@@ -313,7 +312,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsUpdating
         {
-            get { return m_IsUpdating; }
+            get => m_IsUpdating;
             set
             {
                 // set new value
@@ -327,7 +326,7 @@ namespace SilkroadLauncher
         /// </summary>
         public ulong UpdatingBytesMaxDownloading
         {
-            get { return m_UpdatingBytesMaxDownloading; }
+            get => m_UpdatingBytesMaxDownloading;
             set
             {
                 // set new value
@@ -341,7 +340,7 @@ namespace SilkroadLauncher
         /// </summary>
         public ulong UpdatingBytesDownloading
         {
-            get { return m_UpdatingBytesDownloading; }
+            get => m_UpdatingBytesDownloading;
             set
             {
                 // set new value
@@ -350,7 +349,7 @@ namespace SilkroadLauncher
                 OnPropertyChanged(nameof(UpdatingBytesDownloading));
 
                 // Set percentage
-                if(m_UpdatingBytesMaxDownloading != 0)
+                if (m_UpdatingBytesMaxDownloading != 0)
                     UpdatingPercentage = (int)(m_UpdatingBytesDownloading * 100ul / m_UpdatingBytesMaxDownloading);
             }
         }
@@ -359,7 +358,7 @@ namespace SilkroadLauncher
         /// </summary>
         public int UpdatingPercentage
         {
-            get { return m_UpdatingPercentage; }
+            get => m_UpdatingPercentage;
             set
             {
                 if (m_UpdatingPercentage == value)
@@ -374,7 +373,7 @@ namespace SilkroadLauncher
         /// </summary>
         public string UpdatingFilePath
         {
-            get { return m_UpdatingFilePath; }
+            get => m_UpdatingFilePath;
             set
             {
                 m_UpdatingFilePath = value;
@@ -386,7 +385,7 @@ namespace SilkroadLauncher
         /// </summary>
         public int UpdatingFilePercentage
         {
-            get { return m_UpdatingFilePercentage; }
+            get => m_UpdatingFilePercentage;
             set
             {
                 m_UpdatingFilePercentage = value;
@@ -398,7 +397,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool CanStartGame
         {
-            get { return m_CanStartGame; }
+            get => m_CanStartGame;
             set
             {
                 // set new value
@@ -410,7 +409,7 @@ namespace SilkroadLauncher
         /// <summary>
         /// Contains all assets to be displayed
         /// </summary>
-        public LauncherAssetsViewModel Assets { get; set; } = new LauncherAssetsViewModel();
+        public LauncherAssets Assets { get; private set; }
         #endregion
 
         #region Commands
@@ -475,7 +474,7 @@ namespace SilkroadLauncher
             CommandStartGame = new RelayCommand(()=> {
                 // Starts the game but only if is ready and exists
                 if (CanStartGame && File.Exists(LauncherSettings.CLIENT_EXECUTABLE)) { 
-                    System.Diagnostics.Process.Start(LauncherSettings.CLIENT_EXECUTABLE, m_SRClientArguments);
+                    System.Diagnostics.Process.Start(LauncherSettings.CLIENT_EXECUTABLE, m_ClientArgs);
                     // Closing launcher
                     CommandClose.Execute(null);
                 }
@@ -542,52 +541,61 @@ namespace SilkroadLauncher
         /// <summary>
         /// Check and loads the patch updates
         /// </summary>
-        public async Task CheckUpdatesAsync()
+        public void CheckUpdatesAsync()
         {
-            // Avoid connection
             if (!IsLoaded)
                 return;
 
             IsCheckingUpdates = true;
-            // Check all IP's and try to connect one at least
-            m_GatewaySession = new Session();
 
-            // Add handlers for updating
-            m_GatewaySession.AddHandler(GatewayModule.Opcode.GLOBAL_IDENTIFICATION, new PacketHandler(GatewayModule.Server_GlobalIdentification));
-            m_GatewaySession.AddHandler(GatewayModule.Opcode.SERVER_PATCH_RESPONSE, new PacketHandler(GatewayModule.Server_PatchResponse));
-            m_GatewaySession.AddHandler(GatewayModule.Opcode.SERVER_SHARD_LIST_RESPONSE, new PacketHandler(GatewayModule.Server_ShardListResponse));
-            m_GatewaySession.AddHandler(GatewayModule.Opcode.SERVER_WEB_NOTICE_RESPONSE, new PacketHandler(GatewayModule.Server_WebNoticeResponse));
+            // Find the best connection
+            long bestTime = 0;
+            string hostAddress = null;
 
-            m_GatewaySession.Disconnect += new EventHandler((_Session, _Event) => {
-                System.Diagnostics.Debug.WriteLine("Gateway: Session disconnected");
-            });
-            bool connectionSolved = false;
-            // Save at the same time the connection arguments
-            int divIndex = 0, hostIndex = 0;
-            foreach (var division in m_DivisionInfo)
+            var divIdx = 0;
+            foreach (var div in m_DivisionInfo)
             {
-                for (int i = 0; i < division.Value.Count; i++)
+                for (var hostIdx = 0; hostIdx < div.Value.Count; hostIdx++)
                 {
-                    // Try to connect to the address
-                    System.Diagnostics.Debug.WriteLine("Starting Session..");
-                    connectionSolved = await Task.Run(() => m_GatewaySession.Start(division.Value[i], m_Gateport, 5000));
-                    if (connectionSolved)
+                    var session = new Client();
+                    // Connect to server and find the time used
+                    if (session.Start(div.Value[hostIdx], m_Gateport, 5000, out var elapsedTime))
                     {
-                        hostIndex = i;
-                        break;
+                        session.Stop();
+                        // Check the best time
+                        if (hostAddress == null || elapsedTime < bestTime)
+                        {
+                            hostAddress = div.Value[hostIdx];
+                            elapsedTime = bestTime;
+                            m_ClientArgs = "0 /" + m_Locale + " " + divIdx + " " + hostIdx;
+                        }
                     }
                 }
-                if (connectionSolved)
-                {
-                    // Set client args
-                    m_SRClientArguments = "0 /" + m_Locale + " " + divIndex + " " + hostIndex;
-                    break;
-                }
-                divIndex++;
+                divIdx++;
             }
-            // Not able to connect to server
-            if (!connectionSolved)
+
+            // Start gateway connection
+            if (hostAddress != null)
             {
+                m_GatewaySession = new Client();
+                // Packet handlers
+                m_GatewaySession.RegisterHandler(GatewayModule.Opcode.GLOBAL_IDENTIFICATION, GatewayModule.Server_GlobalIdentification);
+                m_GatewaySession.RegisterHandler(GatewayModule.Opcode.SERVER_PATCH_RESPONSE, GatewayModule.Server_PatchResponse);
+                m_GatewaySession.RegisterHandler(GatewayModule.Opcode.SERVER_SHARD_LIST_RESPONSE, GatewayModule.Server_ShardListResponse);
+                m_GatewaySession.RegisterHandler(GatewayModule.Opcode.SERVER_WEB_NOTICE_RESPONSE, GatewayModule.Server_WebNoticeResponse);
+                // Event handlers
+                m_GatewaySession.OnConnect += (s, e) =>
+                {
+                    System.Diagnostics.Debug.WriteLine("Gateway: Session established");
+                };
+                m_GatewaySession.OnDisconnect += (s, e) => {
+                    System.Diagnostics.Debug.WriteLine("Gateway: Session disconnected [" + e.Exception.Message + "]");
+                };
+                m_GatewaySession.Start(hostAddress, m_Gateport, 5000, out _);
+            }
+            else
+            {
+                // Not being able to connect to the server
                 IsCheckingUpdates = false;
                 IsUnderInspection = true;
                 ShowMessage(LauncherSettings.MSG_INSPECTION);
@@ -615,10 +623,10 @@ namespace SilkroadLauncher
             try
             {
                 // Load pk2 reader
-                pk2Reader = new Pk2Reader(LauncherSettings.PATH_PK2_MEDIA, LauncherSettings.CLIENT_BLOWFISH_KEY);
+                pk2Reader = new Pk2Reader(LauncherSettings.CLIENT_MEDIA_PK2_PATH, LauncherSettings.CLIENT_BLOWFISH_KEY);
 
                 // Load assets from client
-                LoadAssets(pk2Reader);
+                Assets = new LauncherAssets(pk2Reader);
 
                 // Extract essential stuffs for the process
                 if (pk2Reader.TryGetDivisionInfo(out m_DivisionInfo) && pk2Reader.TryGetGateport(out m_Gateport))
@@ -649,73 +657,6 @@ namespace SilkroadLauncher
             {
                 pk2Reader?.Close();
             }
-        }
-        /// <summary>
-        /// Loads all images assets from client
-        /// </summary>
-        private void LoadAssets(Pk2Reader reader)
-        {
-            Assets.Background = new ImageBrush(reader.GetImage("launcher_wpf/background.dat"));
-            Assets.HomeIcon = new ImageBrush(reader.GetImage("launcher_wpf/home_icon.dat"));
-            Assets.HomeIconOnHover = new ImageBrush(reader.GetImage("launcher_wpf/home_icon_onhover.dat"));
-
-            Assets.OptionButton = new ImageBrush(reader.GetImage("launcher_wpf/option_button.dat"));
-            Assets.OptionButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/option_button_onhover.dat"));
-            Assets.OptionButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/option_button_onpressed.dat"));
-            Assets.GuideButton = new ImageBrush(reader.GetImage("launcher_wpf/guide_button.dat"));
-            Assets.GuideButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/guide_button_onhover.dat"));
-            Assets.GuideButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/guide_button_onpressed.dat"));
-            Assets.MovieButton = new ImageBrush(reader.GetImage("launcher_wpf/movie_button.dat"));
-            Assets.MovieButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/movie_button_onhover.dat"));
-            Assets.MovieButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/movie_button_onpressed.dat"));
-            Assets.ExitButton = new ImageBrush(reader.GetImage("launcher_wpf/exit_button.dat"));
-            Assets.ExitButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/exit_button_onhover.dat"));
-            Assets.ExitButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/exit_button_onpressed.dat"));
-            Assets.StartButton = new ImageBrush(reader.GetImage("launcher_wpf/start_button.dat"));
-            Assets.StartButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/start_button_onhover.dat"));
-            Assets.StartButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/start_button_onpressed.dat"));
-            Assets.StartButtonUpdating = new ImageBrush(reader.GetImage("launcher_wpf/start_button_updating.dat"));
-
-            Assets.UpdatingBackground = new ImageBrush(reader.GetImage("launcher_wpf/updating_background.dat"));
-            Assets.UpdatingBar = new ImageBrush(reader.GetImage("launcher_wpf/updating_bar.dat"));
-
-            Assets.NoticeSelectedIcon = new ImageBrush(reader.GetImage("launcher_wpf/notice/selected_icon.dat"));
-            Assets.NoticeScrollBackground = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_background.dat"));
-            Assets.NoticeScrollThumb = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_thumb.dat"));
-            Assets.NoticeScrollArrowUp = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_up.dat"));
-            Assets.NoticeScrollArrowUpOnHover = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_up_onhover.dat"));
-            Assets.NoticeScrollArrowUpOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_up_onpressed.dat"));
-            Assets.NoticeScrollArrowDown = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_down.dat"));
-            Assets.NoticeScrollArrowDownOnHover = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_down_onhover.dat"));
-            Assets.NoticeScrollArrowDownOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/notice/scroll_arrow_down_onpressed.dat"));
-
-            Assets.LanguageDisplayBackground = new ImageBrush(reader.GetImage("launcher_wpf/language_display_background.dat"));
-            Assets.LanguageButton = new ImageBrush(reader.GetImage("launcher_wpf/language_button.dat"));
-            Assets.LanguageButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/language_button_onhover.dat"));
-            Assets.LanguageButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/language_button_onpressed.dat"));
-
-            Assets.LanguagePopupFrameTop = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/frame_top.dat"));
-            Assets.LanguagePopupFrameMid = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/frame_mid.dat"));
-            Assets.LanguagePopupFrameBottom = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/frame_bottom.dat"));
-            Assets.LanguagePopupCheckbox = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/checkbox.dat"));
-            Assets.LanguagePopupCheckboxChecked = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/checkbox_checked.dat"));
-            Assets.LanguagePopupAcceptButton = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/accept_button.dat"));
-            Assets.LanguagePopupAcceptButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/accept_button_onhover.dat"));
-            Assets.LanguagePopupAcceptButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/accept_button_onpressed.dat"));
-            Assets.LanguagePopupCancelButton = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/cancel_button.dat"));
-            Assets.LanguagePopupCancelButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/cancel_button_onhover.dat"));
-            Assets.LanguagePopupCancelButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/language_popup/cancel_button_onpressed.dat"));
-
-            Assets.SettingsFrameTop = new ImageBrush(reader.GetImage("launcher_wpf/settings/frame_top.dat"));
-            Assets.SettingsComboboxBackground = new ImageBrush(reader.GetImage("launcher_wpf/settings/combobox_background.dat"));
-            Assets.SettingsComboboxArrow = new ImageBrush(reader.GetImage("launcher_wpf/settings/combobox_arrow.dat"));
-            Assets.SettingsComboboxArrowOnHover = new ImageBrush(reader.GetImage("launcher_wpf/settings/combobox_arrow_onhover.dat"));
-            Assets.SettingsComboboxArrowOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/settings/combobox_arrow_onpressed.dat"));
-            Assets.SettingsSaveButton = new ImageBrush(reader.GetImage("launcher_wpf/settings/save_button.dat"));
-            Assets.SettingsSaveButtonOnHover = new ImageBrush(reader.GetImage("launcher_wpf/settings/save_button_onhover.dat"));
-            Assets.SettingsSaveButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/settings/save_button_onpressed.dat"));
-            Assets.SettingsCheckbox = new ImageBrush(reader.GetImage("launcher_wpf/settings/checkbox.dat"));
-            Assets.SettingsCheckboxChecked = new ImageBrush(reader.GetImage("launcher_wpf/settings/checkbox_checked.dat"));
         }
         /// <summary>
         /// Verify host used to start the game it's linked to launcher config

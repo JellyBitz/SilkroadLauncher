@@ -30,9 +30,11 @@ namespace SilkroadLauncher.Network
             GLOBAL_IDENTIFICATION = 0x2001,
             GLOBAL_PING = 0x2002;
         }
-        public static void Server_GlobalIdentification(Packet p, Session s)
+        public static void Server_GlobalIdentification(object sender, ClientMsgEventArgs e)
         {
-            string service = p.ReadAscii();
+            System.Diagnostics.Debug.WriteLine("GatewayModule::Server_GlobalIdentification");
+
+            string service = e.Packet.ReadAscii();
             if (service == "GatewayServer")
             {
                 // Send authentication
@@ -40,14 +42,15 @@ namespace SilkroadLauncher.Network
                 packet.WriteByte(LauncherViewModel.Instance.Locale);
                 packet.WriteAscii("SR_Client"); // Module Name
                 packet.WriteUInt(LauncherViewModel.Instance.Version);
-                s.Send(packet);
+                ((Client)sender).Send(packet);
             }
         }
-        public static void Server_PatchResponse(Packet p, Session s)
+        public static void Server_PatchResponse(object sender, ClientMsgEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Server_PatchResponse");
-            LauncherViewModel.Instance.IsCheckingUpdates = false;
+            System.Diagnostics.Debug.WriteLine("GatewayModule::Server_PatchResponse");
 
+            var p = e.Packet;
+            LauncherViewModel.Instance.IsCheckingUpdates = false;
             // Analyze the patch
             switch (p.ReadByte())
             {
@@ -60,63 +63,67 @@ namespace SilkroadLauncher.Network
                     switch (errorCode)
                     {
                         case 2:
+                        {
+                            string DownloadServerIP = p.ReadAscii();
+                            ushort DownloadServerPort = p.ReadUShort();
+                            DownloadModule.DownloadVersion = p.ReadUInt();
+
+                            System.Diagnostics.Debug.WriteLine("Version outdate. New version available (v" + DownloadModule.DownloadVersion + ")");
+                            ulong bytesToDownload = 0;
+
+                            while (p.ReadByte() == 1)
                             {
-                                string DownloadServerIP = p.ReadAscii();
-                                ushort DownloadServerPort = p.ReadUShort();
-                                DownloadModule.DownloadVersion = p.ReadUInt();
-
-                                System.Diagnostics.Debug.WriteLine("Version outdate. New version available (v" + DownloadModule.DownloadVersion + ")");
-                                ulong bytesToDownload = 0;
-
-                                while (p.ReadByte() == 1)
+                                FileEntry file = new FileEntry()
                                 {
-                                    FileEntry file = new FileEntry()
+                                    ID = p.ReadUInt(),
+                                    Name = p.ReadAscii(),
+                                    Path = p.ReadAscii(),
+                                    Size = p.ReadUInt(),
+                                    ImportToPk2 = p.ReadByte() == 1
+                                };
+
+                                DownloadModule.DownloadFiles.Add(file);
+
+                                bytesToDownload += file.Size;
+                            }
+
+                            // Set progress bar values
+                            LauncherViewModel.Instance.UpdatingBytesMaxDownloading = bytesToDownload;
+                            LauncherViewModel.Instance.UpdatingBytesDownloading = 0;
+
+                            // Start downloader protocol
+                            if (DownloadModule.DownloadFiles.Count > 0)
+                            {
+                                // Try to load the GFXFileManager
+                                if (Pk2Writer.Initialize("GFXFileManager.dll"))
+                                {
+                                    // Start downloading patch
+                                    LauncherViewModel.Instance.IsUpdating = true;
+                                    System.Diagnostics.Debug.WriteLine("Downloading updates...");
+
+                                    var downloadSession = new Client();
+                                    // Packet handlers
+                                    downloadSession.RegisterHandler(DownloadModule.Opcode.SERVER_READY, DownloadModule.Server_Ready);
+                                    downloadSession.RegisterHandler(DownloadModule.Opcode.SERVER_FILE_CHUNK, DownloadModule.Server_FileChunk);
+                                    downloadSession.RegisterHandler(DownloadModule.Opcode.SERVER_FILE_COMPLETED, DownloadModule.Server_FileCompleted);
+                                    // Event handlers
+                                    downloadSession.OnConnect += (_s, _e) =>
                                     {
-                                        ID = p.ReadUInt(),
-                                        Name = p.ReadAscii(),
-                                        Path = p.ReadAscii(),
-                                        Size = p.ReadUInt(),
-                                        ImportToPk2 = p.ReadByte() == 1
+                                        System.Diagnostics.Debug.WriteLine("Download: Session established");
+                                    };
+                                    downloadSession.OnDisconnect += (_s, _e) => {
+                                        System.Diagnostics.Debug.WriteLine("Download: Session disconnected [" + _e.Exception.Message + "]");
                                     };
 
-                                    DownloadModule.DownloadFiles.Add(file);
-
-                                    bytesToDownload += file.Size;
+                                    downloadSession.Start(DownloadServerIP, DownloadServerPort, 10000, out _);
                                 }
-
-                                // Set progress bar values
-                                LauncherViewModel.Instance.UpdatingBytesMaxDownloading = bytesToDownload;
-                                LauncherViewModel.Instance.UpdatingBytesDownloading = 0;
-
-                                // Start downloader protocol
-                                if (DownloadModule.DownloadFiles.Count > 0)
+                                else
                                 {
-                                    // Try to load the GFXFileManager
-                                    if (Pk2Writer.Initialize("GFXFileManager.dll"))
-                                    {
-                                        // Start downloading patch
-                                        LauncherViewModel.Instance.IsUpdating = true;
-                                        System.Diagnostics.Debug.WriteLine("Downloading updates...");
-
-                                        Session downloaderSession = new Session();
-                                        downloaderSession.AddHandler(Opcode.GLOBAL_IDENTIFICATION, new PacketHandler(Server_GlobalIdentification));
-                                        downloaderSession.AddHandler(DownloadModule.Opcode.SERVER_READY, new PacketHandler(DownloadModule.Server_Ready));
-                                        downloaderSession.AddHandler(DownloadModule.Opcode.SERVER_FILE_CHUNK, new PacketHandler(DownloadModule.Server_FileChunk));
-                                        downloaderSession.AddHandler(DownloadModule.Opcode.SERVER_FILE_COMPLETED, new PacketHandler(DownloadModule.Server_FileCompleted));
-
-                                        downloaderSession.Disconnect += new System.EventHandler((_Session, _Event) => {
-                                            System.Diagnostics.Debug.WriteLine("Download: Session disconnected");
-                                        });
-
-                                        System.Threading.Tasks.Task.Run(() => downloaderSession.Start(DownloadServerIP,DownloadServerPort,10000));
-                                    }
-                                    else
-                                    {
-                                        LauncherViewModel.Instance.ShowMessage("GFXFileManager not found!");
-                                    }
+                                    LauncherViewModel.Instance.ShowMessage(LauncherSettings.MSG_ERR_GFXDLL_NOT_FOUND);
                                 }
                             }
-                            break;
+                        }
+                        break;
                         case 4:
                             LauncherViewModel.Instance.ShowMessage(LauncherSettings.MSG_PATCH_UNABLE);
                             break;
@@ -127,12 +134,13 @@ namespace SilkroadLauncher.Network
                             LauncherViewModel.Instance.ShowMessage(LauncherSettings.MSG_PATCH_TOO_NEW);
                             break;
                         default:
-                            LauncherViewModel.Instance.ShowMessage("Patch Error: [" + errorCode + "]");
+                            LauncherViewModel.Instance.ShowMessage("Unknown Error: [" + errorCode + "]");
                             break;
                     }
                     break;
             }
 
+            var s = (Client)sender;
             // Request shard list just for fun c:
             System.Diagnostics.Debug.WriteLine("CLIENT_SHARD_LIST_REQUEST");
             s.Send(new Packet(Opcode.CLIENT_SHARD_LIST_REQUEST, true));
@@ -143,14 +151,15 @@ namespace SilkroadLauncher.Network
             packet.WriteByte(LauncherViewModel.Instance.Locale);
             s.Send(packet);
         }
-        public static void Server_WebNoticeResponse(Packet p, Session s)
+        public static void Server_WebNoticeResponse(object sender, ClientMsgEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Server_WebNoticeResponse");
+            System.Diagnostics.Debug.WriteLine("GatewayModule::Server_WebNoticeResponse");
 
+            var p = e.Packet;
             byte noticeCount = p.ReadByte();
             // Reading notices
             List<WebNoticeViewModel> webNotices = new List<WebNoticeViewModel>(noticeCount);
-            for (int i = 0; i < noticeCount; i++)
+            for (byte i = 0; i < noticeCount; i++)
             {
                 webNotices.Add(new WebNoticeViewModel(new WebNotice()
                 {
@@ -173,14 +182,15 @@ namespace SilkroadLauncher.Network
                 LauncherViewModel.Instance.SelectedWebNotice = LauncherViewModel.Instance.WebNotices[0];
         }
 
-        public static void Server_ShardListResponse(Packet p, Session s)
+        public static void Server_ShardListResponse(object sender, ClientMsgEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Server_ShardListResponse");
+            System.Diagnostics.Debug.WriteLine("GatewayModule::Server_ShardListResponse");
 
+            var p = e.Packet;
             while (p.ReadByte() == 1)
             {
-                byte farmID = p.ReadByte();
-                string farmName = p.ReadAscii();
+                p.SkipRead(1); // farmID
+                p.SkipRead(p.ReadUShort()); // farmName
             }
             while (p.ReadByte() == 1)
             {
@@ -189,9 +199,9 @@ namespace SilkroadLauncher.Network
                 ushort playerCounter = p.ReadUShort();
                 ushort playerLimit = p.ReadUShort();
                 bool isAvailable = p.ReadByte() == 1;
-                byte farm_ID = p.ReadByte();
+                p.SkipRead(1); // farmID
 
-                System.Diagnostics.Debug.WriteLine($"#{serverID} {serverName} - {playerCounter}/{playerLimit} - "+(isAvailable?"Online":"Offline"));
+                System.Diagnostics.Debug.WriteLine($"#{serverID} {serverName} - {playerCounter}/{playerLimit} - " + (isAvailable ? "Online" : "Offline"));
             }
         }
     }

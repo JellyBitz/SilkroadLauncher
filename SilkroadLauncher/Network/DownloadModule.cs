@@ -5,7 +5,6 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.IO.Compression;
-using System.Reflection;
 using System.Text;
 
 namespace SilkroadLauncher.Network
@@ -19,7 +18,9 @@ namespace SilkroadLauncher.Network
 
             SERVER_READY = 0x6005,
             SERVER_FILE_CHUNK = 0x1001,
-            SERVER_FILE_COMPLETED = 0xA004;
+            SERVER_FILE_COMPLETED = 0xA004,
+
+            GLOBAL_IDENTIFICATION = 0x2001;
         }
         /// <summary>
         /// The current file being downloaded
@@ -35,31 +36,31 @@ namespace SilkroadLauncher.Network
         public static uint DownloadVersion { get; set; }
 
         #region Public Methods
-        public static void Server_Ready(Packet p, Session s)
+        public static void Server_Ready(object sender, ClientMsgEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Server_Ready");
+            System.Diagnostics.Debug.WriteLine("DownloadModule::Server_Ready");
 
             // Create a temporary directory to allocate the file
             Directory.CreateDirectory("Temp");
 
             // Create file download from server
-            RequestFileDownload(s);
+            RequestFileDownload((Client)sender);
         }
-        public static void Server_FileChunk(Packet p, Session s)
+        public static void Server_FileChunk(object sender, ClientMsgEventArgs e)
         {
-            System.Diagnostics.Debug.WriteLine("Server_FileChunk");
+            System.Diagnostics.Debug.WriteLine("DownloadModule::Server_FileChunk");
 
             // Continue adding bytes to the file
-            byte[] buffer = p.GetBytes();
+            byte[] buffer = e.Packet.GetBytes();
             m_FileStream.Write(buffer, 0, buffer.Length);
 
             LauncherViewModel.Instance.UpdatingBytesDownloading += (uint)buffer.Length;
             // File being downloaded
             LauncherViewModel.Instance.UpdatingFilePercentage = (int)(m_FileStream.Length * 100L / DownloadFiles[0].Size);
         }
-        public static void Server_FileCompleted(Packet p, Session s)
+        public static void Server_FileCompleted(object sender, ClientMsgEventArgs e)
         {
-            byte result = p.ReadByte();
+            byte result = e.Packet.ReadByte();
 
             // File downloaded
             var file = DownloadFiles[0];
@@ -95,7 +96,8 @@ namespace SilkroadLauncher.Network
                 DecompressFile("Temp\\" + file.ID);
 
                 // Check file path
-                if (file.Path != string.Empty) {
+                if (file.Path != string.Empty)
+                {
                     // Create directory if doesn't exists
                     if (!Directory.Exists(file.Path))
                         Directory.CreateDirectory(file.Path);
@@ -114,7 +116,7 @@ namespace SilkroadLauncher.Network
                     // Move or replace from Temp to the folder required
                     if (!ForceMovingFile("Temp\\" + file.ID, file.Path + file.Name))
                     {
-                        LauncherViewModel.Instance.ShowMessage("Fatal error updating \"" + file.Name + "\"!");
+                        LauncherViewModel.Instance.ShowMessage(string.Format(LauncherSettings.MSG_ERR_FILE_UPDATE,file.Name));
                         LauncherViewModel.Instance.Exit();
                     };
                 }
@@ -122,11 +124,11 @@ namespace SilkroadLauncher.Network
 
             // Remove the file and delete it from Temp
             DownloadFiles.RemoveAt(0);
-            
+
             // Continue protocol
             if (DownloadFiles.Count > 0)
             {
-                RequestFileDownload(s);
+                RequestFileDownload((Client)sender);
             }
             else
             {
@@ -137,12 +139,12 @@ namespace SilkroadLauncher.Network
 
                 // Update done!
                 LauncherViewModel.Instance.IsUpdating = false;
-                
+
                 // Dispose pk2 writer
                 Pk2Writer.Deinitialize();
 
                 // Replace the Launcher if exists
-                if (File.Exists("Temp\\_"+ Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)))
+                if (File.Exists("Temp\\_" + Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)))
                 {
                     // Replace launcher required
                     StartReplacer();
@@ -154,7 +156,7 @@ namespace SilkroadLauncher.Network
                     LauncherViewModel.Instance.CanStartGame = true;
 
                     // Stop connection
-                    s.Stop();
+                    ((Client)sender).Stop();
                 }
             }
         }
@@ -164,7 +166,7 @@ namespace SilkroadLauncher.Network
         /// <summary>
         /// Request a server file to be downloaded inmediatly
         /// </summary>
-        private static void RequestFileDownload(Session s)
+        private static void RequestFileDownload(Client s)
         {
             // Request the first file on list
             var file = DownloadFiles[0];
@@ -188,7 +190,7 @@ namespace SilkroadLauncher.Network
         private static void UpdateSilkroadVersion()
         {
             // Set the new version into pk2 automagically...
-            if (Pk2Writer.Open(LauncherSettings.PATH_PK2_MEDIA, LauncherSettings.CLIENT_BLOWFISH_KEY))
+            if (Pk2Writer.Open(LauncherSettings.CLIENT_MEDIA_PK2_PATH, LauncherSettings.CLIENT_BLOWFISH_KEY))
             {
                 var buffer = Encoding.ASCII.GetBytes(DownloadVersion.ToString());
                 // Add blowfish minimum padding
@@ -225,7 +227,7 @@ namespace SilkroadLauncher.Network
             var launcherFilename = Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName);
             var launcherPath = Path.GetFullPath(launcherFilename);
             // Move my current executable to temp
-            ForceMovingFile(launcherPath,"Temp\\" + launcherFilename + ".bkp");
+            ForceMovingFile(launcherPath, "Temp\\" + launcherFilename + ".bkp");
             // Move the new launcher to the folder
             File.Move("Temp\\_" + launcherFilename, launcherPath);
             // Run the new launcher

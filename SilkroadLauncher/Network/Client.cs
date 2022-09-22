@@ -7,53 +7,51 @@ using System.Net.Sockets;
 namespace SilkroadLauncher.Network
 {
     /// <summary>
-    /// Class to handle the client session on asynchronized state.
+    /// Class to handle the client connection on asynchronized state
     /// </summary>
-    public class Session
+    public class Client
     {
         #region Private Members
-        private Socket m_Socket;
+        private Socket m_Socket = null;
         private TransferBuffer m_Buffer;
         private Security m_Security;
         /// <summary>
         /// Packet handlers by opcode
         /// </summary>
-        private Dictionary<ushort, List<PacketHandler>> m_PacketHandlers;
+        private readonly Dictionary<ushort, List<ClientMsgHandler>> m_PacketHandlers = new Dictionary<ushort, List<ClientMsgHandler>>();
         #endregion
 
-        #region Constructor
-        public Session()
-        {
-            m_Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
-            m_Buffer = new TransferBuffer(8192);
-            m_Security = new Security();
-
-            m_PacketHandlers = new Dictionary<ushort, List<PacketHandler>>();
-        }
+        #region Public Properties
+        public string Host { get; private set; }
+        public ushort Port { get; private set; }
         #endregion
 
         #region Public Methods
         /// <summary>
-        /// Starts the connetion to the server, Return success.
+        /// Starts the connection to the server. Returns success.
         /// </summary>
-        public bool Start(string Host, ushort Port, int MilisecondsTimeout)
+        /// <param name="Host">Host/IP to connect</param>
+        /// <param name="Port">Port</param>
+        /// <param name="TimeOut">Timeout to wait for connection at miliseconds</param>
+        /// <param name="TimeElapsed">Time elapsed from connection</param>
+        public bool Start(string Host, ushort Port, long TimeOut, out long TimeElapsed)
         {
             try
             {
-                m_Socket.Connect(Host, Port, MilisecondsTimeout);
+                m_Security = new Security();
+                m_Buffer = new TransferBuffer(8192);
+                m_Socket = new Socket(AddressFamily.InterNetwork, SocketType.Stream, ProtocolType.Tcp);
+                // Timeout check
+                m_Socket.Connect(Host, Port, TimeOut, out TimeElapsed);
+                _OnConnect();
+                return true;
             }
-            catch
+            catch (Exception ex)
             {
+                TimeElapsed = -1L;
+                _OnDisconnect(ex);
                 return false;
             }
-            // Make sure is connected
-            if (!m_Socket.Connected)
-                return false;
-
-            // Start reading asynchronized
-            ReceivingAsync();
-
-            return true;
         }
         /// <summary>
         /// Stops the connetion.
@@ -63,24 +61,35 @@ namespace SilkroadLauncher.Network
             m_Socket?.Close();
         }
         /// <summary>
-        /// Add handler to opcode
+        /// Check if the socket is connected
         /// </summary>
-        public void AddHandler(ushort Opcode, PacketHandler Handler)
+        public bool IsConnected()
+        {
+            try
+            {
+                return !(m_Socket.Poll(1, SelectMode.SelectRead) && m_Socket.Available == 0);
+            }
+            catch { return false; }
+        }
+        /// <summary>
+        /// Register the handler to the opcode
+        /// </summary>
+        public void RegisterHandler(ushort Opcode, ClientMsgHandler Handler)
         {
             // Check if the opcode has some subscriber
-            if (!m_PacketHandlers.TryGetValue(Opcode, out List<PacketHandler> handlers))
+            if (!m_PacketHandlers.TryGetValue(Opcode, out List<ClientMsgHandler> handlers))
             {
                 // Create the subscribers list for this opcode
-                handlers = new List<PacketHandler>();
+                handlers = new List<ClientMsgHandler>();
                 m_PacketHandlers[Opcode] = handlers;
             }
             // Add the new handler
             handlers.Add(Handler);
         }
         /// <summary>
-        /// Remove handler to opcode
+        /// Delete the handler to the opcode. If handler is not specified, will delete all handler from opcode.
         /// </summary>
-        public void RemoveHandler(ushort Opcode, PacketHandler Handler = null)
+        public void UnregisterHandler(ushort Opcode, ClientMsgHandler Handler = null)
         {
             // Remove all
             if (Handler == null)
@@ -92,7 +101,7 @@ namespace SilkroadLauncher.Network
             else
             {
                 // Check if the opcode has handlers
-                if (m_PacketHandlers.TryGetValue(Opcode, out List<PacketHandler> handlers))
+                if (m_PacketHandlers.TryGetValue(Opcode, out List<ClientMsgHandler> handlers))
                 {
                     for (int i = 0; i < handlers.Count; i++)
                     {
@@ -107,7 +116,7 @@ namespace SilkroadLauncher.Network
             }
         }
         /// <summary>
-        /// Send packet to the server.
+        /// Send packet to the server
         /// </summary>
         public void Send(Packet packet)
         {
@@ -116,7 +125,7 @@ namespace SilkroadLauncher.Network
         #endregion
 
         #region Private Members
-        private void ReceivingAsync()
+        private void BeginReceiveAsync()
         {
             try
             {
@@ -137,24 +146,24 @@ namespace SilkroadLauncher.Network
 
                                 OnReceivedPackets(m_Security.TransferIncoming());
 
-                                SendingAsync();
+                                BeginSendAsync();
                             }
 
-                            ReceivingAsync();
+                            BeginReceiveAsync();
                         }
-                        catch
+                        catch (Exception ex)
                         {
-                            OnDisconnect();
+                            _OnDisconnect(ex);
                         }
 
                     }, null);
             }
-            catch
+            catch (Exception ex)
             {
-                OnDisconnect();
+                _OnDisconnect(ex);
             }
         }
-        private void SendingAsync()
+        private void BeginSendAsync()
         {
             try
             {
@@ -163,17 +172,16 @@ namespace SilkroadLauncher.Network
                 {
                     foreach (var kvp in buffers)
                     {
-                        m_Socket.BeginSend(kvp.Key.Buffer, kvp.Key.Offset, kvp.Key.Size, SocketFlags.None,
-                            (_asyncResult) =>
-                            {
-                                m_Socket.EndSend(_asyncResult);
-                            }, null);
+                        m_Socket.BeginSend(kvp.Key.Buffer, kvp.Key.Offset, kvp.Key.Size, SocketFlags.None, (_asyncResult) =>
+                        {
+                            m_Socket.EndSend(_asyncResult);
+                        }, null);
                     }
                 }
             }
-            catch
+            catch (Exception ex)
             {
-                OnDisconnect();
+                _OnDisconnect(ex);
             }
         }
         private void OnReceivedPackets(List<Packet> Packets)
@@ -181,18 +189,16 @@ namespace SilkroadLauncher.Network
             // Just in case
             if (Packets == null)
                 return;
-            
+
             foreach (var p in Packets)
             {
                 System.Diagnostics.Debug.WriteLine("[" + p.Opcode.ToString("X2") + "]");
 
-                if (m_PacketHandlers.TryGetValue(p.Opcode, out List<PacketHandler> handlers))
+                if (m_PacketHandlers.TryGetValue(p.Opcode, out List<ClientMsgHandler> handlers))
                 {
                     // Execute every packet handler
                     foreach (var handler in handlers)
-                    {
-                        handler.Execute(p, this);
-                    }
+                        handler.Invoke(this, new ClientMsgEventArgs(p));
                 }
             }
         }
@@ -200,18 +206,39 @@ namespace SilkroadLauncher.Network
 
         #region Events
         /// <summary>
-        /// Called when the connection is lost for some reason.
+        /// Called when the connection is established
         /// </summary>
-        public event EventHandler Disconnect;
+        public event ConnectEventHandler OnConnect;
+        public delegate void ConnectEventHandler(object sender, EventArgs e);
+        private void _OnConnect()
+        {
+            this.Host = Host;
+            this.Port = Port;
+            BeginReceiveAsync();
 
-        private void OnDisconnect()
+            OnConnect?.Invoke(this, EventArgs.Empty);
+        }
+        /// <summary>
+        /// Called when the connection is lost
+        /// </summary>
+        public event DisconnectEventHandler OnDisconnect;
+        public delegate void DisconnectEventHandler(object sender, DisconnectEventArgs e);
+        public class DisconnectEventArgs : EventArgs
+        {
+            public Exception Exception { get; }
+            public DisconnectEventArgs(Exception ex)
+            {
+                Exception = ex;
+            }
+        }
+        private void _OnDisconnect(Exception ex)
         {
             if (m_Socket != null)
             {
                 m_Socket.Close();
                 m_Socket = null;
             }
-            Disconnect?.Invoke(this, EventArgs.Empty);
+            OnDisconnect?.Invoke(this, new DisconnectEventArgs(ex));
         }
         #endregion
     }
