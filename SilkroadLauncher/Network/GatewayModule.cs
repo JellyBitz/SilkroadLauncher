@@ -30,7 +30,7 @@ namespace SilkroadLauncher.Network
             GLOBAL_IDENTIFICATION = 0x2001,
             GLOBAL_PING = 0x2002;
         }
-        public static void Server_GlobalIdentification(object sender, SessionPacketEventArgs e)
+        public static void Server_GlobalIdentification(object sender, ClientMsgEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("GatewayModule::Server_GlobalIdentification");
 
@@ -42,10 +42,10 @@ namespace SilkroadLauncher.Network
                 packet.WriteByte(LauncherViewModel.Instance.Locale);
                 packet.WriteAscii("SR_Client"); // Module Name
                 packet.WriteUInt(LauncherViewModel.Instance.Version);
-                ((Session)sender).Send(packet);
+                ((Client)sender).Send(packet);
             }
         }
-        public static void Server_PatchResponse(object sender, SessionPacketEventArgs e)
+        public static void Server_PatchResponse(object sender, ClientMsgEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("GatewayModule::Server_PatchResponse");
 
@@ -101,20 +101,25 @@ namespace SilkroadLauncher.Network
                                     LauncherViewModel.Instance.IsUpdating = true;
                                     System.Diagnostics.Debug.WriteLine("Downloading updates...");
 
-                                    Session downloadSession = new Session();
+                                    var downloadSession = new Client();
+                                    // Packet handlers
                                     downloadSession.RegisterHandler(DownloadModule.Opcode.SERVER_READY, DownloadModule.Server_Ready);
                                     downloadSession.RegisterHandler(DownloadModule.Opcode.SERVER_FILE_CHUNK, DownloadModule.Server_FileChunk);
                                     downloadSession.RegisterHandler(DownloadModule.Opcode.SERVER_FILE_COMPLETED, DownloadModule.Server_FileCompleted);
-
+                                    // Event handlers
+                                    downloadSession.OnConnect += (_s, _e) =>
+                                    {
+                                        System.Diagnostics.Debug.WriteLine("Download: Session established");
+                                    };
                                     downloadSession.OnDisconnect += (_s, _e) => {
-                                        System.Diagnostics.Debug.WriteLine("Download: Session disconnected");
+                                        System.Diagnostics.Debug.WriteLine("Download: Session disconnected [" + _e.Exception.Message + "]");
                                     };
 
-                                    System.Threading.Tasks.Task.Run(() => downloadSession.Start(DownloadServerIP, DownloadServerPort, 10000));
+                                    downloadSession.Start(DownloadServerIP, DownloadServerPort, 10000, out _);
                                 }
                                 else
                                 {
-                                    LauncherViewModel.Instance.ShowMessage("GFXFileManager not found!");
+                                    LauncherViewModel.Instance.ShowMessage(LauncherSettings.MSG_ERR_GFXDLL_NOT_FOUND);
                                 }
                             }
                         }
@@ -129,13 +134,13 @@ namespace SilkroadLauncher.Network
                             LauncherViewModel.Instance.ShowMessage(LauncherSettings.MSG_PATCH_TOO_NEW);
                             break;
                         default:
-                            LauncherViewModel.Instance.ShowMessage("Patch Error: [" + errorCode + "]");
+                            LauncherViewModel.Instance.ShowMessage("Unknown Error: [" + errorCode + "]");
                             break;
                     }
                     break;
             }
 
-            var s = (Session)sender;
+            var s = (Client)sender;
             // Request shard list just for fun c:
             System.Diagnostics.Debug.WriteLine("CLIENT_SHARD_LIST_REQUEST");
             s.Send(new Packet(Opcode.CLIENT_SHARD_LIST_REQUEST, true));
@@ -146,7 +151,7 @@ namespace SilkroadLauncher.Network
             packet.WriteByte(LauncherViewModel.Instance.Locale);
             s.Send(packet);
         }
-        public static void Server_WebNoticeResponse(object sender, SessionPacketEventArgs e)
+        public static void Server_WebNoticeResponse(object sender, ClientMsgEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("GatewayModule::Server_WebNoticeResponse");
 
@@ -177,7 +182,7 @@ namespace SilkroadLauncher.Network
                 LauncherViewModel.Instance.SelectedWebNotice = LauncherViewModel.Instance.WebNotices[0];
         }
 
-        public static void Server_ShardListResponse(object sender, SessionPacketEventArgs e)
+        public static void Server_ShardListResponse(object sender, ClientMsgEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("GatewayModule::Server_ShardListResponse");
 

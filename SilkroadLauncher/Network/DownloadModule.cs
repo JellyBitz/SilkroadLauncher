@@ -36,7 +36,7 @@ namespace SilkroadLauncher.Network
         public static uint DownloadVersion { get; set; }
 
         #region Public Methods
-        public static void Server_Ready(object sender, SessionPacketEventArgs e)
+        public static void Server_Ready(object sender, ClientMsgEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("DownloadModule::Server_Ready");
 
@@ -44,9 +44,9 @@ namespace SilkroadLauncher.Network
             Directory.CreateDirectory("Temp");
 
             // Create file download from server
-            RequestFileDownload((Session)sender);
+            RequestFileDownload((Client)sender);
         }
-        public static void Server_FileChunk(object sender, SessionPacketEventArgs e)
+        public static void Server_FileChunk(object sender, ClientMsgEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("DownloadModule::Server_FileChunk");
 
@@ -58,7 +58,7 @@ namespace SilkroadLauncher.Network
             // File being downloaded
             LauncherViewModel.Instance.UpdatingFilePercentage = (int)(m_FileStream.Length * 100L / DownloadFiles[0].Size);
         }
-        public static void Server_FileCompleted(object sender, SessionPacketEventArgs e)
+        public static void Server_FileCompleted(object sender, ClientMsgEventArgs e)
         {
             byte result = e.Packet.ReadByte();
 
@@ -116,7 +116,7 @@ namespace SilkroadLauncher.Network
                     // Move or replace from Temp to the folder required
                     if (!ForceMovingFile("Temp\\" + file.ID, file.Path + file.Name))
                     {
-                        LauncherViewModel.Instance.ShowMessage("Fatal error updating \"" + file.Name + "\"!");
+                        LauncherViewModel.Instance.ShowMessage(string.Format(LauncherSettings.MSG_ERR_FILE_UPDATE,file.Name));
                         LauncherViewModel.Instance.Exit();
                     };
                 }
@@ -128,7 +128,7 @@ namespace SilkroadLauncher.Network
             // Continue protocol
             if (DownloadFiles.Count > 0)
             {
-                RequestFileDownload((Session)sender);
+                RequestFileDownload((Client)sender);
             }
             else
             {
@@ -156,7 +156,7 @@ namespace SilkroadLauncher.Network
                     LauncherViewModel.Instance.CanStartGame = true;
 
                     // Stop connection
-                    ((Session)sender).Stop();
+                    ((Client)sender).Stop();
                 }
             }
         }
@@ -166,7 +166,7 @@ namespace SilkroadLauncher.Network
         /// <summary>
         /// Request a server file to be downloaded inmediatly
         /// </summary>
-        private static void RequestFileDownload(Session s)
+        private static void RequestFileDownload(Client s)
         {
             // Request the first file on list
             var file = DownloadFiles[0];
@@ -190,7 +190,7 @@ namespace SilkroadLauncher.Network
         private static void UpdateSilkroadVersion()
         {
             // Set the new version into pk2 automagically...
-            if (Pk2Writer.Open(LauncherSettings.PATH_PK2_MEDIA, LauncherSettings.CLIENT_BLOWFISH_KEY))
+            if (Pk2Writer.Open(LauncherSettings.CLIENT_MEDIA_PK2_PATH, LauncherSettings.CLIENT_BLOWFISH_KEY))
             {
                 var buffer = Encoding.ASCII.GetBytes(DownloadVersion.ToString());
                 // Add blowfish minimum padding
