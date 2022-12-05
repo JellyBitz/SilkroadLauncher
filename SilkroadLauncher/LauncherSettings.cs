@@ -37,7 +37,8 @@
         public static string[]
             CLIENT_LANGUAGE_SUPPORTED_MASK = new string[]{
                 "한국어‫",
-                "中文",
+                //"中文(繁體)", // Chinese (Traditional)
+                "中文(简体)", // Chinese (Simplified)
                 "日本語‫",
                 "English",
                 "Türkçe",
