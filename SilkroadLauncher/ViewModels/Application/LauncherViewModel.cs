@@ -1,6 +1,7 @@
 ﻿using Pk2ReaderAPI;
 using SilkroadLauncher.Network;
 using SilkroadLauncher.Utility;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -649,6 +650,7 @@ namespace SilkroadLauncher
             }
             catch (Exception ex)
             {
+                File.WriteAllText("error.txt", DateTime.Now.ToString() + ":" + ex.Message);
                 System.Diagnostics.Debug.WriteLine(ex);
                 // Forced shutdown
                 Application.Current.Shutdown();
@@ -674,8 +676,10 @@ namespace SilkroadLauncher
                 {
                     // Check if host is verified
                     foreach (var h in LauncherSettings.CLIENT_VERIFY_HOST)
+                    {
                         if (h != host)
                             return false;
+                    }
                 }
             }
 

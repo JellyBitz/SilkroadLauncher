@@ -1,4 +1,5 @@
 ﻿using SilkroadSecurityAPI;
+
 using System;
 using System.Collections.Generic;
 using System.Globalization;
@@ -8,7 +9,7 @@ using System.Text;
 
 namespace Pk2ReaderAPI
 {
-	public class Pk2Reader
+    public class Pk2Reader
 	{
         #region Private Members
         private Blowfish m_Blowfish = new Blowfish();
@@ -230,9 +231,8 @@ namespace Pk2ReaderAPI
 			if (FolderPath.EndsWith("\\"))
 				FolderPath = FolderPath.Remove(FolderPath.Length - 1);
 
-			Pk2Folder folder = null;
-			m_Folders.TryGetValue(FolderPath, out folder);
-			return folder;
+            m_Folders.TryGetValue(FolderPath, out Pk2Folder folder);
+            return folder;
 		}
         
         /// <summary>
@@ -247,8 +247,7 @@ namespace Pk2ReaderAPI
             // Normalize key format
             Path = Path.ToUpper(m_EnglishCulture).Replace("/", "\\");
 
-            Pk2File file = null;
-			m_Files.TryGetValue(Path, out file);
+			m_Files.TryGetValue(Path, out Pk2File file);
             return file;
 		}
 		/// <summary>

@@ -1,12 +1,13 @@
-﻿using System.IO;
-using SilkroadLauncher.SilkroadCommon;
-using System.Collections.Generic;
-using System;
-using SilkroadLauncher.SilkroadCommon.Setting;
-using System.Text.RegularExpressions;
-using Pk2ReaderAPI;
+﻿using Pk2ReaderAPI;
 using Pk2WriterAPI;
+using SilkroadLauncher.SilkroadCommon;
+using SilkroadLauncher.SilkroadCommon.Setting;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace SilkroadLauncher
@@ -82,10 +83,6 @@ namespace SilkroadLauncher
         /// Language index currently selected
         /// </summary>
         private int m_SupportedLanguageIndex;
-        /// <summary>
-        /// Language mask currently selected
-        /// </summary>
-        private int m_SupportedLanguageMask;
         #endregion
 
         #region Public Properties
@@ -102,7 +99,7 @@ namespace SilkroadLauncher
         /// </summary>
         public SilkCfg.WindowResolution Resolution
         {
-            get { return m_SilkCfg.Resolution; }
+            get => m_SilkCfg.Resolution;
             set
             {
                 m_SilkCfg.Resolution = value;
@@ -121,7 +118,7 @@ namespace SilkroadLauncher
         /// </summary>
         public SilkCfg.Brightness Brightness
         {
-            get { return m_SilkCfg.BrightnessType; }
+            get => m_SilkCfg.BrightnessType;
             set
             {
                 m_SilkCfg.BrightnessType = value;
@@ -138,7 +135,7 @@ namespace SilkroadLauncher
         /// </summary>
         public SilkCfg.Graphic Graphics
         {
-            get { return m_SilkCfg.GraphicType; }
+            get => m_SilkCfg.GraphicType;
             set
             {
                 m_SilkCfg.GraphicType = value;
@@ -150,7 +147,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsSoundEnabled
         {
-            get { return m_SilkCfg.IsSoundEnabled; }
+            get => m_SilkCfg.IsSoundEnabled;
             set
             {
                 m_SilkCfg.IsSoundEnabled = value;
@@ -162,7 +159,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsWindowMode
         {
-            get { return (bool)m_SROptionSet.Options[SROptionSet.OptionID.IsWindowMode]; }
+            get => (bool)m_SROptionSet.Options[SROptionSet.OptionID.IsWindowMode];
             set
             {
                 m_SROptionSet.Options[SROptionSet.OptionID.IsWindowMode] = value;
@@ -178,7 +175,7 @@ namespace SilkroadLauncher
         /// </summary>
         public int SupportedLanguageIndex
         {
-            get { return m_SupportedLanguageIndex; }
+            get => m_SupportedLanguageIndex;
             set
             {
                 m_SupportedLanguageIndex = value;
@@ -408,10 +405,14 @@ namespace SilkroadLauncher
                         SROptionSet.OptionID id = (SROptionSet.OptionID)reader.ReadUInt32();
                         if (m_SROptionSet.Options.TryGetValue(id, out object value))
                         {
-                            if (value is bool) value = reader.ReadBoolean();
-                            else if (value is byte) value = reader.ReadByte();
-                            else if (value is ushort) value = reader.ReadUInt16();
-                            else if (value is uint) value = reader.ReadUInt32();
+                            if (value is bool)
+                                value = reader.ReadBoolean();
+                            else if (value is byte)
+                                value = reader.ReadByte();
+                            else if (value is ushort)
+                                value = reader.ReadUInt16();
+                            else if (value is uint)
+                                value = reader.ReadUInt32();
                             // Update the saved value
                             m_SROptionSet.Options[id] = value;
                         }
@@ -457,10 +458,14 @@ namespace SilkroadLauncher
                     // ID
                     writer.Write((uint)k_v.Key);
                     // Value
-                    if (k_v.Value is bool _bool) writer.Write(_bool);
-                    else if (k_v.Value is byte _byte) writer.Write(_byte);
-                    else if (k_v.Value is ushort _ushort) writer.Write(_ushort);
-                    else if (k_v.Value is uint _uint) writer.Write(_uint);
+                    if (k_v.Value is bool _bool)
+                        writer.Write(_bool);
+                    else if (k_v.Value is byte _byte)
+                        writer.Write(_byte);
+                    else if (k_v.Value is ushort _ushort)
+                        writer.Write(_ushort);
+                    else if (k_v.Value is uint _uint)
+                        writer.Write(_uint);
                 }
             }
             catch (Exception e)

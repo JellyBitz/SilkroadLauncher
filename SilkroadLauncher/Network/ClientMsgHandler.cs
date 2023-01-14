@@ -1,5 +1,6 @@
-﻿using System;
-using SilkroadSecurityAPI;
+﻿using SilkroadSecurityAPI;
+
+using System;
 
 namespace SilkroadLauncher.Network
 {

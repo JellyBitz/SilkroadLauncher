@@ -1,6 +1,7 @@
 ﻿using Pk2WriterAPI;
 using SilkroadCommon.Download;
 using SilkroadSecurityAPI;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
@@ -83,10 +84,28 @@ namespace SilkroadLauncher.Network
                     DecompressFile("Temp\\" + file.ID);
                     // Set pk2 path to be used
                     var pk2Path = (pk2NameIndex == -1 ? "" : file.Path.Substring(pk2Name.Length + 1) + "\\") + file.Name;
-                    if (Pk2Writer.ImportFile(pk2Path, "Temp\\" + file.ID))
+
+                    // Try to import it multiple times (3) or leave
+                    int attempt = 1, attemptMax = 3;
+                    while (attempt < attemptMax && !Pk2Writer.ImportFile(pk2Path, "Temp\\" + file.ID))
+                        attempt++;
+                    if (attempt == attemptMax)
+                    {
+                        LauncherViewModel.Instance.ShowMessage("Fatal error updating \"" + file.Name + "\" from \"" + pk2Name + "\"!");
+                        LauncherViewModel.Instance.Exit();
+                    }
+                    else
+                    {
                         System.Diagnostics.Debug.WriteLine($"File {file.Name} imported into the Pk2");
+                    }
+
                     // Close the Pk2
                     Pk2Writer.Close();
+                }
+                else
+                {
+                    LauncherViewModel.Instance.ShowMessage("Fatal error opening \"" + pk2Name + "\"!");
+                    LauncherViewModel.Instance.Exit();
                 }
                 // Delete the file
                 File.Delete("Temp\\" + file.ID);
@@ -116,7 +135,7 @@ namespace SilkroadLauncher.Network
                     // Move or replace from Temp to the folder required
                     if (!ForceMovingFile("Temp\\" + file.ID, file.Path + file.Name))
                     {
-                        LauncherViewModel.Instance.ShowMessage(string.Format(LauncherSettings.MSG_ERR_FILE_UPDATE,file.Name));
+                        LauncherViewModel.Instance.ShowMessage(string.Format(LauncherSettings.MSG_ERR_FILE_UPDATE, file.Name));
                         LauncherViewModel.Instance.Exit();
                     };
                 }

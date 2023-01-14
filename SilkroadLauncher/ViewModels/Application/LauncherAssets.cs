@@ -1,9 +1,7 @@
 ﻿using Pk2ReaderAPI;
 using SilkroadLauncher.Utility;
-using System;
-using System.IO;
+
 using System.Windows.Media;
-using System.Windows.Media.Imaging;
 
 namespace SilkroadLauncher
 {
