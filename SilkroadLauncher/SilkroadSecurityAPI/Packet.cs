@@ -109,11 +109,7 @@ namespace SilkroadSecurityAPI
         {
             lock (m_lock)
             {
-                if (m_locked)
-                {
-                    return m_reader_bytes;
-                }
-                return m_writer.GetBytes();
+                return m_locked ? m_reader_bytes : m_writer.GetBytes();
             }
         }
 
@@ -136,132 +132,93 @@ namespace SilkroadSecurityAPI
         {
             lock (m_lock)
             {
-                if (!m_locked)
-                {
-                    throw new Exception("Cannot SeekRead on an unlocked Packet.");
-                }
-                return m_reader.BaseStream.Seek(offset, orgin);
+                return !m_locked ? throw new Exception("Cannot SeekRead on an unlocked Packet.") : m_reader.BaseStream.Seek(offset, orgin);
             }
+        }
+        /// <summary>
+        /// Skip reading bytes from current position
+        /// </summary>
+        public void SkipRead(long count)
+        {
+            SeekRead(count, SeekOrigin.Current);
         }
         public int RemainingRead()
         {
             lock (m_lock)
             {
-                if (!m_locked)
-                {
-                    throw new Exception("Cannot SeekRead on an unlocked Packet.");
-                }
-                return (int)(m_reader.BaseStream.Length - m_reader.BaseStream.Position);
+                return !m_locked
+                    ? throw new Exception("Cannot SeekRead on an unlocked Packet.")
+                    : (int)(m_reader.BaseStream.Length - m_reader.BaseStream.Position);
             }
         }
         public byte ReadByte()
         {
             lock (m_lock)
             {
-                if (!m_locked)
-                {
-                    throw new Exception("Cannot Read from an unlocked Packet.");
-                }
-                return m_reader.ReadByte();
+                return !m_locked ? throw new Exception("Cannot Read from an unlocked Packet.") : m_reader.ReadByte();
             }
         }
         public sbyte ReadSByte()
         {
             lock (m_lock)
             {
-                if (!m_locked)
-                {
-                    throw new Exception("Cannot Read from an unlocked Packet.");
-                }
-                return m_reader.ReadSByte();
+                return !m_locked ? throw new Exception("Cannot Read from an unlocked Packet.") : m_reader.ReadSByte();
             }
         }
         public ushort ReadUShort()
         {
             lock (m_lock)
             {
-                if (!m_locked)
-                {
-                    throw new Exception("Cannot Read from an unlocked Packet.");
-                }
-                return m_reader.ReadUInt16();
+                return !m_locked ? throw new Exception("Cannot Read from an unlocked Packet.") : m_reader.ReadUInt16();
             }
         }
         public short ReadShort()
         {
             lock (m_lock)
             {
-                if (!m_locked)
-                {
-                    throw new Exception("Cannot Read from an unlocked Packet.");
-                }
-                return m_reader.ReadInt16();
+                return !m_locked ? throw new Exception("Cannot Read from an unlocked Packet.") : m_reader.ReadInt16();
             }
         }
         public uint ReadUInt()
         {
             lock (m_lock)
             {
-                if (!m_locked)
-                {
-                    throw new Exception("Cannot Read from an unlocked Packet.");
-                }
-                return m_reader.ReadUInt32();
+                return !m_locked ? throw new Exception("Cannot Read from an unlocked Packet.") : m_reader.ReadUInt32();
             }
         }
         public int ReadInt()
         {
             lock (m_lock)
             {
-                if (!m_locked)
-                {
-                    throw new Exception("Cannot Read from an unlocked Packet.");
-                }
-                return m_reader.ReadInt32();
+                return !m_locked ? throw new Exception("Cannot Read from an unlocked Packet.") : m_reader.ReadInt32();
             }
         }
         public ulong ReadULong()
         {
             lock (m_lock)
             {
-                if (!m_locked)
-                {
-                    throw new Exception("Cannot Read from an unlocked Packet.");
-                }
-                return m_reader.ReadUInt64();
+                return !m_locked ? throw new Exception("Cannot Read from an unlocked Packet.") : m_reader.ReadUInt64();
             }
         }
         public long ReadLong()
         {
             lock (m_lock)
             {
-                if (!m_locked)
-                {
-                    throw new Exception("Cannot Read from an unlocked Packet.");
-                }
-                return m_reader.ReadInt64();
+                return !m_locked ? throw new Exception("Cannot Read from an unlocked Packet.") : m_reader.ReadInt64();
             }
         }
         public float ReadFloat()
         {
             lock (m_lock)
             {
-                if (!m_locked)
-                {
-                    throw new Exception("Cannot Read from an unlocked Packet.");
-                }
-                return m_reader.ReadSingle();
+                return !m_locked ? throw new Exception("Cannot Read from an unlocked Packet.") : m_reader.ReadSingle();
             }
         }
         public double ReadDouble()
         {
             lock (m_lock)
             {
-                if (!m_locked)
-                {
-                    throw new Exception("Cannot Read from an unlocked Packet.");
-                }
-                return m_reader.ReadDouble();
+                return !m_locked ? throw new Exception("Cannot Read from an unlocked Packet.") : m_reader.ReadDouble();
             }
         }
         public string ReadAscii()
@@ -277,7 +234,7 @@ namespace SilkroadSecurityAPI
                     throw new Exception("Cannot Read from an unlocked Packet.");
                 }
 
-                UInt16 length = m_reader.ReadUInt16();
+                ushort length = m_reader.ReadUInt16();
                 byte[] bytes = m_reader.ReadBytes(length);
 
                 return Encoding.GetEncoding(codepage).GetString(bytes);
@@ -292,7 +249,7 @@ namespace SilkroadSecurityAPI
                     throw new Exception("Cannot Read from an unlocked Packet.");
                 }
 
-                UInt16 length = m_reader.ReadUInt16();
+                ushort length = m_reader.ReadUInt16();
                 byte[] bytes = m_reader.ReadBytes(length * 2);
 
                 return Encoding.Unicode.GetString(bytes);
@@ -503,11 +460,7 @@ namespace SilkroadSecurityAPI
         {
             lock (m_lock)
             {
-                if (m_locked)
-                {
-                    throw new Exception("Cannot SeekWrite on a locked Packet.");
-                }
-                return m_writer.BaseStream.Seek(offset, orgin);
+                return m_locked ? throw new Exception("Cannot SeekWrite on a locked Packet.") : m_writer.BaseStream.Seek(offset, orgin);
             }
         }
 
@@ -533,7 +486,7 @@ namespace SilkroadSecurityAPI
                 m_writer.Write(value);
             }
         }
-        public void WriteUShort(UInt16 value)
+        public void WriteUShort(ushort value)
         {
             lock (m_lock)
             {
@@ -544,7 +497,7 @@ namespace SilkroadSecurityAPI
                 m_writer.Write(value);
             }
         }
-        public void WriteShort(Int16 value)
+        public void WriteShort(short value)
         {
             lock (m_lock)
             {
@@ -827,11 +780,11 @@ namespace SilkroadSecurityAPI
                 }
             }
         }
-        public void WriteUShortArray(UInt16[] values)
+        public void WriteUShortArray(ushort[] values)
         {
             WriteUShortArray(values, 0, values.Length);
         }
-        public void WriteUShortArray(UInt16[] values, int index, int count)
+        public void WriteUShortArray(ushort[] values, int index, int count)
         {
             lock (m_lock)
             {
@@ -845,11 +798,11 @@ namespace SilkroadSecurityAPI
                 }
             }
         }
-        public void WriteShortArray(Int16[] values)
+        public void WriteShortArray(short[] values)
         {
             WriteShortArray(values, 0, values.Length);
         }
-        public void WriteShortArray(Int16[] values, int index, int count)
+        public void WriteShortArray(short[] values, int index, int count)
         {
             lock (m_lock)
             {
@@ -863,11 +816,11 @@ namespace SilkroadSecurityAPI
                 }
             }
         }
-        public void WriteUIntArray(UInt32[] values)
+        public void WriteUIntArray(uint[] values)
         {
             WriteUIntArray(values, 0, values.Length);
         }
-        public void WriteUIntArray(UInt32[] values, int index, int count)
+        public void WriteUIntArray(uint[] values, int index, int count)
         {
             lock (m_lock)
             {
@@ -881,11 +834,11 @@ namespace SilkroadSecurityAPI
                 }
             }
         }
-        public void WriteIntArray(Int32[] values)
+        public void WriteIntArray(int[] values)
         {
             WriteIntArray(values, 0, values.Length);
         }
-        public void WriteIntArray(Int32[] values, int index, int count)
+        public void WriteIntArray(int[] values, int index, int count)
         {
             lock (m_lock)
             {
@@ -899,11 +852,11 @@ namespace SilkroadSecurityAPI
                 }
             }
         }
-        public void WriteULongArray(UInt64[] values)
+        public void WriteULongArray(ulong[] values)
         {
             WriteULongArray(values, 0, values.Length);
         }
-        public void WriteULongArray(UInt64[] values, int index, int count)
+        public void WriteULongArray(ulong[] values, int index, int count)
         {
             lock (m_lock)
             {
@@ -917,11 +870,11 @@ namespace SilkroadSecurityAPI
                 }
             }
         }
-        public void WriteLongArray(Int64[] values)
+        public void WriteLongArray(long[] values)
         {
             WriteLongArray(values, 0, values.Length);
         }
-        public void WriteLongArray(Int64[] values, int index, int count)
+        public void WriteLongArray(long[] values, int index, int count)
         {
             lock (m_lock)
             {
@@ -971,11 +924,11 @@ namespace SilkroadSecurityAPI
                 }
             }
         }
-        public void WriteAsciiArray(String[] values, int codepage)
+        public void WriteAsciiArray(string[] values, int codepage)
         {
             WriteAsciiArray(values, 0, values.Length, codepage);
         }
-        public void WriteAsciiArray(String[] values, int index, int count, int codepage)
+        public void WriteAsciiArray(string[] values, int index, int count, int codepage)
         {
             lock (m_lock)
             {
@@ -989,19 +942,19 @@ namespace SilkroadSecurityAPI
                 }
             }
         }
-        public void WriteAsciiArray(String[] values)
+        public void WriteAsciiArray(string[] values)
         {
             WriteAsciiArray(values, 0, values.Length, 1252);
         }
-        public void WriteAsciiArray(String[] values, int index, int count)
+        public void WriteAsciiArray(string[] values, int index, int count)
         {
             WriteAsciiArray(values, index, count, 1252);
         }
-        public void WriteUnicodeArray(String[] values)
+        public void WriteUnicodeArray(string[] values)
         {
             WriteUnicodeArray(values, 0, values.Length);
         }
-        public void WriteUnicodeArray(String[] values, int index, int count)
+        public void WriteUnicodeArray(string[] values, int index, int count)
         {
             lock (m_lock)
             {

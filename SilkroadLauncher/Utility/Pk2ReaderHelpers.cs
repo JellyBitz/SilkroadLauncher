@@ -3,6 +3,7 @@ using SilkroadSecurityAPI;
 using System.Collections.Generic;
 using System.IO;
 using System.Text;
+using System.Windows.Media.Imaging;
 
 namespace SilkroadLauncher.Utility
 {
@@ -147,6 +148,19 @@ namespace SilkroadLauncher.Utility
                 Gateport = ushort.MinValue;
                 return false;
             }
+        }
+        /// <summary>
+        /// Gets image from path
+        /// </summary>
+        public static BitmapImage GetImage(this Pk2Reader Pk2Reader, string path)
+        {
+            var bm = new BitmapImage();
+            // copy from stream
+            bm.BeginInit();
+            bm.StreamSource = Pk2Reader.GetFileStream(path);
+            bm.EndInit();
+            // return img
+            return bm;
         }
     }
 }

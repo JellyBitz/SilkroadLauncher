@@ -5,5 +5,7 @@
     <!-- TextBlock for application  -->
     <Style x:Key="TextBlockBaseStyle" TargetType="{x:Type TextBlock}">
         <Setter Property="Foreground" Value="{StaticResource ForegroundMainBrush}"/>
+        <Setter Property="FontSize" Value="{StaticResource FontSizeRegular}"/>
+        <Setter Property="FontFamily" Value="Arial"/>
     </Style>
 </ResourceDictionary>

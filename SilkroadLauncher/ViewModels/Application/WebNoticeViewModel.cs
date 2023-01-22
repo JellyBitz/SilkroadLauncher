@@ -1,5 +1,7 @@
 ﻿using SilkroadCommon;
+
 using System;
+
 namespace SilkroadLauncher
 {
     public class WebNoticeViewModel: BaseViewModel

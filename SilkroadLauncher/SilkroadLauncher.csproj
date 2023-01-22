@@ -89,8 +89,8 @@
     <Compile Include="AttachedProperties\BaseAttachedProperty.cs" />
     <Compile Include="Network\DownloadModule.cs" />
     <Compile Include="Network\GatewayModule.cs" />
-    <Compile Include="Network\PacketHandler.cs" />
-    <Compile Include="Network\Session.cs" />
+    <Compile Include="Network\ClientMsgHandler.cs" />
+    <Compile Include="Network\Client.cs" />
     <Compile Include="Pk2ReaderAPI\Pk2File.cs" />
     <Compile Include="Pk2ReaderAPI\Pk2Folder.cs" />
     <Compile Include="Pk2ReaderAPI\Pk2Reader.cs" />
@@ -204,9 +204,11 @@
     <Compile Include="Utility\SocketHelpers.cs" />
     <Compile Include="Utility\TaskHelpers.cs" />
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
+    <Compile Include="ValueConverters\BooleanToInverseConverter.cs" />
     <Compile Include="ValueConverters\BooleanToVisibilityConverter.cs" />
     <Compile Include="ViewModels\Application\ConfigViewModel.cs" />
     <Compile Include="ViewModels\Application\IWindow.cs" />
+    <Compile Include="ViewModels\Application\LauncherAssets.cs" />
     <Compile Include="ViewModels\Application\WebNoticeViewModel.cs" />
     <Compile Include="ViewModels\Base\BaseViewModel.cs" />
     <Compile Include="ViewModels\Base\RelayCommand.cs" />
@@ -224,6 +226,10 @@
       <DependentUpon>MainWindow.xaml</DependentUpon>
       <SubType>Code</SubType>
     </Compile>
+    <Page Include="Styles\ScrollBar.xaml">
+      <Generator>MSBuild:Compile</Generator>
+      <SubType>Designer</SubType>
+    </Page>
     <Page Include="Styles\CheckBox.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -279,6 +285,7 @@
       <Generator>ResXFileCodeGenerator</Generator>
       <LastGenOutput>Resources.Designer.cs</LastGenOutput>
     </EmbeddedResource>
+    <None Include=".editorconfig" />
     <None Include="Properties\Settings.settings">
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
@@ -293,17 +300,11 @@
     <None Include="App.config" />
   </ItemGroup>
   <ItemGroup>
-    <Resource Include="Resources\Images\Logo.png" />
     <Resource Include="Resources\Images\Silkroad.ico" />
   </ItemGroup>
   <ItemGroup>
     <Resource Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\ImageError.png" />
     <Resource Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\ImageLoad.png" />
-    <Resource Include="Resources\Images\ProgressBarEmpty.png" />
-    <Resource Include="Resources\Images\ProgressBarFull.png" />
-    <Resource Include="Resources\Images\Background.png" />
-    <Resource Include="Resources\Images\ButtonBase.png" />
-    <Resource Include="Resources\Images\ButtonBaseHover.png" />
     <Content Include="Pk2Writer.dll">
       <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
     </Content>

@@ -1,4 +1,5 @@
-﻿using System.Net;
+﻿using System;
+using System.Diagnostics;
 using System.Net.Sockets;
 namespace SilkroadLauncher.Utility
 {
@@ -7,21 +8,25 @@ namespace SilkroadLauncher.Utility
         /// <summary>
         /// Connects the specified socket
         /// </summary>
-        /// <param name="host">The host/IP to connect</param>
-        /// <param name="port">The port</param>
-        /// <param name="timeout">The timeout</param>
-        public static void Connect(this Socket socket, string host, int port, int milisecondsTimeout)
+        /// <param name="host">Host/IP to connect</param>
+        /// <param name="port">Port</param>
+        /// <param name="timeout">Timeout to wait for connection at miliseconds</param>
+        /// <param name="elapsed">Time elapsed from connection</param>
+        public static void Connect(this Socket socket, string host, int port, long timeout, out long elapsed)
         {
+            var timeoutWatch = Stopwatch.StartNew();
+            // wait result
             var result = socket.BeginConnect(host, port, null, null);
-            bool success = result.AsyncWaitHandle.WaitOne(milisecondsTimeout, true);
+            result.AsyncWaitHandle.WaitOne(TimeSpan.FromMilliseconds(timeout), true);
             if (socket.Connected)
             {
                 socket.EndConnect(result);
+                elapsed = timeoutWatch.ElapsedMilliseconds;
             }
             else
             {
                 socket.Close();
-                // Connection timed out.
+                // Connection timed out
                 throw new SocketException(10060);
             }
         }

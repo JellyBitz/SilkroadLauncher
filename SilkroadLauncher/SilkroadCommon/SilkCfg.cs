@@ -52,7 +52,7 @@ namespace SilkroadLauncher.SilkroadCommon
             #region Enum Type Reference
             public override string ToString()
             {
-                return Width + " x " + Height;
+                return Width + " * " + Height;
             }
             public override bool Equals(object obj)
             {

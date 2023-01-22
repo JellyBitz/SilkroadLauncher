@@ -1,11 +1,5 @@
 ﻿<ResourceDictionary xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:SilkroadLauncher">
-
-    <ImageBrush x:Key="BackgroundImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/Background.png" Stretch="Fill"/>
-    <ImageBrush x:Key="LogoImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/Logo.png" Stretch="Fill"/>
-
-    <ImageBrush x:Key="ButtonBaseImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/ButtonBase.png" Stretch="Fill"/>
-    <ImageBrush x:Key="ButtonBaseHoverImageBrush" ImageSource="/SilkroadLauncher;component/Resources/Images/ButtonBaseHover.png" Stretch="Fill"/>
     
 </ResourceDictionary>

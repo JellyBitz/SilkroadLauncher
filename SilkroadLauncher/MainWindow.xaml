@@ -7,373 +7,380 @@
         xmlns:local="clr-namespace:SilkroadLauncher"
         mc:Ignorable="d"
         WindowStartupLocation="CenterScreen"
-        AllowsTransparency="True"
         WindowStyle="None" ResizeMode="NoResize"
-        Title="{Binding Title}" Height="480" Width="640"
+        Title="{Binding Title}"
+        Width="758" Height="473"
         Background="Transparent"
+        UseLayoutRounding="True"
         Loaded="Window_Loaded">
     <!-- Main layout -->
     <Grid>
         <Grid.RowDefinitions>
-            <RowDefinition Height="60"/>
+            <!-- Header -->
+            <RowDefinition Height="48"/>
+            <!-- Body -->
+            <RowDefinition/>
+            <!-- Main buttons -->
+            <RowDefinition Height="35"/>
+            <!-- Updating Bar -->
             <RowDefinition Height="40"/>
-            <RowDefinition Height="*"/>
-            <RowDefinition Height="32"/>
-            <RowDefinition Height="32"/>
         </Grid.RowDefinitions>
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="1*"/>
-        </Grid.ColumnDefinitions>
-        <!-- Header Toolbar -->
-        <Grid Grid.Row="1" Margin="10,6,10,0">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="20*"/>
-                <ColumnDefinition Width="60*"/>
-                <ColumnDefinition Width="20*"/>
-            </Grid.ColumnDefinitions>
-            <!-- Social -->
-            <Grid>
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="32"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="Auto"/>
-                </Grid.ColumnDefinitions>
-                <Button Style="{StaticResource ButtonBaseStyle}"
-                        Command="{Binding CommandOpenLink}"
-                        CommandParameter="https://www.facebook.com/ImJellyBitz">
-                    <TextBlock FontFamily="{StaticResource FontAwesomeBrands}"
-                               Text="{StaticResource fa-facebook}"
-                               FontSize="18"/>
-                </Button>
-                <Button Grid.Column="1" Style="{StaticResource ButtonBaseStyle}"
-                        Margin="2,0,2,0"
-                        Command="{Binding CommandOpenLink}"
-                        CommandParameter="http://bit.ly/SRO-LA">
-                    <TextBlock FontFamily="{StaticResource FontAwesomeBrands}"
-                               Text="{StaticResource fa-discord}"
-                               FontSize="18"/>
-                </Button>
-                <Button Grid.Column="2" Style="{StaticResource ButtonBaseStyle}"
-                        Command="{Binding CommandOpenLink}"
-                        CommandParameter="https://www.google.com/">
-                    <TextBlock FontFamily="{StaticResource FontAwesomeBrands}"
-                               Text="{StaticResource fa-youtube}"
-                               FontSize="18"/>
-                </Button>
-            </Grid>
 
-            <!-- Window buttons -->
-            <Grid Grid.Column="3">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                    <ColumnDefinition Width="Auto"/>
-                    <ColumnDefinition Width="32"/>
-                </Grid.ColumnDefinitions>
-                <Button Grid.Column="1" Margin="0,0,2,0"
-                        Style="{StaticResource ButtonBaseStyle}"
-                        Command="{Binding CommandToggleConfig}">
-                    <TextBlock FontFamily="{StaticResource FontAwesomeLight}"
-                               Text="{StaticResource fa-cog}"
-                               FontSize="18"/>
-                </Button>
-                <Button Grid.Column="2"
-                        Style="{StaticResource ButtonBaseStyle}"
-                        Command="{Binding CommandClose}">
-                    <TextBlock FontFamily="{StaticResource FontAwesomeRegular}"
-                               Text="{StaticResource fa-close}"
-                               FontSize="18"/>
-                </Button>
-            </Grid>
+        <!-- Background draggable -->
+        <Border Grid.RowSpan="4"
+                MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow"
+                Background="{Binding Assets.Background}"/>
+
+        <!-- Header -->
+        <Grid Grid.Row="0"
+              Margin="15 10">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto"/>
+            </Grid.ColumnDefinitions>
+
+            <!-- Version -->
+            <StackPanel Grid.Column="0"
+                        Orientation="Horizontal"
+                        VerticalAlignment="Bottom">
+                <TextBlock Text="ver "
+                           Style="{StaticResource TextBlockBaseStyle}"
+                           FontSize="{StaticResource FontSizeSmall}"/>
+                <TextBlock Text="{Binding ClientVersion}"
+                           Style="{StaticResource TextBlockBaseStyle}"
+                           FontSize="{StaticResource FontSizeSmall}"/>
+            </StackPanel>
+
+            <!-- Link -->
+            <Button Grid.Column="1"
+                    Style="{StaticResource ButtonWebsiteLinkStyle}"
+                    Command="{Binding CommandOpenLink}"
+                    CommandParameter="www.silkroadonline.net">
+            </Button>
         </Grid>
-        
-        <!-- Image logo -->
-        <Border Grid.Row="0" Grid.RowSpan="3"
-                Width="350" Height="121"
-                Margin="0,-295,0,0"
-                Background="{StaticResource LogoImageBrush}"
-                MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow"
-                Panel.ZIndex="1">
-        </Border>
 
-        <!-- Background -->
-        <Border Grid.Row="1"
-                Grid.RowSpan="3"
-                MouseLeftButtonDown="Control_MouseLeftButtonDown_DragWindow"
-                Background="{StaticResource BackgroundImageBrush}"
-                BorderThickness="2"
-                BorderBrush="{StaticResource BorderBaseBrush}"
-                CornerRadius="20,20,5,5"
-                Panel.ZIndex="-1"/>
         <!-- Body -->
-        <Grid Grid.Row="2" Margin="10,40,10,0">
+        <Grid Grid.Row="1"
+              Margin="5 3">
+            <!-- Announcements, Notices & Language -->
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="50*"/>
-                <ColumnDefinition Width="50*"/>
+                <ColumnDefinition Width="25*"/>
+                <ColumnDefinition Width="21*"/>
             </Grid.ColumnDefinitions>
+            
+            <!-- News & announcements -->
+            <Grid Grid.Column="0"
+                  Margin="1">
+            </Grid>
+
+            <!-- Notices & Language -->
             <Grid Grid.Column="1">
                 <Grid.RowDefinitions>
-                    <RowDefinition Height="32"/>
-                    <RowDefinition Height="*"/>
+                    <RowDefinition/>
+                    <RowDefinition Height="Auto"/>
                 </Grid.RowDefinitions>
-                <Grid>
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="*"/>
-                        <ColumnDefinition Width="Auto"/>
-                    </Grid.ColumnDefinitions>
-                    <Border Grid.ColumnSpan="2"
-                            Margin="5"
-                            CornerRadius="6"
-                            Background="#80000000"/>
-                    <!-- Notices HEAD -->
-                    <TextBlock Margin="10,0"
-                               Text="News and Announcements"
-                               FontSize="{StaticResource FontSizeLarge}"
-                               FontWeight="DemiBold"
-                               HorizontalAlignment="Left"
-                               VerticalAlignment="Center"
-                               Foreground="{StaticResource ForegroundMainBrush}"/>
-                    <!-- Version -->
-                    <StackPanel Grid.Column="1"
-                                Opacity="0.7"
-                                Orientation="Horizontal">
-                        <TextBlock Text="Client"
-                                   HorizontalAlignment="Right"
-                                   VerticalAlignment="Center"
-                                   Foreground="{StaticResource ForegroundMainBrush}"/>
-                        <TextBlock Text="v"
-                                   Margin="4,0,0,0"
-                                   VerticalAlignment="Center"
-                                   Foreground="{StaticResource HighlightMainBrush}"/>
-                        <TextBlock Text="{Binding ClientVersion}"
-                                   VerticalAlignment="Center"
-                                   Foreground="{StaticResource HighlightMainBrush}"/>
-                    </StackPanel>
-                </Grid>
-                <!-- Right Panel / 50% background opacity -->
-                <Border Grid.Row="1" Margin="5,0,0,0"
-                        BorderBrush="{StaticResource BorderBaseBrush}"
-                        BorderThickness="2"
-                        Background="#80000000"
-                        CornerRadius="6,6,0,0">
-                    <!-- Notice Subject -->
-                    <ListBox Style="{StaticResource NoticeListBox}"
-                             ItemsSource="{Binding WebNotices}"
-                             SelectedItem="{Binding SelectedWebNotice}"
-                             Background="Transparent"
-                             Foreground="{StaticResource ForegroundMainBrush}"
-                             ScrollViewer.VerticalScrollBarVisibility="Auto"
-                             ScrollViewer.HorizontalScrollBarVisibility="Hidden">
-                    </ListBox>
-                </Border>
-            </Grid>
-            <!-- Left panel / 50% background opacity -->
-            <Border Background="#80000000"
-                    BorderBrush="{StaticResource BorderBaseBrush}"
-                    BorderThickness="2"
-                    CornerRadius="6,6,0,0">
-                <Grid>
-                    <!-- Notice Message (HTML) -->
-                    <htmlrender:HtmlPanel Visibility="{Binding IsViewingConfig,Converter={local:BooleanToVisibilityConverter},ConverterParameter=True}"
-                                          Background="Transparent" Margin="6"
-                                          BaseStylesheet="body{color:#eee;} a { color:#89b3ff; }"
-                                          Text="{Binding SelectedWebNotice.Article}"/>
-                    <!-- Game Settings -->
-                    <Grid Visibility="{Binding IsViewingConfig,Converter={local:BooleanToVisibilityConverter}}"
-                          Margin="40,45,40,25">
-                        <Grid.RowDefinitions>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                            <RowDefinition Height="*"></RowDefinition>
-                            <RowDefinition Height="Auto"></RowDefinition>
-                        </Grid.RowDefinitions>
-                        <!-- Resolution -->
-                        <Grid Grid.Row="0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Style="{StaticResource TextBlockBaseStyle}"
-                                       Text="Set Resolution "
-                                       FontWeight="DemiBold"
-                                       FontSize="{StaticResource FontSizeRegular}"
-                                       VerticalAlignment="Center"/>
-                            <ComboBox Grid.Column="1" Style="{StaticResource ComboBoxBaseStyle}"
-                                      FontSize="{StaticResource FontSizeRegular}"
-                                      ItemsSource="{Binding Config.SupportedResolutions}"
-                                      SelectedItem="{Binding Config.Resolution}"/>
-                        </Grid>
-                        <!-- Brightness -->
-                        <Grid Grid.Row="1" Margin="0,10,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Style="{StaticResource TextBlockBaseStyle}"
-                                       Text="Set Brightness "
-                                       FontWeight="DemiBold"
-                                       FontSize="{StaticResource FontSizeRegular}"
-                                       VerticalAlignment="Center"/>
-                            <ComboBox Grid.Column="1" Style="{StaticResource ComboBoxBaseStyle}"
-                                      FontSize="{StaticResource FontSizeRegular}"
-                                      ItemsSource="{Binding Config.SupportedBrightness}"
-                                      SelectedItem="{Binding Config.Brightness}"/>
-                        </Grid>
-                        <!-- Graphics -->
-                        <Grid Grid.Row="2" Margin="0,10,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Style="{StaticResource TextBlockBaseStyle}"
-                                       Text="Set Graphics "
-                                       FontWeight="DemiBold"
-                                       FontSize="{StaticResource FontSizeRegular}"
-                                       VerticalAlignment="Center"/>
-                            <ComboBox Grid.Column="1" Style="{StaticResource ComboBoxBaseStyle}"
-                                      FontSize="{StaticResource FontSizeRegular}"
-                                      ItemsSource="{Binding Config.SupportedGraphics}"
-                                      SelectedItem="{Binding Config.Graphics}"/>
-                        </Grid>
-                        <!-- Lang -->
-                        <Grid Grid.Row="3" Margin="0,10,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Style="{StaticResource TextBlockBaseStyle}"
-                                       Text="Language "
-                                       FontWeight="DemiBold"
-                                       FontSize="{StaticResource FontSizeRegular}"
-                                       VerticalAlignment="Center"/>
-                            <ComboBox Grid.Column="1" Style="{StaticResource ComboBoxBaseStyle}"
-                                      FontSize="{StaticResource FontSizeRegular}"
-                                      ItemsSource="{Binding Config.SupportedLanguages}"
-                                      SelectedIndex="{Binding Config.SupportedLanguageIndex}"/>
-                        </Grid>
-                        <!-- Sound -->
-                        <Grid Grid.Row="4" Margin="0,10,0,0">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Style="{StaticResource TextBlockBaseStyle}"
-                                       Text="Use Sound "
-                                       FontWeight="DemiBold"
-                                       FontSize="{StaticResource FontSizeRegular}"
-                                       VerticalAlignment="Center"/>
-                            <CheckBox Grid.Column="1" Style="{StaticResource CheckBoxBaseStyle}"
-                                       IsChecked="{Binding Config.IsSoundEnabled}"
-                                       VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="3"  Style="{StaticResource TextBlockBaseStyle}"
-                                       Text="Window Mode "
-                                       FontWeight="DemiBold"
-                                       FontSize="{StaticResource FontSizeRegular}"
-                                       VerticalAlignment="Center"/>
-                            <CheckBox Grid.Column="4" Style="{StaticResource CheckBoxBaseStyle}"
-                                       IsChecked="{Binding Config.IsWindowMode}"
-                                       VerticalAlignment="Center"/>
-                        </Grid>
-                        <!-- Config Actions -->
-                        <Grid Grid.Row="6">
-                            <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="*"/>
-                                <ColumnDefinition Width="Auto"/>
-                                <ColumnDefinition Width="Auto"/>
-                            </Grid.ColumnDefinitions>
-                            <TextBlock Grid.Column="2" Style="{StaticResource TextBlockBaseStyle}"
-                                       Foreground="{StaticResource HighlightMainBrush}"
-                                       Opacity="0.5"
-                                       Text="Settings v"
-                                       FontWeight="DemiBold"
-                                       FontSize="{StaticResource FontSizeSmall}"
-                                       VerticalAlignment="Center"/>
-                            <TextBlock Grid.Column="3" Style="{StaticResource TextBlockBaseStyle}"
-                                       Opacity="0.5"
-                                       Foreground="{StaticResource HighlightMainBrush}"
-                                       Text="{Binding Config.Version}"
-                                       FontWeight="DemiBold"
-                                       FontSize="{StaticResource FontSizeSmall}"
-                                       VerticalAlignment="Center"/>
-                            <Button Grid.Column="0" Style="{StaticResource ButtonBaseStyle}"
-                                    Command="{Binding CommandSaveConfig}"
-                                    CommandParameter="https://www.google.com/">
-                                <StackPanel Orientation="Horizontal">
-                                    <TextBlock  Foreground="{StaticResource ForegroundMainLighterBrush}"
-                                           FontFamily="{StaticResource FontAwesomeRegular}"
-                                           Text="{StaticResource fa-save}"
-                                           FontSize="18"/>
-                                    <TextBlock Foreground="{StaticResource ForegroundMainLighterBrush}"
-                                           Text=" Save"
-                                           FontSize="{StaticResource FontSizeRegular}"/>
+
+                <!-- Notices -->
+                <Grid Grid.Row="0">
+                    <Grid.RowDefinitions>
+                        <RowDefinition Height="*"/>
+                        <RowDefinition Height="191"/>
+                    </Grid.RowDefinitions>
+
+                    <!-- Subject -->
+                    <Grid Grid.Row="0"
+                          Margin="2 25 4 3">
+                        <ListBox Style="{StaticResource NoticeListBox}"
+                                 ItemsSource="{Binding WebNotices}"
+                                 SelectedItem="{Binding SelectedWebNotice}"
+                                 Foreground="#FAE9B6"
+                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"/>
+                    </Grid>
+
+                    <!-- Article -->
+                    <Grid Grid.Row="1"
+                          Margin="4">
+                        <!-- Scroller -->
+                        <ScrollViewer Style="{StaticResource NoticeScrollViewer}"
+                                      Visibility="{Binding IsViewingConfig,Converter={local:BooleanToVisibilityConverter},ConverterParameter=True}"
+                                      HorizontalScrollBarVisibility="Disabled"
+                                      VerticalScrollBarVisibility="Auto">
+                            <!-- Notice Message (HTML) -->
+                            <htmlrender:HtmlPanel Background="Transparent"
+                                                  BaseStylesheet="body{color:#eee; font-size:12px; line-height:22px; font-family:arial;} a{color:#009e99;} b{color:#ffff00;}"
+                                                  Text="{Binding SelectedWebNotice.Article}"/>
+                        </ScrollViewer>
+
+                        <!-- Game options -->
+                        <Grid Visibility="{Binding IsViewingConfig,Converter={local:BooleanToVisibilityConverter}}">
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition/>
+                            </Grid.RowDefinitions>
+
+                            <!-- Header -->
+                            <Border Grid.Row="0"
+                                    Background="{Binding Assets.SettingsFrameTop}"
+                                    Height="23" Width="323"
+                                    Margin="0 5"/>
+
+                            <!-- Options -->
+                            <Grid Grid.Row="1">
+                                <Grid.RowDefinitions>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                    <RowDefinition/>
+                                </Grid.RowDefinitions>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition/>
+                                    <ColumnDefinition/>
+                                </Grid.ColumnDefinitions>
+
+                                <!-- Resolution -->
+                                <StackPanel Grid.Row="0" Grid.Column="0"
+                                            Width="112">
+                                    <TextBlock Text="Set Resolution"
+                                               Style="{StaticResource TextBlockBaseStyle}"
+                                               FontSize="{StaticResource FontSizeRegular}"
+                                               Margin="3 0 0 3"/>
+                                    <ComboBox Style="{StaticResource ComboBoxBaseStyle}"
+                                              ItemsSource="{Binding Config.SupportedResolutions}"
+                                              SelectedItem="{Binding Config.Resolution}"/>
                                 </StackPanel>
-                            </Button>
+                                <!-- Brightness -->
+                                <StackPanel Grid.Row="0" Grid.Column="1"
+                                            Width="112">
+                                    <TextBlock Text="Set Brightness"
+                                               Style="{StaticResource TextBlockBaseStyle}"
+                                               FontSize="{StaticResource FontSizeRegular}"
+                                               Margin="3 0 0 3"/>
+                                    <ComboBox Style="{StaticResource ComboBoxBaseStyle}"
+                                              ItemsSource="{Binding Config.SupportedBrightness}"
+                                              SelectedItem="{Binding Config.Brightness}"/>
+                                </StackPanel>
+                                <!-- Graphics -->
+                                <StackPanel Grid.Row="1" Grid.Column="0"
+                                            Width="112">
+                                    <TextBlock Text="Set Graphic"
+                                               Style="{StaticResource TextBlockBaseStyle}"
+                                               FontSize="{StaticResource FontSizeRegular}"
+                                               Margin="3 0 0 3"/>
+                                    <ComboBox Style="{StaticResource ComboBoxBaseStyle}"
+                                              ItemsSource="{Binding Config.SupportedGraphics}"
+                                              SelectedItem="{Binding Config.Graphics}"/>
+                                </StackPanel>
+                                <!-- Sound -->
+                                <StackPanel Grid.Row="1" Grid.Column="1"
+                                            Width="112">
+                                    <TextBlock Text="Set Sound"
+                                               Style="{StaticResource TextBlockBaseStyle}"
+                                               FontSize="{StaticResource FontSizeRegular}"
+                                               Margin="3 0 0 3"/>
+                                    <!-- On / Off-->
+                                    <Grid>
+                                        <Grid.ColumnDefinitions>
+                                            <ColumnDefinition/>
+                                            <ColumnDefinition/>
+                                        </Grid.ColumnDefinitions>
+                                        <RadioButton Grid.Column="0"
+                                                     HorizontalAlignment="Center"
+                                                     Style="{DynamicResource RadioButtonBaseStyle}"
+                                                     IsChecked="{Binding Config.IsSoundEnabled}">
+                                            <TextBlock Text="On"/>
+                                        </RadioButton>
+                                        <RadioButton Grid.Column="1"
+                                                     HorizontalAlignment="Center"
+                                                     Style="{DynamicResource RadioButtonBaseStyle}"
+                                                     IsChecked="{Binding Config.IsSoundEnabled,Converter={local:BooleanToInverseConverter},Mode=OneWay}">
+                                            <TextBlock Text="Off"/>
+                                        </RadioButton>
+                                    </Grid>
+                                </StackPanel>
+
+                                <!-- Save Button -->
+                                <Button Grid.Row="2" Grid.Column="2"
+                                        Style="{StaticResource ButtonOptionsSaveImageStyle}"
+                                        Width="56" Height="29"
+                                        Command="{Binding CommandSaveConfig}"/>
+                            </Grid>
                         </Grid>
                     </Grid>
+
                 </Grid>
-            </Border>
+
+                <!-- Language Selection -->
+                <Grid Grid.Row="1"
+                      Margin="0 0 0 3">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition Width="Auto"/>
+                    </Grid.ColumnDefinitions>
+
+                    <Button Grid.Column="1"
+                            Style="{StaticResource ButtonLanguageSelectImageStyle}"
+                            Width="233" Height="63"
+                            Command="{Binding CommandToggleLangConfig}"/>
+
+                    <Border Background="{Binding Assets.LanguageDisplayBackground}">
+                        <TextBlock Text="{Binding Config.Language}"
+                                   Style="{StaticResource TextBlockBaseStyle}"
+                                   VerticalAlignment="Center" HorizontalAlignment="Center"
+                                   Foreground="#FFD200"
+                                   FontWeight="Bold"
+                                   FontSize="{StaticResource FontSizeLarge}"/>
+                    </Border>
+
+                </Grid>
+            </Grid>
+
         </Grid>
 
-        <!-- Launcher buttom actions -->
-        <Grid Grid.Row="3" Grid.RowSpan="2">
+        <!-- Main buttons -->
+        <Grid Grid.Row="2"
+              Margin="6 0 6 2">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="2*"/>
-                <ColumnDefinition Width="3*"/>
-                <ColumnDefinition Width="2*"/>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="Auto"/>
+                <ColumnDefinition Width="167"/>
             </Grid.ColumnDefinitions>
-            <!-- Link -->
-            <Button Grid.Column="0" Margin="3,3,0,3"
-                    Content="Guide"
-                    Style="{StaticResource ButtonBaseImageStyle}"
-                    FontSize="{StaticResource FontSizeXLarge}"
+
+            <!-- Options -->
+            <Button Grid.Column="0"
+                    Style="{StaticResource ButtonOptionImageStyle}"
+                    Width="122" Height="24"
+                    Command="{Binding CommandToggleConfig}"/>
+            <!-- Wiki link -->
+            <Button Grid.Column="1"
+                    Style="{StaticResource ButtonGuideImageStyle}"
+                    Width="128" Height="24"
                     Command="{Binding CommandOpenLink}"
-                    CommandParameter="https://www.google.com/"/>
-            <!-- Start Game -->
-            <Button Grid.Column="1" Margin="0,-4,0,0"
-                    Style="{StaticResource ButtonBaseImageStyle}"
-                    Command="{Binding CommandStartGame}"
-                    Visibility="{Binding CanStartGame,Converter={local:BooleanToVisibilityConverter}}">
-                <TextBlock Text="Play" Margin="0,-3,0,0"
-                           FontSize="{StaticResource FontSizeXXLarge}"/>
-            </Button>
-            <!-- Patch Progress -->
-            <Grid Grid.Column="1"  Margin="0,-4,0,0"
-                  Visibility="{Binding IsUpdating,Converter={local:BooleanToVisibilityConverter}}">
-                <ProgressBar Style="{StaticResource ProgressBarImageFill}"
-                             Value="{Binding UpdatingPercentage}">
-                </ProgressBar>
-                <StackPanel Grid.Column="1"
-                            Orientation="Horizontal"
-                            HorizontalAlignment="Center"
-                            VerticalAlignment="Center">
-                    <TextBlock Text="Applying Patch.."
-                               Foreground="{StaticResource ForegroundMainBrush}"
-                               FontFamily="{StaticResource AmaranteRegular}"
-                               FontSize="{StaticResource FontSizeLarge}"/>
-                    <TextBlock Text="{Binding UpdatingPercentage}"
-                               Foreground="{StaticResource ForegroundMainBrush}"
-                               FontFamily="{StaticResource AmaranteRegular}"
-                               FontSize="{StaticResource FontSizeLarge}"/>
-                    <TextBlock Text="%"
-                               Foreground="{StaticResource ForegroundMainBrush}"
-                               FontFamily="{StaticResource AmaranteRegular}"
-                               FontSize="{StaticResource FontSizeLarge}"/>
-                </StackPanel>
+                    CommandParameter="www.google.com"/>
+            <!-- Youtube link -->
+            <Button Grid.Column="2"
+                    Style="{StaticResource ButtonMovieImageStyle}"
+                    Width="129" Height="24"
+                    Command="{Binding CommandOpenLink}"
+                    CommandParameter="www.youtube.com"/>
+            <!-- Exit -->
+            <Button Grid.Column="3"
+                    Style="{StaticResource ButtonExitImageStyle}"
+                    Width="163" Height="24"
+                    Command="{Binding CommandClose}"/>
+
+            <!-- Start / Updating -->
+            <Grid Grid.Column="4"
+                  Width="167" Height="30"
+                  Margin="0 0 0 1">
+                <!-- Updating text notice -->
+                <Border Visibility="{Binding IsUpdating,Converter={local:BooleanToVisibilityConverter}}"
+                        Background="{Binding Assets.StartButtonUpdating}"/>
+                <!-- Start button -->
+                <Button Visibility="{Binding CanStartGame,Converter={local:BooleanToVisibilityConverter}}"
+                        Style="{StaticResource ButtonStartImageStyle}"
+                        Command="{Binding CommandStartGame}"/>
             </Grid>
-            <!-- Link -->
-            <Button Grid.Column="2" Margin="0,3,3,3"
-                    Style="{StaticResource ButtonBaseImageStyle}"
-                    FontSize="{StaticResource FontSizeXLarge}"
-                    Command="{Binding CommandOpenLink}"
-                    CommandParameter="https://www.google.com/">
-                Register
-            </Button>
         </Grid>
+
+        <!-- Updating Bar -->
+        <Grid Background="{Binding Assets.UpdatingBackground}"
+              Grid.Row="3"
+              Visibility="{Binding IsUpdating,Converter={local:BooleanToVisibilityConverter}}">
+            <Grid.RowDefinitions>
+                <!-- Top bar loading-->
+                <RowDefinition/>
+                <!-- Bottom bar loading -->
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+
+            <!-- Top bar loading as progress bar -->
+            <ProgressBar Grid.Row="0"
+                         Style="{StaticResource ProgressBarImageFill}"
+                         Background="#60000000"
+                         Height="11"
+                         Margin="6 4 6 0"
+                         Value="{Binding UpdatingPercentage}"/>
+            <!-- Top bar loading as text -->
+            <StackPanel Grid.Row="0"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="6 5 6 0">
+                <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                           FontSize="11"
+                           Text="{Binding UpdatingPercentage}"/>
+                <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                           FontSize="11"
+                           Text="%"/>
+            </StackPanel>
+
+            <!-- Bottom bar loading -->
+            <ProgressBar Grid.Row="1"
+                         Style="{StaticResource ProgressBarImageFill}"
+                         Background="#60000000"
+                         Height="11"
+                         Margin="6 0 6 4"
+                         Value="{Binding UpdatingFilePercentage}"/>
+            <!-- Bottom bar loading as text -->
+            <StackPanel Grid.Row="1"
+                        Orientation="Horizontal"
+                        HorizontalAlignment="Center"
+                        VerticalAlignment="Center"
+                        Margin="6 0 6 4">
+                <TextBlock Style="{StaticResource TextBlockBaseStyle}"
+                           FontSize="11"
+                           Text="{Binding UpdatingFilePath}"/>
+            </StackPanel>
+
+        </Grid>
+        
+        <!-- Language Selection Popup -->
+        <Border Grid.Row="1" Grid.RowSpan="2"
+                Background="Transparent"
+                Panel.ZIndex="1"
+                Visibility="{Binding IsViewingLangConfig,Converter={local:BooleanToVisibilityConverter}}">
+            <Grid Width="339"
+                  VerticalAlignment="Center">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="46"/>
+                </Grid.RowDefinitions>
+
+                <!-- Header -->
+                <Border Grid.Row="0"
+                        Background="{Binding Assets.LanguagePopupFrameTop}"/>
+
+                <!-- Languages availables -->
+                <ListBox Grid.Row="1"
+                         Style="{StaticResource LanguageListBoxStyle}"
+                         Background="{Binding Assets.LanguagePopupFrameMid}"
+                         VerticalAlignment="Center"
+                         SelectionMode="Single"
+                         Padding="20 3"
+                         ItemsSource="{Binding Config.SupportedLanguages}"
+                         SelectedIndex="{Binding LangConfigIndex}"/>
+
+                <!-- Ok & Cancel -->
+                <Grid Grid.Row="2"
+                      Background="{Binding Assets.LanguagePopupFrameBottom}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition/>
+                        <ColumnDefinition/>
+                    </Grid.ColumnDefinitions>
+                    <Button Grid.Column="0"
+                            Style="{StaticResource ButtonLanguageSaveImageStyle}"
+                            Width="88" Height="24"
+                            Command="{Binding CommandSaveLangConfig}"/>
+                    <Button Grid.Column="1"
+                            Style="{StaticResource ButtonLanguageCancelImageStyle}"
+                            Width="88" Height="24"
+                            Command="{Binding CommandToggleLangConfig}"/>
+                </Grid>
+            </Grid>
+        </Border>
+
     </Grid>
 </Window>

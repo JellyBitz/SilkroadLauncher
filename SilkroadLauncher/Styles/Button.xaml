@@ -3,28 +3,32 @@
                     xmlns:local="clr-namespace:SilkroadLauncher">
     
     <!-- Buttons for application  -->
-    <Style x:Key="ButtonBaseStyle" TargetType="{x:Type Button}">
-        <Setter Property="BorderThickness" Value="2"/>
-        <Setter Property="BorderBrush" Value="{StaticResource BorderBaseBrush}"/>
-        <Setter Property="Foreground" Value="{StaticResource ForegroundMainBrush}"/>
-        <Setter Property="Background" Value="{StaticResource ButtonBackgroundBaseBrush}"/>
+    
+    <!-- Clean and clickable button Layer -->
+    <Style x:Key="ButtonCleanStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="BorderBrush" Value="Transparent"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="HorizontalContentAlignment" Value="Center"/>
+        <Setter Property="VerticalContentAlignment" Value="Center"/>
+        <Setter Property="FontSize" Value="16"/>
+        <Setter Property="Opacity" Value="0.9"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
                     <Border x:Name="xBorder"
-                            Background="{StaticResource ButtonBackgroundBaseBrush}" 
+                            Background="{TemplateBinding Background}" 
                             BorderBrush="{TemplateBinding BorderBrush}"
-                            CornerRadius="6"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            Padding="6,3">
+                            BorderThickness="{TemplateBinding BorderThickness}">
                         <ContentPresenter Content="{TemplateBinding Content}" 
-                                      HorizontalAlignment="Center"
-                                      VerticalAlignment="Center"/>
+                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
+                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
                     </Border>
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsMouseOver" Value="True">
                             <Setter Property="Cursor" Value="Hand" />
-                            <Setter TargetName="xBorder" Property="BorderBrush" Value="#80FFFFFF" />
+                            <Setter Property="Opacity" Value="1" />
                         </Trigger>
                     </ControlTemplate.Triggers>
                 </ControlTemplate>
@@ -32,11 +36,60 @@
         </Setter>
     </Style>
 
-    <Style x:Key="ButtonBaseImageStyle" TargetType="{x:Type Button}">
-        <Setter Property="FontFamily" Value="{StaticResource AmaranteRegular}"/>
-        <Setter Property="FontWeight" Value="Bold"/>
-        <Setter Property="Background" Value="{StaticResource ButtonBaseImageBrush}"/>
-        <Setter Property="Foreground" Value="{StaticResource ForegroundMainBrush}"/>
+    <!-- Website link button -->
+    <Style x:Key="ButtonWebsiteLinkStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Grid x:Name="BackgroundEffect"
+                          Background="{TemplateBinding Background}">
+                        <Grid.RowDefinitions>
+                            <RowDefinition/>
+                            <RowDefinition/>
+                        </Grid.RowDefinitions>
+                        <!-- Top -->
+                        <StackPanel Grid.Row="0"
+                                    Orientation="Horizontal"
+                                    HorizontalAlignment="Right">
+                            <Border x:Name="LinkMark"
+                                   Background="{Binding Assets.HomeIcon}"
+                                   Width="11" Height="11"
+                                   Margin="0 0 5 0"/>
+                            <TextBlock Text="Silkroad Home"
+                                       Style="{StaticResource TextBlockBaseStyle}"
+                                       FontSize="{StaticResource FontSizeRegular}"
+                                       HorizontalAlignment="Right"
+                                       FontWeight="Bold"/>
+                        </StackPanel>
+                        <!-- Bottom -->
+                        <TextBlock Grid.Row="1"
+                                   Text="www.silkroadonline.net"
+                                   Style="{StaticResource TextBlockBaseStyle}"
+                                   FontSize="{StaticResource FontSizeRegular}"
+                                   FontWeight="DemiBold"/>
+                    </Grid>
+                    <ControlTemplate.Triggers>
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <!-- Change mark -->
+                            <Setter TargetName="LinkMark" Property="Background" Value="{Binding Assets.HomeIconOnHover}"/>
+                            <!-- Drop glow -->
+                            <Setter TargetName="BackgroundEffect" Property="Effect">
+                                <Setter.Value>
+                                    <DropShadowEffect Color="White" BlurRadius="10" ShadowDepth="0"/>
+                                </Setter.Value>
+                            </Setter>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
+    <!-- Button Language Select -->
+    <Style x:Key="ButtonLanguageSelectImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{Binding Assets.LanguageButton}"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type Button}">
@@ -48,8 +101,192 @@
         </Setter>
         <Style.Triggers>
             <Trigger Property="IsMouseOver" Value="True">
-                <Setter Property="Background"  Value="{StaticResource ButtonBaseHoverImageBrush}"/>
+            	<Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Background"  Value="{Binding Assets.LanguageButtonOnHover}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{Binding Assets.LanguageButtonOnPressed}"/>
             </Trigger>
         </Style.Triggers>
     </Style>
+
+    <!-- Button Option -->
+    <Style x:Key="ButtonOptionImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{Binding Assets.OptionButton}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+            	<Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Background"  Value="{Binding Assets.OptionButtonOnHover}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{Binding Assets.OptionButtonOnPressed}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!-- Button Guide -->
+    <Style x:Key="ButtonGuideImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{Binding Assets.GuideButton}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+            	<Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Background"  Value="{Binding Assets.GuideButtonOnHover}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{Binding Assets.GuideButtonOnPressed}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!-- Button Movie -->
+    <Style x:Key="ButtonMovieImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{Binding Assets.MovieButton}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+            	<Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Background"  Value="{Binding Assets.MovieButtonOnHover}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{Binding Assets.MovieButtonOnPressed}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!-- Button Exit -->
+    <Style x:Key="ButtonExitImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{Binding Assets.ExitButton}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+            	<Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Background"  Value="{Binding Assets.ExitButtonOnHover}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{Binding Assets.ExitButtonOnPressed}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!-- Button Start -->
+    <Style x:Key="ButtonStartImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{Binding Assets.StartButton}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+            	<Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Background"  Value="{Binding Assets.StartButtonOnHover}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{Binding Assets.StartButtonOnPressed}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Button Options Save -->
+    <Style x:Key="ButtonOptionsSaveImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{Binding Assets.SettingsSaveButton}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Background"  Value="{Binding Assets.SettingsSaveButtonOnHover}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{Binding Assets.SettingsSaveButtonOnPressed}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
+    <!-- Button Language Save -->
+    <Style x:Key="ButtonLanguageSaveImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{Binding Assets.LanguagePopupAcceptButton}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Background"  Value="{Binding Assets.LanguagePopupAcceptButtonOnHover}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{Binding Assets.LanguagePopupAcceptButtonOnPressed}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+    <!-- Button Language Cancel -->
+    <Style x:Key="ButtonLanguageCancelImageStyle" TargetType="{x:Type Button}">
+        <Setter Property="Background" Value="{Binding Assets.LanguagePopupCancelButton}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type Button}">
+                    <Border Background="{TemplateBinding Background}">
+                        <ContentPresenter HorizontalAlignment="Center" VerticalAlignment="Center"/>
+                    </Border>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+        <Style.Triggers>
+            <Trigger Property="IsMouseOver" Value="True">
+                <Setter Property="Cursor" Value="Hand"/>
+                <Setter Property="Background"  Value="{Binding Assets.LanguagePopupCancelButtonOnHover}"/>
+            </Trigger>
+            <Trigger Property="IsPressed" Value="True">
+                <Setter Property="Background"  Value="{Binding Assets.LanguagePopupCancelButtonOnPressed}"/>
+            </Trigger>
+        </Style.Triggers>
+    </Style>
+
 </ResourceDictionary>

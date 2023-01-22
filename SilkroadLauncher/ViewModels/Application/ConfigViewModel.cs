@@ -1,12 +1,13 @@
-﻿using System.IO;
-using SilkroadLauncher.SilkroadCommon;
-using System.Collections.Generic;
-using System;
-using SilkroadLauncher.SilkroadCommon.Setting;
-using System.Text.RegularExpressions;
-using Pk2ReaderAPI;
+﻿using Pk2ReaderAPI;
 using Pk2WriterAPI;
+using SilkroadLauncher.SilkroadCommon;
+using SilkroadLauncher.SilkroadCommon.Setting;
+
+using System;
+using System.Collections.Generic;
+using System.IO;
 using System.Runtime.InteropServices;
+using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
 namespace SilkroadLauncher
@@ -98,7 +99,7 @@ namespace SilkroadLauncher
         /// </summary>
         public SilkCfg.WindowResolution Resolution
         {
-            get { return m_SilkCfg.Resolution; }
+            get => m_SilkCfg.Resolution;
             set
             {
                 m_SilkCfg.Resolution = value;
@@ -117,7 +118,7 @@ namespace SilkroadLauncher
         /// </summary>
         public SilkCfg.Brightness Brightness
         {
-            get { return m_SilkCfg.BrightnessType; }
+            get => m_SilkCfg.BrightnessType;
             set
             {
                 m_SilkCfg.BrightnessType = value;
@@ -134,7 +135,7 @@ namespace SilkroadLauncher
         /// </summary>
         public SilkCfg.Graphic Graphics
         {
-            get { return m_SilkCfg.GraphicType; }
+            get => m_SilkCfg.GraphicType;
             set
             {
                 m_SilkCfg.GraphicType = value;
@@ -146,7 +147,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsSoundEnabled
         {
-            get { return m_SilkCfg.IsSoundEnabled; }
+            get => m_SilkCfg.IsSoundEnabled;
             set
             {
                 m_SilkCfg.IsSoundEnabled = value;
@@ -158,14 +159,13 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsWindowMode
         {
-            get { return (bool)m_SROptionSet.Options[SROptionSet.OptionID.IsWindowMode]; }
+            get => (bool)m_SROptionSet.Options[SROptionSet.OptionID.IsWindowMode];
             set
             {
                 m_SROptionSet.Options[SROptionSet.OptionID.IsWindowMode] = value;
                 OnPropertyChanged(nameof(IsWindowMode));
             }
         }
-
         /// <summary>
         /// All languages supported by the game
         /// </summary>
@@ -175,14 +175,23 @@ namespace SilkroadLauncher
         /// </summary>
         public int SupportedLanguageIndex
         {
-            get { return m_SupportedLanguageIndex; }
+            get => m_SupportedLanguageIndex;
             set
             {
                 m_SupportedLanguageIndex = value;
                 OnPropertyChanged(nameof(SupportedLanguageIndex));
                 // Set the language internally
                 m_Language = LauncherSettings.CLIENT_LANGUAGE_SUPPORTED[value];
+                // Raise event
+                OnPropertyChanged(nameof(Language));
             }
+        }
+        /// <summary>
+        /// Language mask selected by user
+        /// </summary>
+        public string Language
+        {
+            get { return LauncherSettings.CLIENT_LANGUAGE_SUPPORTED_MASK[SupportedLanguageIndex]; }
         }
         #endregion
 
@@ -396,10 +405,14 @@ namespace SilkroadLauncher
                         SROptionSet.OptionID id = (SROptionSet.OptionID)reader.ReadUInt32();
                         if (m_SROptionSet.Options.TryGetValue(id, out object value))
                         {
-                            if (value is bool) value = reader.ReadBoolean();
-                            else if (value is byte) value = reader.ReadByte();
-                            else if (value is ushort) value = reader.ReadUInt16();
-                            else if (value is uint) value = reader.ReadUInt32();
+                            if (value is bool)
+                                value = reader.ReadBoolean();
+                            else if (value is byte)
+                                value = reader.ReadByte();
+                            else if (value is ushort)
+                                value = reader.ReadUInt16();
+                            else if (value is uint)
+                                value = reader.ReadUInt32();
                             // Update the saved value
                             m_SROptionSet.Options[id] = value;
                         }
@@ -445,10 +458,14 @@ namespace SilkroadLauncher
                     // ID
                     writer.Write((uint)k_v.Key);
                     // Value
-                    if (k_v.Value is bool _bool) writer.Write(_bool);
-                    else if (k_v.Value is byte _byte) writer.Write(_byte);
-                    else if (k_v.Value is ushort _ushort) writer.Write(_ushort);
-                    else if (k_v.Value is uint _uint) writer.Write(_uint);
+                    if (k_v.Value is bool _bool)
+                        writer.Write(_bool);
+                    else if (k_v.Value is byte _byte)
+                        writer.Write(_byte);
+                    else if (k_v.Value is ushort _ushort)
+                        writer.Write(_ushort);
+                    else if (k_v.Value is uint _uint)
+                        writer.Write(_uint);
                 }
             }
             catch (Exception e)
@@ -475,16 +492,18 @@ namespace SilkroadLauncher
                 var match = Regex.Match(temp, "Language[ ]{0,1}=[ ]{0,1}[\"]{0,1}([a-zA-Z]*)[\"]{0,1}");
                 if (match.Success)
                 {
+                    m_TypeFile = temp;
                     // Try to find the index selected
                     for (int i = 0; i < LauncherSettings.CLIENT_LANGUAGE_SUPPORTED.Length; i++)
                     {
                         if (LauncherSettings.CLIENT_LANGUAGE_SUPPORTED[i] == match.Groups[1].Value)
                         {
-                            m_TypeFile = temp;
                             SupportedLanguageIndex = i;
                             return true;
                         }
                     }
+                    SupportedLanguageIndex = 0;
+                    return true;
                 }
             }
             return false;
@@ -501,7 +520,7 @@ namespace SilkroadLauncher
                 // Import to Pk2
                 if (Pk2Writer.Initialize("GFXFileManager.dll"))
                 {
-                    if (Pk2Writer.Open(LauncherSettings.PATH_PK2_MEDIA, LauncherSettings.CLIENT_BLOWFISH_KEY))
+                    if (Pk2Writer.Open(LauncherSettings.CLIENT_MEDIA_PK2_PATH, LauncherSettings.CLIENT_BLOWFISH_KEY))
                     {
                         // Create a temporary file
                         if (!Directory.Exists("Temp"))

@@ -1,10 +1,10 @@
 ﻿using Pk2ReaderAPI;
 using SilkroadLauncher.Network;
 using SilkroadLauncher.Utility;
+
 using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -54,7 +54,7 @@ namespace SilkroadLauncher
         /// <summary>
         /// Arguments used to start the game client
         /// </summary>
-        private string m_SRClientArguments;
+        private string m_ClientArgs;
         /// <summary>
         /// Indicates if the Pk2 has been loaded correctly
         /// </summary>
@@ -66,11 +66,19 @@ namespace SilkroadLauncher
         /// <summary>
         /// Game bsic config
         /// </summary>
-        private ConfigViewModel m_Config;
+        private ConfigViewModel m_Config = new ConfigViewModel();
+        /// <summary>
+        /// Indicates if the user is viewing language options
+        /// </summary>
+        private bool m_IsViewingLangConfig;
+        /// <summary>
+        /// Language temporally being selected as language option
+        /// </summary>
+        private int m_LangConfigIndex;
         /// <summary>
         /// The initial connection to server
         /// </summary>
-        private Session m_GatewaySession;
+        private Client m_GatewaySession;
         /// <summary>
         /// Indicates if the launcher is checking for updates
         /// </summary>
@@ -104,6 +112,14 @@ namespace SilkroadLauncher
         /// </summary>
         private int m_UpdatingPercentage;
         /// <summary>
+        /// The current file path being updated
+        /// </summary>
+        private string m_UpdatingFilePath;
+        /// <summary>
+        /// The current file progress updating percentage
+        /// </summary>
+        private int m_UpdatingFilePercentage;
+        /// <summary>
         /// Indicates if the game can be started
         /// </summary>
         private bool m_CanStartGame;
@@ -113,8 +129,9 @@ namespace SilkroadLauncher
         /// <summary>
         /// Application title shown on windows title bar
         /// </summary>
-        public string Title {
-            get { return m_Title; }
+        public string Title
+        {
+            get => m_Title;
             set
             {
                 m_Title = value;
@@ -126,7 +143,7 @@ namespace SilkroadLauncher
         /// </summary>
         public byte Locale
         {
-            get { return m_Locale; }
+            get => m_Locale;
             set
             {
                 // set new value
@@ -140,7 +157,7 @@ namespace SilkroadLauncher
         /// </summary>
         public uint Version
         {
-            get { return m_Version; }
+            get => m_Version;
             set
             {
                 // set new value
@@ -155,9 +172,9 @@ namespace SilkroadLauncher
         /// <summary>
         /// Client version shown to the user
         /// </summary>
-        public string ClientVersion 
+        public string ClientVersion
         {
-            get { return m_ClientVersion; }
+            get => m_ClientVersion;
             private set
             {
                 // set new value
@@ -171,7 +188,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsLoaded
         {
-            get { return m_IsLoaded; }
+            get => m_IsLoaded;
             private set
             {
                 // set new value
@@ -185,7 +202,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsViewingConfig
         {
-            get { return m_IsViewingConfig; }
+            get => m_IsViewingConfig;
             set
             {
                 // set new value
@@ -199,7 +216,7 @@ namespace SilkroadLauncher
         /// </summary>
         public ConfigViewModel Config
         {
-            get { return m_Config; }
+            get => m_Config;
             set
             {
                 // set new value
@@ -209,11 +226,39 @@ namespace SilkroadLauncher
             }
         }
         /// <summary>
+        /// Check if the launcher is on game language config window
+        /// </summary>
+        public bool IsViewingLangConfig
+        {
+            get => m_IsViewingLangConfig;
+            set
+            {
+                // set new value
+                m_IsViewingLangConfig = value;
+                // notify event
+                OnPropertyChanged(nameof(IsViewingLangConfig));
+            }
+        }
+        /// <summary>
+        /// Language temporally selected as new option
+        /// </summary>
+        public int LangConfigIndex
+        {
+            get => m_LangConfigIndex;
+            set
+            {
+                // set new value
+                m_LangConfigIndex = value;
+                // notify event
+                OnPropertyChanged(nameof(LangConfigIndex));
+            }
+        }
+        /// <summary>
         /// Check if the launcher is looking for update the client
         /// </summary>
         public bool IsCheckingUpdates
         {
-            get { return m_IsCheckingUpdates; }
+            get => m_IsCheckingUpdates;
             set
             {
                 // set new value
@@ -227,7 +272,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsUnderInspection
         {
-            get { return m_IsUnderInspection; }
+            get => m_IsUnderInspection;
             set
             {
                 // set new value
@@ -241,7 +286,7 @@ namespace SilkroadLauncher
         /// </summary>
         public List<WebNoticeViewModel> WebNotices
         {
-            get { return m_WebNotices; }
+            get => m_WebNotices;
             set
             {
                 m_WebNotices = value;
@@ -254,7 +299,7 @@ namespace SilkroadLauncher
         /// </summary>
         public WebNoticeViewModel SelectedWebNotice
         {
-            get { return m_SelectedWebNotice; }
+            get => m_SelectedWebNotice;
             set
             {
                 // set new value
@@ -268,7 +313,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsUpdating
         {
-            get { return m_IsUpdating; }
+            get => m_IsUpdating;
             set
             {
                 // set new value
@@ -278,25 +323,11 @@ namespace SilkroadLauncher
             }
         }
         /// <summary>
-        /// Get the current percentage from patch download
-        /// </summary>
-        public int UpdatingPercentage
-        {
-            get { return m_UpdatingPercentage; }
-            set {
-                if (m_UpdatingPercentage == value)
-                    return;
-
-                m_UpdatingPercentage = value;
-                OnPropertyChanged(nameof(UpdatingPercentage));
-            }
-        }
-        /// <summary>
         /// Get or sets the max. bytes quantity to be downloaded to apply patch
         /// </summary>
         public ulong UpdatingBytesMaxDownloading
         {
-            get { return m_UpdatingBytesMaxDownloading; }
+            get => m_UpdatingBytesMaxDownloading;
             set
             {
                 // set new value
@@ -310,7 +341,7 @@ namespace SilkroadLauncher
         /// </summary>
         public ulong UpdatingBytesDownloading
         {
-            get { return m_UpdatingBytesDownloading; }
+            get => m_UpdatingBytesDownloading;
             set
             {
                 // set new value
@@ -319,8 +350,47 @@ namespace SilkroadLauncher
                 OnPropertyChanged(nameof(UpdatingBytesDownloading));
 
                 // Set percentage
-                if(m_UpdatingBytesMaxDownloading != 0)
+                if (m_UpdatingBytesMaxDownloading != 0)
                     UpdatingPercentage = (int)(m_UpdatingBytesDownloading * 100ul / m_UpdatingBytesMaxDownloading);
+            }
+        }
+        /// <summary>
+        /// Get the current percentage from patch download
+        /// </summary>
+        public int UpdatingPercentage
+        {
+            get => m_UpdatingPercentage;
+            set
+            {
+                if (m_UpdatingPercentage == value)
+                    return;
+
+                m_UpdatingPercentage = value;
+                OnPropertyChanged(nameof(UpdatingPercentage));
+            }
+        }
+        /// <summary>
+        /// The current file being downloaded and imported
+        /// </summary>
+        public string UpdatingFilePath
+        {
+            get => m_UpdatingFilePath;
+            set
+            {
+                m_UpdatingFilePath = value;
+                OnPropertyChanged(nameof(UpdatingFilePath));
+            }
+        }
+        /// <summary>
+        /// Get the current file percentage being updated
+        /// </summary>
+        public int UpdatingFilePercentage
+        {
+            get => m_UpdatingFilePercentage;
+            set
+            {
+                m_UpdatingFilePercentage = value;
+                OnPropertyChanged(nameof(UpdatingFilePercentage));
             }
         }
         /// <summary>
@@ -328,7 +398,7 @@ namespace SilkroadLauncher
         /// </summary>
         public bool CanStartGame
         {
-            get { return m_CanStartGame; }
+            get => m_CanStartGame;
             set
             {
                 // set new value
@@ -337,6 +407,10 @@ namespace SilkroadLauncher
                 OnPropertyChanged(nameof(CanStartGame));
             }
         }
+        /// <summary>
+        /// Contains all assets to be displayed
+        /// </summary>
+        public LauncherAssets Assets { get; private set; }
         #endregion
 
         #region Commands
@@ -365,9 +439,17 @@ namespace SilkroadLauncher
         /// </summary>
         public ICommand CommandToggleConfig { get; set; }
         /// <summary>
+        /// Set the language window viewing state
+        /// </summary>
+        public ICommand CommandToggleLangConfig { get; set; }
+        /// <summary>
         /// Save the config file
         /// </summary>
         public ICommand CommandSaveConfig { get; set; }
+        /// <summary>
+        /// Save the config file
+        /// </summary>
+        public ICommand CommandSaveLangConfig { get; set; }
         #endregion
 
         #region Constructor
@@ -393,7 +475,7 @@ namespace SilkroadLauncher
             CommandStartGame = new RelayCommand(()=> {
                 // Starts the game but only if is ready and exists
                 if (CanStartGame && File.Exists(LauncherSettings.CLIENT_EXECUTABLE)) { 
-                    System.Diagnostics.Process.Start(LauncherSettings.CLIENT_EXECUTABLE, m_SRClientArguments);
+                    System.Diagnostics.Process.Start(LauncherSettings.CLIENT_EXECUTABLE, m_ClientArgs);
                     // Closing launcher
                     CommandClose.Execute(null);
                 }
@@ -412,6 +494,26 @@ namespace SilkroadLauncher
                 {
                     Config.Save();
                     IsViewingConfig = false;
+                }
+            });
+            CommandToggleLangConfig = new RelayCommand(() => {
+                // Update language selected currently
+                if (!IsViewingLangConfig)
+                    LangConfigIndex = Config.SupportedLanguageIndex;
+                IsViewingLangConfig = !IsViewingLangConfig;
+            });
+            CommandSaveLangConfig = new RelayCommand(() => {
+                // Make sure pk2 it's not being used
+                if (!IsUpdating)
+                {
+                    // Avoid unchecked selection
+                    if (LangConfigIndex != -1)
+                    {
+                        // Set new language selected
+                        Config.SupportedLanguageIndex = LangConfigIndex;
+                        Config.Save();
+                    }
+                    IsViewingLangConfig = false;
                 }
             });
             #endregion
@@ -440,51 +542,61 @@ namespace SilkroadLauncher
         /// <summary>
         /// Check and loads the patch updates
         /// </summary>
-        public async Task CheckUpdatesAsync()
+        public void CheckUpdatesAsync()
         {
-            // Avoid connection
             if (!IsLoaded)
                 return;
 
             IsCheckingUpdates = true;
-            // Check all IP's and try to connect one at least
-            m_GatewaySession = new Session();
 
-            // Add handlers for updating
-            m_GatewaySession.AddHandler(GatewayModule.Opcode.GLOBAL_IDENTIFICATION, new PacketHandler(GatewayModule.Server_GlobalIdentification));
-            m_GatewaySession.AddHandler(GatewayModule.Opcode.SERVER_PATCH_RESPONSE, new PacketHandler(GatewayModule.Server_PatchResponse));
-            m_GatewaySession.AddHandler(GatewayModule.Opcode.SERVER_SHARD_LIST_RESPONSE, new PacketHandler(GatewayModule.Server_ShardListResponse));
-            m_GatewaySession.AddHandler(GatewayModule.Opcode.SERVER_WEB_NOTICE_RESPONSE, new PacketHandler(GatewayModule.Server_WebNoticeResponse));
+            // Find the best connection
+            long bestTime = 0;
+            string hostAddress = null;
 
-            m_GatewaySession.Disconnect += new EventHandler((_Session, _Event) => {
-                System.Diagnostics.Debug.WriteLine("Gateway: Session disconnected");
-            });
-            bool connectionSolved = false;
-            // Save at the same time the connection arguments
-            int divIndex = 0, hostIndex = 0;
-            foreach (var division in m_DivisionInfo)
+            var divIdx = 0;
+            foreach (var div in m_DivisionInfo)
             {
-                for (int i = 0; i < division.Value.Count; i++)
+                for (var hostIdx = 0; hostIdx < div.Value.Count; hostIdx++)
                 {
-                    // Try to connect to the address
-                    System.Diagnostics.Debug.WriteLine("Starting Session..");
-                    connectionSolved = await Task.Run(() => m_GatewaySession.Start(division.Value[i], m_Gateport, 5000));
-                    if (connectionSolved)
+                    var session = new Client();
+                    // Connect to server and find the time used
+                    if (session.Start(div.Value[hostIdx], m_Gateport, 5000, out var elapsedTime))
                     {
-                        hostIndex = i;
-                        break;
+                        session.Stop();
+                        // Check the best time
+                        if (hostAddress == null || elapsedTime < bestTime)
+                        {
+                            hostAddress = div.Value[hostIdx];
+                            elapsedTime = bestTime;
+                            m_ClientArgs = "0 /" + m_Locale + " " + divIdx + " " + hostIdx;
+                        }
                     }
                 }
-                if (connectionSolved)
-                {
-                    m_SRClientArguments = "0 /" + m_Locale + " " + divIndex + " " + hostIndex;
-                    break;
-                }
-                divIndex++;
+                divIdx++;
             }
-            // Not able to connect to server
-            if (!connectionSolved)
+
+            // Start gateway connection
+            if (hostAddress != null)
             {
+                m_GatewaySession = new Client();
+                // Packet handlers
+                m_GatewaySession.RegisterHandler(GatewayModule.Opcode.GLOBAL_IDENTIFICATION, GatewayModule.Server_GlobalIdentification);
+                m_GatewaySession.RegisterHandler(GatewayModule.Opcode.SERVER_PATCH_RESPONSE, GatewayModule.Server_PatchResponse);
+                m_GatewaySession.RegisterHandler(GatewayModule.Opcode.SERVER_SHARD_LIST_RESPONSE, GatewayModule.Server_ShardListResponse);
+                m_GatewaySession.RegisterHandler(GatewayModule.Opcode.SERVER_WEB_NOTICE_RESPONSE, GatewayModule.Server_WebNoticeResponse);
+                // Event handlers
+                m_GatewaySession.OnConnect += (s, e) =>
+                {
+                    System.Diagnostics.Debug.WriteLine("Gateway: Session established");
+                };
+                m_GatewaySession.OnDisconnect += (s, e) => {
+                    System.Diagnostics.Debug.WriteLine("Gateway: Session disconnected [" + e.Exception.Message + "]");
+                };
+                m_GatewaySession.Start(hostAddress, m_Gateport, 5000, out _);
+            }
+            else
+            {
+                // Not being able to connect to the server
                 IsCheckingUpdates = false;
                 IsUnderInspection = true;
                 ShowMessage(LauncherSettings.MSG_INSPECTION);
@@ -512,31 +624,74 @@ namespace SilkroadLauncher
             try
             {
                 // Load pk2 reader
-                pk2Reader = new Pk2Reader(LauncherSettings.PATH_PK2_MEDIA,LauncherSettings.CLIENT_BLOWFISH_KEY);
+                pk2Reader = new Pk2Reader(LauncherSettings.CLIENT_MEDIA_PK2_PATH, LauncherSettings.CLIENT_BLOWFISH_KEY);
 
-                // Load settings
-                m_Config = new ConfigViewModel();
-                m_Config.Load(pk2Reader);
+                // Load assets from client
+                Assets = new LauncherAssets(pk2Reader);
 
                 // Extract essential stuffs for the process
-                if (pk2Reader.TryGetDivisionInfo(out m_DivisionInfo) 
-                    && pk2Reader.TryGetGateport(out m_Gateport) 
-                    && pk2Reader.TryGetVersion(out m_Version)
-                    && pk2Reader.TryGetLocale(out m_Locale))
+                if (pk2Reader.TryGetDivisionInfo(out m_DivisionInfo) && pk2Reader.TryGetGateport(out m_Gateport))
                 {
-                    IsLoaded = true;
-                    // Force string to be updated
-                    Version = m_Version;
+                    // Abort operations if host or port is not verified
+                    if (!VerifyHosts(m_DivisionInfo) || !VerifyPort(m_Gateport))
+                        return;
+
+                    // Load settings
+                    m_Config.Load(pk2Reader);
+                    // continue extracting
+                    if (pk2Reader.TryGetVersion(out m_Version)
+                    && pk2Reader.TryGetLocale(out m_Locale))
+                    {
+                        IsLoaded = true;
+                        // Force string to be updated
+                        Version = m_Version;
+                    }
                 }
             }
             catch (Exception ex)
             {
+                File.WriteAllText("error.txt", DateTime.Now.ToString() + ":" + ex.Message);
                 System.Diagnostics.Debug.WriteLine(ex);
+                // Forced shutdown
+                Application.Current.Shutdown();
             }
             finally
             {
                 pk2Reader?.Close();
             }
+        }
+        /// <summary>
+        /// Verify host used to start the game it's linked to launcher config
+        /// </summary>
+        private bool VerifyHosts(Dictionary<string, List<string>> divInfo)
+        {
+            // Verification not required
+            if (LauncherSettings.CLIENT_VERIFY_HOST.Length == 0)
+                return true;
+
+            // Check every host from divisions
+            foreach (var div in divInfo.Values)
+            {
+                foreach (var host in div)
+                {
+                    // Check if host is verified
+                    foreach (var h in LauncherSettings.CLIENT_VERIFY_HOST)
+                    {
+                        if (h != host)
+                            return false;
+                    }
+                }
+            }
+
+            // All host has been succeed
+            return true;
+        }
+        /// <summary>
+        /// Verify port used to start the game it's linked to launcher config
+        /// </summary>
+        private bool VerifyPort(int port)
+        {
+            return LauncherSettings.CLIENT_VERIFY_PORT == 0 || LauncherSettings.CLIENT_VERIFY_PORT == port;
         }
         #endregion
     }
