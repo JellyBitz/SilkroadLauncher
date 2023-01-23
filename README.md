@@ -1,16 +1,19 @@
 # SilkroadLauncher
-Customizable launcher writted on C# (WPF) for Silkroad Online (vSRO 1.188)
+Customizable launcher written on C# (WPF) for Silkroad Online (vSRO 1.188)
 
 ### Features
-- Create whatever design you can imagine
 - By using ViewModels, you won't need to worry about coding
-- News can be customized by using CSS
-- Auto updater included (support zlib)
-- Self replacer if is required
-- Downloading and update progress
-- Settings (even window mode has been added)
-- Client language switch support, [read more..](README.LANGUAGES.md)
-- 
+- NEWS can be customized with CSS
+- Auto updater with self replacer
+- Client language switch support (Korean, Chinese Traditional, Chinese Simplified, Japanese, English, Turkish, Spanish, Portuguese, German, Russian, Vietnamese, Arabic) [read more..](README.LANGUAGES.md)
+- Settings
+- Images are loaded from media (JPEG/PNG as .DAT)
+- Restrict it to work with your client only by verifying your host/port
+- Transparent background, gifs and videos, can be supported
+
+### Preview
+
+<img title="Silkroad Launcher - Default Theme" src="http://i.epvpimg.com/iji3aab.png">
 
 ---
 > ### Do you like this project ? 

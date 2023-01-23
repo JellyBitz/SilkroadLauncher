@@ -1,7 +1,7 @@
 # Language Support Guide
 
 Google sheet with all languages organized and translated right to be used with the client/launcher.
-Link: https://docs.google.com/spreadsheets/d/1qHcztTx9MsBwl3fyKYWWhHFg92anqWkbs-mGbxQGSQg
+Link: [Silkroad Texts - Google Spreadsheets](https://docs.google.com/spreadsheets/d/1qHcztTx9MsBwl3fyKYWWhHFg92anqWkbs-mGbxQGSQg)
 
 ## How to use it?
 
