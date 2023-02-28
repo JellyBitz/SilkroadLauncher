@@ -5,6 +5,7 @@ using SilkroadLauncher.Utility;
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Runtime.InteropServices;
 using System.Windows;
 using System.Windows.Input;
 
@@ -15,6 +16,9 @@ namespace SilkroadLauncher
     /// </summary>
     public class LauncherViewModel : BaseViewModel
     {
+        [DllImport("kernel32.dll")]
+        private static extern IntPtr CreateMutex(IntPtr lpMutexAttributes, bool bInitialOwner, string lpName);
+
         #region Singleton
         /// <summary>
         /// Unique instance of this class
@@ -620,6 +624,10 @@ namespace SilkroadLauncher
         /// </summary>
         private void Initialize()
         {
+            // Create mutex required to execute client
+            CreateMutex(IntPtr.Zero, false, "Silkroad Online Launcher");
+            CreateMutex(IntPtr.Zero, false, "Ready");
+            // Load Pk2 Data
             Pk2Reader pk2Reader = null;
             try
             {
