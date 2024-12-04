@@ -1,6 +1,6 @@
-﻿using Pk2ReaderAPI;
-using SilkroadLauncher.Network;
+﻿using SilkroadLauncher.Network;
 using SilkroadLauncher.Utility;
+using SRO.PK2API;
 
 using System;
 using System.Collections.Generic;
@@ -603,7 +603,7 @@ namespace SilkroadLauncher
                 // Not being able to connect to the server
                 IsCheckingUpdates = false;
                 IsUnderInspection = true;
-                ShowMessage(LauncherSettings.MSG_INSPECTION);
+                ShowMessage(string.Format(LauncherSettings.MSG_INSPECTION,Assets.LinkWebsite));
             }
         }
         /// <summary>
@@ -628,27 +628,27 @@ namespace SilkroadLauncher
             CreateMutex(IntPtr.Zero, false, "Silkroad Online Launcher");
             CreateMutex(IntPtr.Zero, false, "Ready");
             // Load Pk2 Data
-            Pk2Reader pk2Reader = null;
+            Pk2Stream pk2Stream = null;
             try
             {
                 // Load pk2 reader
-                pk2Reader = new Pk2Reader(LauncherSettings.CLIENT_MEDIA_PK2_PATH, LauncherSettings.CLIENT_BLOWFISH_KEY);
+                pk2Stream = new Pk2Stream(LauncherSettings.CLIENT_MEDIA_PK2_PATH, LauncherSettings.CLIENT_BLOWFISH_KEY);
 
                 // Load assets from client
-                Assets = new LauncherAssets(pk2Reader);
+                Assets = new LauncherAssets(pk2Stream);
 
                 // Extract essential stuffs for the process
-                if (pk2Reader.TryGetDivisionInfo(out m_DivisionInfo) && pk2Reader.TryGetGateport(out m_Gateport))
+                if (pk2Stream.TryGetDivisionInfo(out m_DivisionInfo) && pk2Stream.TryGetGateport(out m_Gateport))
                 {
                     // Abort operations if host or port is not verified
                     if (!VerifyHosts(m_DivisionInfo) || !VerifyPort(m_Gateport))
                         return;
 
                     // Load settings
-                    m_Config.Load(pk2Reader);
+                    m_Config.Load(pk2Stream);
                     // continue extracting
-                    if (pk2Reader.TryGetVersion(out m_Version)
-                    && pk2Reader.TryGetLocale(out m_Locale))
+                    if (pk2Stream.TryGetVersion(out m_Version)
+                    && pk2Stream.TryGetLocale(out m_Locale))
                     {
                         IsLoaded = true;
                         // Force string to be updated
@@ -658,14 +658,15 @@ namespace SilkroadLauncher
             }
             catch (Exception ex)
             {
-                File.WriteAllText("error.txt", DateTime.Now.ToString() + ":" + ex.Message);
+                Directory.CreateDirectory("Dump");
+                File.WriteAllText("Dump/error.log", DateTime.Now.ToString() + ":" + ex);
                 System.Diagnostics.Debug.WriteLine(ex);
                 // Forced shutdown
                 Application.Current.Shutdown();
             }
             finally
             {
-                pk2Reader?.Close();
+                pk2Stream?.Dispose();
             }
         }
         /// <summary>

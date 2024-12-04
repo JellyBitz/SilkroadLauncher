@@ -1,7 +1,7 @@
-﻿using Pk2WriterAPI;
-using SilkroadCommon;
+﻿using SilkroadCommon;
 using SilkroadCommon.Download;
 using SilkroadSecurityAPI;
+using SRO.PK2API;
 
 using System.Collections.Generic;
 
@@ -95,33 +95,25 @@ namespace SilkroadLauncher.Network
                             // Start downloader protocol
                             if (DownloadModule.DownloadFiles.Count > 0)
                             {
-                                // Try to load the GFXFileManager
-                                if (Pk2Writer.Initialize("GFXFileManager.dll"))
-                                {
-                                    // Start downloading patch
-                                    LauncherViewModel.Instance.IsUpdating = true;
-                                    System.Diagnostics.Debug.WriteLine("Downloading updates...");
+                                // Start downloading patch
+                                LauncherViewModel.Instance.IsUpdating = true;
+                                System.Diagnostics.Debug.WriteLine("Downloading updates...");
 
-                                    var downloadSession = new Client();
-                                    // Packet handlers
-                                    downloadSession.RegisterHandler(DownloadModule.Opcode.SERVER_READY, DownloadModule.Server_Ready);
-                                    downloadSession.RegisterHandler(DownloadModule.Opcode.SERVER_FILE_CHUNK, DownloadModule.Server_FileChunk);
-                                    downloadSession.RegisterHandler(DownloadModule.Opcode.SERVER_FILE_COMPLETED, DownloadModule.Server_FileCompleted);
-                                    // Event handlers
-                                    downloadSession.OnConnect += (_s, _e) =>
-                                    {
-                                        System.Diagnostics.Debug.WriteLine("Download: Session established");
-                                    };
-                                    downloadSession.OnDisconnect += (_s, _e) => {
-                                        System.Diagnostics.Debug.WriteLine("Download: Session disconnected [" + _e.Exception.Message + "]");
-                                    };
-
-                                    downloadSession.Start(DownloadServerIP, DownloadServerPort, 10000, out _);
-                                }
-                                else
+                                var downloadSession = new Client();
+                                // Packet handlers
+                                downloadSession.RegisterHandler(DownloadModule.Opcode.SERVER_READY, DownloadModule.Server_Ready);
+                                downloadSession.RegisterHandler(DownloadModule.Opcode.SERVER_FILE_CHUNK, DownloadModule.Server_FileChunk);
+                                downloadSession.RegisterHandler(DownloadModule.Opcode.SERVER_FILE_COMPLETED, DownloadModule.Server_FileCompleted);
+                                // Event handlers
+                                downloadSession.OnConnect += (_s, _e) =>
                                 {
-                                    LauncherViewModel.Instance.ShowMessage(LauncherSettings.MSG_ERR_GFXDLL_NOT_FOUND);
-                                }
+                                    System.Diagnostics.Debug.WriteLine("Download: Session established");
+                                };
+                                downloadSession.OnDisconnect += (_s, _e) => {
+                                    System.Diagnostics.Debug.WriteLine("Download: Session disconnected [" + _e.Exception.Message + "]");
+                                };
+
+                                downloadSession.Start(DownloadServerIP, DownloadServerPort, 10000, out _);
                             }
                         }
                         break;
@@ -129,7 +121,7 @@ namespace SilkroadLauncher.Network
                             LauncherViewModel.Instance.ShowMessage(LauncherSettings.MSG_PATCH_UNABLE);
                             break;
                         case 5:
-                            LauncherViewModel.Instance.ShowMessage(LauncherSettings.MSG_PATCH_TOO_OLD);
+                            LauncherViewModel.Instance.ShowMessage(string.Format(LauncherSettings.MSG_PATCH_TOO_OLD, LauncherViewModel.Instance.Assets.LinkWebsite));
                             break;
                         case 1:
                             LauncherViewModel.Instance.ShowMessage(LauncherSettings.MSG_PATCH_TOO_NEW);

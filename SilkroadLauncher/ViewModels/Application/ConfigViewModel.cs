@@ -1,12 +1,13 @@
-﻿using Pk2ReaderAPI;
-using Pk2WriterAPI;
-using SilkroadLauncher.SilkroadCommon;
+﻿using SilkroadLauncher.SilkroadCommon;
 using SilkroadLauncher.SilkroadCommon.Setting;
+using SilkroadLauncher.Utility;
+using SRO.PK2API;
 
 using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Text;
 using System.Text.RegularExpressions;
 using System.Windows.Forms;
 
@@ -241,7 +242,7 @@ namespace SilkroadLauncher
         /// <summary>
         /// Load settings or create a new one
         /// </summary>
-        public void Load(Pk2Reader pk2Reader)
+        public void Load(Pk2Stream pk2Reader)
         {
             // Loads language from pk2
             LoadTypeFile(pk2Reader);
@@ -480,11 +481,11 @@ namespace SilkroadLauncher
         /// <summary>
         /// Try to load the Type file from the Pk2
         /// </summary>
-        /// <param name="Pk2Reader">Pk2 used to search</param>
+        /// <param name="Pk2Stream">Pk2 used to search</param>
         /// <returns>Return success</returns>
-        private bool LoadTypeFile(Pk2Reader Pk2Reader)
+        private bool LoadTypeFile(Pk2Stream Pk2Stream)
         {
-            var temp = Pk2Reader.GetFileText("Type.txt");
+            var temp = Pk2Stream.GetFileText("Type.txt");
             // Check if file has been found
             if (temp != null)
             {
@@ -518,22 +519,16 @@ namespace SilkroadLauncher
                 // Replace value
                 m_TypeFile = Regex.Replace(m_TypeFile, "Language[ ]{0,1}=[ ]{0,1}[\"]{0,1}([a-zA-Z]*)[\"]{0,1}", "Language = \"" + m_Language + "\"");
                 // Import to Pk2
-                if (Pk2Writer.Initialize("GFXFileManager.dll"))
+                try
                 {
-                    if (Pk2Writer.Open(LauncherSettings.CLIENT_MEDIA_PK2_PATH, LauncherSettings.CLIENT_BLOWFISH_KEY))
+                    using (var pk2 = new Pk2Stream(LauncherSettings.CLIENT_MEDIA_PK2_PATH, LauncherSettings.CLIENT_BLOWFISH_KEY))
                     {
-                        // Create a temporary file
-                        if (!Directory.Exists("Temp"))
-                            Directory.CreateDirectory("Temp");
-                        File.WriteAllText("Temp\\Type.txt", m_TypeFile);
-                        // Edit Pk2
-                        Pk2Writer.ImportFile("Type.txt", "Temp\\Type.txt");
-                        // Delete temporary file
-                        File.Delete("Temp\\Type.txt");
-                        // Close Pk2
-                        Pk2Writer.Close();
-                        Pk2Writer.Deinitialize();
+                        pk2.AddFile("Type.txt", Encoding.UTF8.GetBytes(m_TypeFile));
                     }
+                }
+                catch
+                {
+
                 }
             }
         }

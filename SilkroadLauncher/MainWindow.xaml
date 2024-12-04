@@ -55,7 +55,7 @@
             <Button Grid.Column="1"
                     Style="{StaticResource ButtonWebsiteLinkStyle}"
                     Command="{Binding CommandOpenLink}"
-                    CommandParameter="www.silkroadonline.net">
+                    CommandParameter="{Binding Assets.LinkWebsite}">
             </Button>
         </Grid>
 

@@ -1,0 +1,4 @@
+[submodule "SilkroadLauncher/Resources/Packages/SRO.PK2API"]
+	path = SilkroadLauncher/Resources/Packages/SRO.PK2API
+	url = git@github.com:JellyBitz/SRO.PK2API.git
+	branch = master

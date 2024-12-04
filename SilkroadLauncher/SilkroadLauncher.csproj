@@ -91,10 +91,6 @@
     <Compile Include="Network\GatewayModule.cs" />
     <Compile Include="Network\ClientMsgHandler.cs" />
     <Compile Include="Network\Client.cs" />
-    <Compile Include="Pk2ReaderAPI\Pk2File.cs" />
-    <Compile Include="Pk2ReaderAPI\Pk2Folder.cs" />
-    <Compile Include="Pk2ReaderAPI\Pk2Reader.cs" />
-    <Compile Include="Pk2WriterAPI\Pk2Writer.cs" />
     <Compile Include="LauncherSettings.cs" />
     <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\Adapters\BrushAdapter.cs" />
     <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer.WPF\Adapters\ContextMenuAdapter.cs" />
@@ -188,6 +184,14 @@
     <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\HtmlUtils.cs" />
     <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\RenderUtils.cs" />
     <Compile Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\SubString.cs" />
+    <Compile Include="Resources\Packages\SRO.PK2API\SRO.PK2API\SRO.PK2API.Security\Blowfish.cs" />
+    <Compile Include="Resources\Packages\SRO.PK2API\SRO.PK2API\SRO.PK2API.Utility\BlowfishHelpers.cs" />
+    <Compile Include="Resources\Packages\SRO.PK2API\SRO.PK2API\SRO.PK2API.Utility\ByteArrayHelpers.cs" />
+    <Compile Include="Resources\Packages\SRO.PK2API\SRO.PK2API\SRO.PK2API.Utility\FileStreamHelpers.cs" />
+    <Compile Include="Resources\Packages\SRO.PK2API\SRO.PK2API\SRO.PK2API\JMXPACK.cs" />
+    <Compile Include="Resources\Packages\SRO.PK2API\SRO.PK2API\SRO.PK2API\Pk2File.cs" />
+    <Compile Include="Resources\Packages\SRO.PK2API\SRO.PK2API\SRO.PK2API\Pk2Folder.cs" />
+    <Compile Include="Resources\Packages\SRO.PK2API\SRO.PK2API\SRO.PK2API\Pk2Stream.cs" />
     <Compile Include="SilkroadCommon\SilkCfg.cs" />
     <Compile Include="SilkroadCommon\Download\FileEntry.cs" />
     <Compile Include="SilkroadCommon\Setting\SROptionSet.cs" />
@@ -200,7 +204,7 @@
     <Compile Include="SilkroadSecurityAPI\TransferBuffer.cs" />
     <Compile Include="SilkroadSecurityAPI\Utility.cs" />
     <Compile Include="Utility\ExpressionHelpers.cs" />
-    <Compile Include="Utility\Pk2ReaderHelpers.cs" />
+    <Compile Include="Utility\Pk2StreamHelpers.cs" />
     <Compile Include="Utility\SocketHelpers.cs" />
     <Compile Include="Utility\TaskHelpers.cs" />
     <Compile Include="ValueConverters\BaseValueConverter.cs" />
@@ -290,11 +294,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Resource Include="Resources\Fonts\Amarante-Regular.ttf" />
-    <Resource Include="Resources\Fonts\fa-brands-400.ttf" />
-    <Resource Include="Resources\Fonts\fa-light-300.ttf" />
-    <Resource Include="Resources\Fonts\fa-regular-400.ttf" />
-    <Resource Include="Resources\Fonts\fa-solid-900.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -305,10 +304,9 @@
   <ItemGroup>
     <Resource Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\ImageError.png" />
     <Resource Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\ImageLoad.png" />
-    <Content Include="Pk2Writer.dll">
-      <CopyToOutputDirectory>PreserveNewest</CopyToOutputDirectory>
-    </Content>
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Resources\Fonts\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
