@@ -1,5 +1,5 @@
-﻿using Pk2ReaderAPI;
-using SilkroadLauncher.Utility;
+﻿using SilkroadLauncher.Utility;
+using SRO.PK2API;
 
 using System.Windows.Media;
 
@@ -54,48 +54,48 @@ namespace SilkroadLauncher
         #endregion
 
         #region Constructor
-        public LauncherAssets(Pk2Reader reader)
+        public LauncherAssets(Pk2Stream pk2Stream)
         {
-            Background = new ImageBrush(reader.GetImage("launcher_wpf_fire/background.dat"));
+            Background = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/background.dat"));
 
-            ButtonStartGame = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_start.dat"));
-            ButtonStartGameDisabled = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_start_disabled.dat"));
-            ButtonStartGameHover = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_start_hover.dat"));
-            ButtonStartGamePressed = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_start_pressed.dat"));
-            ButtonExit = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_exit.dat"));
-            ButtonExitHover = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_exit_hover.dat"));
-            ButtonExitPressed = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_exit_pressed.dat"));
-            ButtonWebsite = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_website.dat"));
-            ButtonWebsiteHover = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_website_hover.dat"));
-            ButtonWebsitePressed = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_website_pressed.dat"));
-            ButtonDiscord = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_discord.dat"));
-            ButtonDiscordHover = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_discord_hover.dat"));
-            ButtonDiscordPressed = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_discord_pressed.dat"));
-            ButtonFacebook = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_facebook.dat"));
-            ButtonFacebookHover = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_facebook_hover.dat"));
-            ButtonFacebookPressed = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_facebook_pressed.dat"));
+            ButtonStartGame = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_start.dat"));
+            ButtonStartGameDisabled = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_start_disabled.dat"));
+            ButtonStartGameHover = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_start_hover.dat"));
+            ButtonStartGamePressed = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_start_pressed.dat"));
+            ButtonExit = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_exit.dat"));
+            ButtonExitHover = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_exit_hover.dat"));
+            ButtonExitPressed = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_exit_pressed.dat"));
+            ButtonWebsite = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_website.dat"));
+            ButtonWebsiteHover = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_website_hover.dat"));
+            ButtonWebsitePressed = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_website_pressed.dat"));
+            ButtonDiscord = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_discord.dat"));
+            ButtonDiscordHover = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_discord_hover.dat"));
+            ButtonDiscordPressed = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_discord_pressed.dat"));
+            ButtonFacebook = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_facebook.dat"));
+            ButtonFacebookHover = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_facebook_hover.dat"));
+            ButtonFacebookPressed = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_facebook_pressed.dat"));
 
-            TextLanguageBackground = new ImageBrush(reader.GetImage("launcher_wpf_fire/text_language_background.dat"));
-            ButtonLanguage = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_language.dat"));
-            ButtonLanguageHover = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_language_hover.dat"));
-            ButtonLanguagePressed = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_language_pressed.dat"));
+            TextLanguageBackground = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/text_language_background.dat"));
+            ButtonLanguage = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_language.dat"));
+            ButtonLanguageHover = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_language_hover.dat"));
+            ButtonLanguagePressed = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_language_pressed.dat"));
 
-            PopupLanguageBackground = new ImageBrush(reader.GetImage("launcher_wpf_fire/popup_language_background.dat"));
-            CheckboxLanguage = new ImageBrush(reader.GetImage("launcher_wpf_fire/checkbox_language.dat"));
-            CheckboxLanguageChecked = new ImageBrush(reader.GetImage("launcher_wpf_fire/checkbox_language_checked.dat"));
-            ButtonLanguageOk = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_language_ok.dat"));
-            ButtonLanguageOkHover = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_language_ok_hover.dat"));
-            ButtonLanguageOkPressed = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_language_ok_pressed.dat"));
-            ButtonLanguageCancel = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_language_cancel.dat"));
-            ButtonLanguageCancelHover = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_language_cancel_hover.dat"));
-            ButtonLanguageCancelPressed = new ImageBrush(reader.GetImage("launcher_wpf_fire/button_language_cancel_pressed.dat"));
+            PopupLanguageBackground = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/popup_language_background.dat"));
+            CheckboxLanguage = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/checkbox_language.dat"));
+            CheckboxLanguageChecked = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/checkbox_language_checked.dat"));
+            ButtonLanguageOk = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_language_ok.dat"));
+            ButtonLanguageOkHover = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_language_ok_hover.dat"));
+            ButtonLanguageOkPressed = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_language_ok_pressed.dat"));
+            ButtonLanguageCancel = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_language_cancel.dat"));
+            ButtonLanguageCancelHover = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_language_cancel_hover.dat"));
+            ButtonLanguageCancelPressed = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/button_language_cancel_pressed.dat"));
 
-            ProgressbarBackground = new ImageBrush(reader.GetImage("launcher_wpf_fire/progressbar_background.dat"));
-            ProgressbarFill = new ImageBrush(reader.GetImage("launcher_wpf_fire/progressbar_fill.dat"));
+            ProgressbarBackground = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/progressbar_background.dat"));
+            ProgressbarFill = new ImageBrush(pk2Stream.GetImage("launcher_wpf_fire/progressbar_fill.dat"));
 
-            LinkWebsite = reader.GetFileText("launcher_wpf_fire/link_website.txt");
-            LinkDiscord = reader.GetFileText("launcher_wpf_fire/link_discord.txt");
-            LinkFacebook = reader.GetFileText("launcher_wpf_fire/link_facebook.txt");
+            LinkWebsite = pk2Stream.GetFileText("launcher_wpf_fire/link_website.txt");
+            LinkDiscord = pk2Stream.GetFileText("launcher_wpf_fire/link_discord.txt");
+            LinkFacebook = pk2Stream.GetFileText("launcher_wpf_fire/link_facebook.txt");
         }
         #endregion
     }
