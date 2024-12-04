@@ -111,7 +111,7 @@ namespace SilkroadLauncher.Network
                 }
                 else
                 {
-                    LauncherViewModel.Instance.ShowMessage("Fatal error updating \"" + file.Name + "\" from \"" + pk2Name + "\"!");
+                    LauncherViewModel.Instance.ShowMessage(string.Format(LauncherSettings.MSG_ERR_FILE_UPDATE, file.Name) + " (\"" + pk2FileName + "\")");
                     LauncherViewModel.Instance.Exit();
                 }
                 // Delete the file
