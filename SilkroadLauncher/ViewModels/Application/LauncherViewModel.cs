@@ -603,7 +603,7 @@ namespace SilkroadLauncher
                 // Not being able to connect to the server
                 IsCheckingUpdates = false;
                 IsUnderInspection = true;
-                ShowMessage(LauncherSettings.MSG_INSPECTION);
+                ShowMessage(string.Format(LauncherSettings.MSG_INSPECTION, Assets.LinkWebsite));
             }
         }
         /// <summary>
@@ -658,7 +658,8 @@ namespace SilkroadLauncher
             }
             catch (Exception ex)
             {
-                File.WriteAllText("error.txt", DateTime.Now.ToString() + ":" + ex.Message);
+                Directory.CreateDirectory("Dump");
+                File.WriteAllText("Dump/error.log", DateTime.Now.ToString() + ":" + ex);
                 System.Diagnostics.Debug.WriteLine(ex);
                 // Forced shutdown
                 Application.Current.Shutdown();

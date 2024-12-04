@@ -151,14 +151,15 @@ namespace SilkroadLauncher.Utility
         /// </summary>
         public static string GetFileText(this Pk2Stream pk2Stream, string path, int codepage = 65001)
         {
-            return Encoding.GetEncoding(codepage).GetString(pk2Stream.GetFile(path).GetContent());
+            var f = pk2Stream.GetFile(path) ?? throw new FileNotFoundException("Pk2 file not found", path);
+            return Encoding.GetEncoding(codepage).GetString(f.GetContent());
         }
         /// <summary>
         /// Gets image from path
         /// </summary>
         public static BitmapImage GetImage(this Pk2Stream pk2Stream, string path)
         {
-            var f = pk2Stream.GetFile(path) ?? throw new FileNotFoundException("Pk2 file not found \"" + path + "\"");
+            var f = pk2Stream.GetFile(path) ?? throw new FileNotFoundException("Pk2 file not found", path);
             var bm = new BitmapImage();
             // copy from stream
             bm.BeginInit();
