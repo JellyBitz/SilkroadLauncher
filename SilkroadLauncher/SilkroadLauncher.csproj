@@ -294,11 +294,6 @@
       <Generator>SettingsSingleFileGenerator</Generator>
       <LastGenOutput>Settings.Designer.cs</LastGenOutput>
     </None>
-    <Resource Include="Resources\Fonts\Amarante-Regular.ttf" />
-    <Resource Include="Resources\Fonts\fa-brands-400.ttf" />
-    <Resource Include="Resources\Fonts\fa-light-300.ttf" />
-    <Resource Include="Resources\Fonts\fa-regular-400.ttf" />
-    <Resource Include="Resources\Fonts\fa-solid-900.ttf" />
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
@@ -310,6 +305,8 @@
     <Resource Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\ImageError.png" />
     <Resource Include="Resources\Packages\HTML-Renderer\HtmlRenderer\Core\Utils\ImageLoad.png" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Resources\Fonts\" />
+  </ItemGroup>
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
 </Project>
