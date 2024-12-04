@@ -43,9 +43,10 @@
         public static string[]
             CLIENT_VERIFY_HOST = new string[] {
                 // Example:
+                "login.srofire.com"
                 //"127.0.0.1", // Launcher will work at local servers only
             };
         /// Restrict port used to connect (0 = disabled)
-        public static ushort CLIENT_VERIFY_PORT = 0;
+        public static ushort CLIENT_VERIFY_PORT = 5000;
     }
 }
