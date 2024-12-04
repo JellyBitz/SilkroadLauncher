@@ -12,9 +12,9 @@
 
         // Messages
         public static string
-            MSG_INSPECTION = "The server is undergoing inspection or updates.\nConnect to https://SilkroadOnline.com/ for more information.",
+            MSG_INSPECTION = "The server is undergoing inspection or updates.\nConnect to {0} for more information.",
             MSG_PATCH_UNABLE = "We're sorry, the download server is down.\nPlease, try again later.",
-            MSG_PATCH_TOO_OLD = "Your version is too old.\nConnect to https://SilkroadOnline.com/ to download the new client.",
+            MSG_PATCH_TOO_OLD = "Your version is too old.\nConnect to {0} to download the new client.",
             MSG_PATCH_TOO_NEW = "Your version is too new.\nDo you want to talk us about it? ;)",
             MSG_ERR_FILE_UPDATE = "Fatal error updating \"{0}\"!";
 

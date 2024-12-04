@@ -72,6 +72,8 @@ namespace SilkroadLauncher
         public ImageBrush SettingsSaveButtonOnPressed { get; }
         public ImageBrush SettingsCheckbox { get; }
         public ImageBrush SettingsCheckboxChecked { get; }
+
+        public string LinkWebsite { get; }
         #endregion
 
         #region Constructor
@@ -138,6 +140,8 @@ namespace SilkroadLauncher
             SettingsSaveButtonOnPressed = new ImageBrush(reader.GetImage("launcher_wpf/settings/save_button_onpressed.dat"));
             SettingsCheckbox = new ImageBrush(reader.GetImage("launcher_wpf/settings/checkbox.dat"));
             SettingsCheckboxChecked = new ImageBrush(reader.GetImage("launcher_wpf/settings/checkbox_checked.dat"));
+
+            LinkWebsite = reader.GetFileText("launcher_wpf/link_website.txt");
         }
         #endregion
     }

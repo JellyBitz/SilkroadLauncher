@@ -5,6 +5,7 @@
 
     <!-- Checkbox Base Style -->
     <SolidColorBrush x:Key="CheckBoxFillNormal" Color="#F4F4F4"/>
+    <SolidColorBrush x:Key="CheckBoxStroke" Color="#8E8F8F"/>
     <Style x:Key="CheckBoxLanguageStyle" TargetType="{x:Type CheckBox}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
         <Setter Property="Background" Value="{StaticResource CheckBoxFillNormal}"/>
@@ -40,7 +41,6 @@
     </Style>
     
     <!-- RadioButton Base Style -->
-    <SolidColorBrush x:Key="CheckBoxStroke" Color="#8E8F8F"/>
     <Style x:Key="RadioButtonBaseStyle" TargetType="{x:Type RadioButton}">
         <Setter Property="Foreground" Value="White"/>
         <Setter Property="BorderBrush" Value="{StaticResource CheckBoxStroke}"/>

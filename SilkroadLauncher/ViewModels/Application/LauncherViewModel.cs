@@ -603,7 +603,7 @@ namespace SilkroadLauncher
                 // Not being able to connect to the server
                 IsCheckingUpdates = false;
                 IsUnderInspection = true;
-                ShowMessage(LauncherSettings.MSG_INSPECTION);
+                ShowMessage(string.Format(LauncherSettings.MSG_INSPECTION,Assets.LinkWebsite));
             }
         }
         /// <summary>
