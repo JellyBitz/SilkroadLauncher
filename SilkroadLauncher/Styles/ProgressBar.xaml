@@ -4,6 +4,7 @@
 
     <!-- Progressbar for application  -->
     <Style x:Key="ProgressBarImageFill" TargetType="{x:Type ProgressBar}">
+        <Setter Property="Background" Value="#00000000"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ProgressBar}">
@@ -14,9 +15,9 @@
                                 ClipToBounds="True"
                                 HorizontalAlignment="Left">
                             <Border x:Name="ImageFill"
-                                    Width="{Binding Path=ActualWidth, ElementName=PART_Track}" 
+                                    Width="{Binding Path=ActualWidth, ElementName=PART_Track}"
                                     Height="{Binding Path=ActualHeight, ElementName=PART_Track}"
-                                    Background="{Binding Assets.UpdatingBar}"/>
+                                    Background="{Binding Assets.ProgressbarFill}"/>
                         </Canvas>
                     </Grid>
                 </ControlTemplate>

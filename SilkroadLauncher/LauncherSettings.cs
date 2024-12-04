@@ -22,32 +22,15 @@
         // Languages availables
         public static string[]
             CLIENT_LANGUAGE_SUPPORTED = new string[]{
-                "Korean", // 1
                 "Chinese", // 4
-                "Japan", // 6
-                "English", // 7
                 "Turkey", // 11
-                "Spain", // 12
-                "Taiwan", // 5 (as Deutch)
-                "Russia", // 10
-                "Arabic", // 13
-                "Vietnam", // 8
-                "Thailand", // 9 (as Portuguese)
+                "English", // 7
             };
         public static string[]
             CLIENT_LANGUAGE_SUPPORTED_MASK = new string[]{
-                "한국어‫",
-                //"中文(繁體)", // Chinese (Traditional)
+                "中文(繁體)", // Chinese (Traditional)
                 "中文(简体)", // Chinese (Simplified)
-                "日本語‫",
                 "English",
-                "Türkçe",
-                "Español",
-                "Deutsch",
-                "Русский",
-                "العربية",
-                "Tiếng Việt",
-                "Portuguese",
             };
 
         // Client settings

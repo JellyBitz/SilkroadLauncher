@@ -2,13 +2,10 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:SilkroadLauncher"
                     xmlns:Themes="clr-namespace:Microsoft.Windows.Themes;assembly=PresentationFramework.Aero">
-
     <!-- Checkbox Base Style -->
-    <SolidColorBrush x:Key="CheckBoxFillNormal" Color="#F4F4F4"/>
     <Style x:Key="CheckBoxLanguageStyle" TargetType="{x:Type CheckBox}">
         <Setter Property="Foreground" Value="{DynamicResource {x:Static SystemColors.ControlTextBrushKey}}"/>
-        <Setter Property="Background" Value="{StaticResource CheckBoxFillNormal}"/>
-        <Setter Property="BorderBrush" Value="{StaticResource CheckBoxStroke}"/>
+        <Setter Property="Background" Value="#F4F4F4"/>
         <Setter Property="BorderThickness" Value="1"/>
         <Setter Property="Template">
             <Setter.Value>
@@ -17,7 +14,7 @@
                     <StackPanel Orientation="Horizontal">
                         <Border x:Name="xCheck"
                                 HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                Background="{Binding DataContext.Assets.LanguagePopupCheckbox,RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}"
+                                Background="{Binding DataContext.Assets.CheckboxLanguage,RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}"
                                 Width="16" Height="16"/>
                         <ContentPresenter x:Name="xContent"
                                           HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
@@ -28,7 +25,7 @@
                     <!-- Events -->
                     <ControlTemplate.Triggers>
                         <Trigger Property="IsChecked" Value="true">
-                            <Setter TargetName="xCheck" Property="Background" Value="{Binding DataContext.Assets.LanguagePopupCheckboxChecked,RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}"/>
+                            <Setter TargetName="xCheck" Property="Background" Value="{Binding DataContext.Assets.CheckboxLanguageChecked,RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}"/>
                         </Trigger>
                         <Trigger Property="HasContent" Value="true">
                             <Setter TargetName="xContent" Property="Margin" Value="4 2 0 0"/>
@@ -38,40 +35,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
-    <!-- RadioButton Base Style -->
-    <SolidColorBrush x:Key="CheckBoxStroke" Color="#8E8F8F"/>
-    <Style x:Key="RadioButtonBaseStyle" TargetType="{x:Type RadioButton}">
-        <Setter Property="Foreground" Value="White"/>
-        <Setter Property="BorderBrush" Value="{StaticResource CheckBoxStroke}"/>
-        <Setter Property="BorderThickness" Value="1"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type RadioButton}">
-                    <!-- CheckBox Mark -->
-                    <StackPanel Orientation="Horizontal">
-                        <Border x:Name="xCheck"
-                                HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                Background="{Binding Assets.SettingsCheckbox}"
-                                Width="20" Height="20"/>
-                        <ContentPresenter x:Name="xContent"
-                                          HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                          Margin="{TemplateBinding Padding}"
-                                          RecognizesAccessKey="True"
-                                          VerticalAlignment="{TemplateBinding VerticalContentAlignment}"/>
-                    </StackPanel>
-                    <!-- Events -->
-                    <ControlTemplate.Triggers>
-                        <Trigger Property="IsChecked" Value="true">
-                            <Setter TargetName="xCheck" Property="Background" Value="{Binding Assets.SettingsCheckboxChecked}"/>
-                        </Trigger>
-                        <Trigger Property="HasContent" Value="true">
-                            <Setter TargetName="xContent" Property="Margin" Value="4 2 0 0"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-
 </ResourceDictionary>

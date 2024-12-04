@@ -2,65 +2,6 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:SilkroadLauncher">
 
-    <!-- ListBox for application  -->
-    
-    <!-- Notice list item -->
-    <Style x:Key="NoticeListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
-        <Setter Property="OverridesDefaultStyle" Value="True"/>
-        <Setter Property="Template">
-            <Setter.Value>
-                <ControlTemplate TargetType="{x:Type ListBoxItem}">
-                    <StackPanel x:Name="xBorder"
-                                Background="Transparent"
-                                Orientation="Horizontal">
-                        <Border x:Name="xSelectedMark"
-                               Opacity="0"
-                               Background="{Binding DataContext.Assets.NoticeSelectedIcon,RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}"
-                               Width="9" Height="15"
-                               Margin="2 1"/>
-                        <ContentPresenter HorizontalAlignment="Stretch"/>
-                    </StackPanel>
-                    <ControlTemplate.Triggers>
-                        <!-- On Hover-->
-                        <Trigger Property="IsMouseOver" Value="True">
-                            <Setter Property="Cursor" Value="Hand"/>
-                            <Setter TargetName="xBorder" Property="Background" Value="#7c361b"/>
-                        </Trigger>
-                        <!-- On Selected -->
-                        <Trigger Property="IsSelected" Value="True">
-                            <Setter Property="Foreground" Value="White"/>
-                            <Setter TargetName="xBorder" Property="Background" Value="#5c8f1a"/>
-                            <Setter TargetName="xSelectedMark" Property="Opacity" Value="1"/>
-                        </Trigger>
-                    </ControlTemplate.Triggers>
-                </ControlTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    <!-- Notice list -->
-    <Style x:Key="NoticeListBox" TargetType="{x:Type ListBox}">
-        <Setter Property="BorderThickness" Value="0"/>
-        <Setter Property="Background" Value="Transparent"/>
-        <Setter Property="ItemContainerStyle" Value="{StaticResource NoticeListBoxItemStyle}"/>
-        <Setter Property="ItemTemplate">
-            <Setter.Value>
-                <DataTemplate>
-                    <StackPanel Margin="3"
-                                Orientation="Horizontal">
-                        <TextBlock FontSize="{StaticResource FontSizeSmall}"
-                                   Grid.Row="1"
-                                   Text="{Binding Date}"
-                                   Margin="0 0 3 0"/>
-                        <TextBlock VerticalAlignment="Center"
-                                   FontWeight="DemiBold"
-                                   FontSize="{StaticResource FontSizeSmall}"
-                                   Text="{Binding Subject}"/>
-                    </StackPanel>
-                </DataTemplate>
-            </Setter.Value>
-        </Setter>
-    </Style>
-    
     <!-- Language ListBox -->
     <Style x:Key="LanguageListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
         <Setter Property="OverridesDefaultStyle" Value="True" />
@@ -84,7 +25,6 @@
     </Style>
     <Style x:Key="LanguageListBoxStyle" TargetType="{x:Type ListBox}">
         <Setter Property="Foreground" Value="White"/>
-        <Setter Property="FontSize" Value="{StaticResource FontSizeLarge}"/>
         <Setter Property="BorderThickness" Value="0"/>
         <Setter Property="ItemContainerStyle" Value="{StaticResource LanguageListBoxItemStyle}"/>
         <Setter Property="ItemsPanel">

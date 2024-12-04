@@ -2,33 +2,4 @@
                     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
                     xmlns:local="clr-namespace:SilkroadLauncher">
 
-    <Color x:Key="BackgroundMain">#303841</Color>
-    <SolidColorBrush x:Key="BackgroundMainBrush" Color="{StaticResource BackgroundMain}"/>
-
-    <Color x:Key="ForegroundMain">#F1F1F1</Color>
-    <SolidColorBrush x:Key="ForegroundMainBrush" Color="{StaticResource ForegroundMain}"/>
-
-    <Color x:Key="ForegroundMainLighter">#CAC9CF</Color>
-    <SolidColorBrush x:Key="ForegroundMainLighterBrush" Color="{StaticResource ForegroundMainLighter}"/>
-
-    <Color x:Key="ForegroundMainInversed">#FF0000</Color>
-    <SolidColorBrush x:Key="ForegroundMainInversedBrush" Color="{StaticResource ForegroundMainInversed}"/>
-
-    <Color x:Key="HighlightMain">#a1bae2</Color>
-    <SolidColorBrush x:Key="HighlightMainBrush" Color="{StaticResource HighlightMain}"/>
-
-    <LinearGradientBrush x:Key="BorderBaseBrush"  StartPoint="0,0" EndPoint="0,1" MappingMode="RelativeToBoundingBox">
-        <GradientStop Color="#a6afe9" Offset="0.1" />
-        <GradientStop Color="#273855" Offset="0.6"/>
-        <GradientStop Color="#b4bcec" Offset="0.9"/>
-        <GradientStop Color="#989fcb" Offset="1"/>
-    </LinearGradientBrush>
-
-    <LinearGradientBrush x:Key="ButtonBackgroundBaseBrush" MappingMode="RelativeToBoundingBox" EndPoint="0,1"  StartPoint="0,0">
-        <GradientStop Color="#434282" Offset="0.05"/>
-        <GradientStop Color="#252459" Offset="0.3"/>
-        <GradientStop Color="#101e3f" Offset="0.9"/>
-        <GradientStop Color="#1c1162" Offset="1"/>
-    </LinearGradientBrush>
-
 </ResourceDictionary>
