@@ -16,8 +16,7 @@
             MSG_PATCH_UNABLE = "We're sorry, the download server is down.\nPlease, try again later.",
             MSG_PATCH_TOO_OLD = "Your version is too old.\nConnect to https://SilkroadOnline.com/ to download the new client.",
             MSG_PATCH_TOO_NEW = "Your version is too new.\nDo you want to talk us about it? ;)",
-            MSG_ERR_FILE_UPDATE = "Fatal error updating \"{0}\"!",
-            MSG_ERR_GFXDLL_NOT_FOUND = "\"GFXFileManager.dll\" cannot be found!";
+            MSG_ERR_FILE_UPDATE = "Fatal error updating \"{0}\"!";
 
         // Languages availables
         public static string[]

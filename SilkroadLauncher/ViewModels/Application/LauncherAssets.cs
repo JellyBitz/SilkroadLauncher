@@ -1,5 +1,5 @@
-﻿using Pk2ReaderAPI;
-using SilkroadLauncher.Utility;
+﻿using SilkroadLauncher.Utility;
+using SRO.PK2API;
 
 using System.Windows.Media;
 
@@ -75,7 +75,7 @@ namespace SilkroadLauncher
         #endregion
 
         #region Constructor
-        public LauncherAssets(Pk2Reader reader)
+        public LauncherAssets(Pk2Stream reader)
         {
             Background = new ImageBrush(reader.GetImage("launcher_wpf/background.dat"));
             HomeIcon = new ImageBrush(reader.GetImage("launcher_wpf/home_icon.dat"));

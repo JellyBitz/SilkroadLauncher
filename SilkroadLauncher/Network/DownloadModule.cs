@@ -1,6 +1,6 @@
-﻿using Pk2WriterAPI;
-using SilkroadCommon.Download;
+﻿using SilkroadCommon.Download;
 using SilkroadSecurityAPI;
+using SRO.PK2API;
 
 using System;
 using System.Collections.Generic;
@@ -35,13 +35,19 @@ namespace SilkroadLauncher.Network
         /// The version currently downloaded
         /// </summary>
         public static uint DownloadVersion { get; set; }
-
+        /// <summary>
+        /// Keep open pk2 files being used
+        /// </summary>
+        private static Dictionary<string, Pk2Stream> mPk2Files = null;
         #region Public Methods
         public static void Server_Ready(object sender, ClientMsgEventArgs e)
         {
             System.Diagnostics.Debug.WriteLine("DownloadModule::Server_Ready");
 
-            // Create a temporary directory to allocate the file
+            // Set up pk2 files to open them only once
+            mPk2Files = new Dictionary<string, Pk2Stream>();
+
+            // Create a temporary directory to allocate the file being downloaded
             Directory.CreateDirectory("Temp");
 
             // Create file download from server
@@ -77,34 +83,35 @@ namespace SilkroadLauncher.Network
             {
                 // Get the Pk2 to be open
                 var pk2NameIndex = file.Path.IndexOf("\\");
-                string pk2Name = pk2NameIndex == -1 ? file.Path : file.Path.Remove(pk2NameIndex);
+                var pk2Name = pk2NameIndex == -1 ? file.Path : file.Path.Remove(pk2NameIndex);
+                var pk2FileName = pk2Name.ToLower() + ".pk2";
                 // Open the Pk2 and insert the file
-                if (Pk2Writer.Open(pk2Name + ".pk2", LauncherSettings.CLIENT_BLOWFISH_KEY))
+                if (!mPk2Files.TryGetValue(pk2FileName, out var pk2))
                 {
-                    DecompressFile("Temp\\" + file.ID);
-                    // Set pk2 path to be used
-                    var pk2Path = (pk2NameIndex == -1 ? "" : file.Path.Substring(pk2Name.Length + 1) + "\\") + file.Name;
-
-                    // Try to import it multiple times (3) or leave
-                    int attempt = 1, attemptMax = 3;
-                    while (attempt < attemptMax && !Pk2Writer.ImportFile(pk2Path, "Temp\\" + file.ID))
-                        attempt++;
-                    if (attempt == attemptMax)
+                    try
                     {
-                        LauncherViewModel.Instance.ShowMessage("Fatal error updating \"" + file.Name + "\" from \"" + pk2Name + "\"!");
+                        pk2 = new Pk2Stream(pk2FileName, LauncherSettings.CLIENT_BLOWFISH_KEY);
+                        mPk2Files[pk2FileName] = pk2;
+                    }
+                    catch
+                    {
+                        LauncherViewModel.Instance.ShowMessage("Fatal error opening \"" + pk2Name + "\"!");
                         LauncherViewModel.Instance.Exit();
                     }
-                    else
-                    {
-                        System.Diagnostics.Debug.WriteLine($"File {file.Name} imported into the Pk2");
-                    }
-
-                    // Close the Pk2
-                    Pk2Writer.Close();
+                }
+                
+                DecompressFile("Temp\\" + file.ID);
+                
+                // Set pk2 path to be used
+                var pk2Path = (pk2NameIndex == -1 ? "" : file.Path.Substring(pk2Name.Length + 1) + "\\") + file.Name;
+                // Import file
+                if (pk2.AddFile(pk2Path, File.ReadAllBytes("Temp\\" + file.ID)))
+                {
+                    System.Diagnostics.Debug.WriteLine($"File {file.Name} imported into the Pk2");
                 }
                 else
                 {
-                    LauncherViewModel.Instance.ShowMessage("Fatal error opening \"" + pk2Name + "\"!");
+                    LauncherViewModel.Instance.ShowMessage("Fatal error updating \"" + file.Name + "\" from \"" + pk2Name + "\"!");
                     LauncherViewModel.Instance.Exit();
                 }
                 // Delete the file
@@ -159,8 +166,9 @@ namespace SilkroadLauncher.Network
                 // Update done!
                 LauncherViewModel.Instance.IsUpdating = false;
 
-                // Dispose pk2 writer
-                Pk2Writer.Deinitialize();
+                // Close all pk2 streams opened
+                foreach (var v in mPk2Files.Values)
+                    v.Dispose();
 
                 // Replace the Launcher if exists
                 if (File.Exists("Temp\\_" + Path.GetFileName(System.Diagnostics.Process.GetCurrentProcess().MainModule.FileName)))
@@ -208,35 +216,27 @@ namespace SilkroadLauncher.Network
         /// </summary>
         private static void UpdateSilkroadVersion()
         {
-            // Set the new version into pk2 automagically...
-            if (Pk2Writer.Open(LauncherSettings.CLIENT_MEDIA_PK2_PATH, LauncherSettings.CLIENT_BLOWFISH_KEY))
-            {
-                var buffer = Encoding.ASCII.GetBytes(DownloadVersion.ToString());
-                // Add blowfish minimum padding
-                Array.Resize(ref buffer, 8);
-                // Init blowfish for encoding
-                Blowfish bf = new Blowfish();
-                bf.Initialize(Encoding.ASCII.GetBytes("SILKROADVERSION"), 0, 8);
-                // Create the SV.T file
-                using (FileStream fs = File.Create("Temp\\SV.T"))
-                using (BinaryWriter bw = new BinaryWriter(fs))
-                {
-                    bw.Write(buffer.Length);
-                    // Encode it
-                    buffer = bf.Encode(buffer, 0, buffer.Length);
-                    // Add empty data
-                    Array.Resize(ref buffer, 1024);
-                    // Save it all
-                    bw.Write(buffer);
-                }
-                // Update Pk2
-                if (Pk2Writer.ImportFile("SV.T", "Temp\\SV.T"))
-                    System.Diagnostics.Debug.WriteLine($"New version created and imported into the Pk2");
-                // Close the Pk2
-                Pk2Writer.Close();
-                // Delete it
-                File.Delete("Temp\\SV.T");
-            }
+            // Check if it's already opened otherwise open it
+            if (!mPk2Files.TryGetValue(LauncherSettings.CLIENT_MEDIA_PK2_PATH.ToLower(), out var pk2))
+                pk2 = new Pk2Stream(LauncherSettings.CLIENT_MEDIA_PK2_PATH, LauncherSettings.CLIENT_BLOWFISH_KEY);
+
+            // Set the new version
+            var versionBuffer = Encoding.ASCII.GetBytes(DownloadVersion.ToString());
+            Array.Resize(ref versionBuffer, 8); // Set minimum padding required for encoding
+
+            // Init blowfish for encoding
+            var bf = new Blowfish();
+            bf.Initialize(Encoding.ASCII.GetBytes("SILKROADVERSION"), 0, 8);
+            // Encode it and add empty padding as 1024
+            versionBuffer = bf.Encode(versionBuffer, 0, versionBuffer.Length);
+            Array.Resize(ref versionBuffer, 1024);
+
+            // Overwrite the SV.T file
+            var bytes = BitConverter.GetBytes(versionBuffer.Length);
+            Array.Resize(ref bytes, bytes.Length + versionBuffer.Length);
+            Array.Copy(versionBuffer, 0, bytes, 4, versionBuffer.Length);
+            if (pk2.AddFile("SV.T", bytes))
+                System.Diagnostics.Debug.WriteLine($"New version ({1000 + DownloadVersion}) created and imported into the Pk2");
         }
         /// <summary>
         /// Replaces the current executable with the new one downloaded
