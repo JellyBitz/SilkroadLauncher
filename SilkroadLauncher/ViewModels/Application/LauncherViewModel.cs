@@ -632,7 +632,7 @@ namespace SilkroadLauncher
             try
             {
                 // Load pk2 reader
-                pk2Stream = new Pk2Stream(LauncherSettings.CLIENT_MEDIA_PK2_PATH, LauncherSettings.CLIENT_BLOWFISH_KEY);
+                pk2Stream = new Pk2Stream(LauncherSettings.CLIENT_MEDIA_PK2_PATH, LauncherSettings.CLIENT_BLOWFISH_KEY, true);
 
                 // Load assets from client
                 Assets = new LauncherAssets(pk2Stream);
