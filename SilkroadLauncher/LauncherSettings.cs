@@ -17,7 +17,7 @@
             MSG_PATCH_TOO_OLD = "Your version is too old.\nConnect to {0} to download the new client.",
             MSG_PATCH_TOO_NEW = "Your version is too new.\nDo you want to talk us about it? ;)",
             MSG_ERR_FILE_UPDATE = "Fatal error updating file \"{0}\"!",
-            MSG_ERR_PK2_FILE_OPEN = "Fatal error opening file \"{0}\"!";
+            MSG_ERR_FILE_OPEN = "Fatal error opening file \"{0}\"!";
 
         // Languages availables
         public static string[]

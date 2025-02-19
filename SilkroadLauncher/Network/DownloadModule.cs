@@ -95,7 +95,7 @@ namespace SilkroadLauncher.Network
                     }
                     catch
                     {
-                        LauncherViewModel.Instance.ShowMessage(string.Format(LauncherSettings.MSG_ERR_PK2_FILE_OPEN, pk2Name));
+                        LauncherViewModel.Instance.ShowMessage(string.Format(LauncherSettings.MSG_ERR_FILE_OPEN, pk2Name));
                         LauncherViewModel.Instance.Exit();
                     }
                 }
