@@ -1,4 +1,4 @@
-﻿namespace SilkroadCommon.Download
+﻿namespace SRO.Data.Download
 {
     public class FileEntry
     {

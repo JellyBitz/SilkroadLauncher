@@ -36,10 +36,6 @@ namespace SilkroadLauncher
         /// </summary>
         private IWindow m_Window;
         /// <summary>
-        /// Division info
-        /// </summary>
-        private Dictionary<string,List<string>> m_DivisionInfo;
-        /// <summary>
         /// Gateway port
         /// </summary>
         private ushort m_Gateport;
@@ -55,10 +51,6 @@ namespace SilkroadLauncher
         /// Locale type
         /// </summary>
         private byte m_Locale;
-        /// <summary>
-        /// Arguments used to start the game client
-        /// </summary>
-        private string m_ClientArgs;
         /// <summary>
         /// Indicates if the Pk2 has been loaded correctly
         /// </summary>
@@ -127,6 +119,18 @@ namespace SilkroadLauncher
         /// Indicates if the game can be started
         /// </summary>
         private bool m_CanStartGame;
+        /// <summary>
+        /// Keep division info loaded to be selected
+        /// </summary>
+        private List<ServerDivisionVM> mServerDivisions = new List<ServerDivisionVM>();
+        /// <summary>
+        /// The current division being selected
+        /// </summary>
+        private ServerDivisionVM mSelectedServerDivision;
+        /// <summary>
+        /// Indicates if the game has more than one division
+        /// </summary>
+        private bool mHasManyDivisions;
         #endregion
 
         #region Public Properties
@@ -412,6 +416,42 @@ namespace SilkroadLauncher
             }
         }
         /// <summary>
+        /// Server divisions availables
+        /// </summary>
+        public List<ServerDivisionVM> ServerDivisions
+        {
+            get => mServerDivisions;
+            set
+            {
+                mServerDivisions = value;
+                OnPropertyChanged(nameof(ServerDivisions));
+            }
+        }
+        /// <summary>
+        /// Server division being selected
+        /// </summary>
+        public ServerDivisionVM SelectedServerDivision
+        {
+            get => mSelectedServerDivision;
+            set
+            {
+                mSelectedServerDivision = value;
+                OnPropertyChanged(nameof(SelectedServerDivision));
+            }
+        }
+        /// <summary>
+        /// Indicates if the server is using more than one server division
+        /// </summary>
+        public bool HasManyDivisions
+        {
+            get => mHasManyDivisions;
+            set
+            {
+                mHasManyDivisions = value;
+                OnPropertyChanged(nameof(HasManyDivisions));
+            }
+        }
+        /// <summary>
         /// Contains all assets to be displayed
         /// </summary>
         public LauncherAssets Assets { get; private set; }
@@ -478,8 +518,10 @@ namespace SilkroadLauncher
             CommandClose = new RelayCommand(Exit);
             CommandStartGame = new RelayCommand(()=> {
                 // Starts the game but only if is ready and exists
-                if (CanStartGame && File.Exists(LauncherSettings.CLIENT_EXECUTABLE)) { 
-                    System.Diagnostics.Process.Start(LauncherSettings.CLIENT_EXECUTABLE, m_ClientArgs);
+                if (CanStartGame && File.Exists(LauncherSettings.CLIENT_EXECUTABLE))
+                {
+                    var args = "0 /" + m_Locale + " " + ServerDivisions.FindIndex( o => o == SelectedServerDivision) + " " + SelectedServerDivision.HostIndex;
+                    System.Diagnostics.Process.Start(LauncherSettings.CLIENT_EXECUTABLE, args);
                     // Closing launcher
                     CommandClose.Execute(null);
                 }
@@ -553,35 +595,24 @@ namespace SilkroadLauncher
 
             IsCheckingUpdates = true;
 
-            // Find the best connection
-            long bestTime = 0;
-            string hostAddress = null;
-
-            var divIdx = 0;
-            foreach (var div in m_DivisionInfo)
+            // Find best host in the division server selected
+            ServerDivisionVM division = null;
+            var divisionIdx = 0;
+            for(var i = 0; i < mServerDivisions.Count; i++)
             {
-                for (var hostIdx = 0; hostIdx < div.Value.Count; hostIdx++)
+                mServerDivisions[i].CalculatePing();
+                if (division == null || mServerDivisions[i].Ping < division.Ping)
                 {
-                    var session = new Client();
-                    // Connect to server and find the time used
-                    if (session.Start(div.Value[hostIdx], m_Gateport, 5000, out var elapsedTime))
-                    {
-                        session.Stop();
-                        // Check the best time
-                        if (hostAddress == null || elapsedTime < bestTime)
-                        {
-                            hostAddress = div.Value[hostIdx];
-                            elapsedTime = bestTime;
-                            m_ClientArgs = "0 /" + m_Locale + " " + divIdx + " " + hostIdx;
-                        }
-                    }
+                    division = mServerDivisions[i];
+                    divisionIdx = i;
                 }
-                divIdx++;
             }
 
             // Start gateway connection
-            if (hostAddress != null)
+            if (division != null)
             {
+                SelectedServerDivision = division;
+
                 m_GatewaySession = new Client();
                 // Packet handlers
                 m_GatewaySession.RegisterHandler(GatewayModule.Opcode.GLOBAL_IDENTIFICATION, GatewayModule.Server_GlobalIdentification);
@@ -596,7 +627,7 @@ namespace SilkroadLauncher
                 m_GatewaySession.OnDisconnect += (s, e) => {
                     System.Diagnostics.Debug.WriteLine("Gateway: Session disconnected [" + e.Exception.Message + "]");
                 };
-                m_GatewaySession.Start(hostAddress, m_Gateport, 5000, out _);
+                m_GatewaySession.Start(division.Host, m_Gateport, 5000, out _);
             }
             else
             {
@@ -638,11 +669,17 @@ namespace SilkroadLauncher
                 Assets = new LauncherAssets(pk2Stream);
 
                 // Extract essential stuffs for the process
-                if (pk2Stream.TryGetDivisionInfo(out m_DivisionInfo) && pk2Stream.TryGetGateport(out m_Gateport))
+                if (pk2Stream.TryGetDivisionInfo(out var divisionInfo) && pk2Stream.TryGetGateport(out m_Gateport))
                 {
                     // Abort operations if host or port is not verified
-                    if (!VerifyHosts(m_DivisionInfo) || !VerifyPort(m_Gateport))
+                    if (!VerifyHosts(divisionInfo) || !VerifyPort(m_Gateport))
                         return;
+
+                    mServerDivisions = new List<ServerDivisionVM>();
+                    foreach (var division in divisionInfo)
+                        mServerDivisions.Add(new ServerDivisionVM(division.Key, division.Value));
+                    mSelectedServerDivision = mServerDivisions[0];
+                    HasManyDivisions = mServerDivisions.Count > 1;
 
                     // Load settings
                     m_Config.Load(pk2Stream);

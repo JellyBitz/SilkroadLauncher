@@ -60,7 +60,113 @@
             </Setter.Value>
         </Setter>
     </Style>
-    
+
+    <!-- Server Divisions list item -->
+    <Style x:Key="ServerDivisionsListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
+        <Setter Property="OverridesDefaultStyle" Value="True"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBoxItem}">
+                    <DockPanel x:Name="mHightlightColor">
+                        <!-- Selector -->
+                        <Border DockPanel.Dock="Left"
+                                x:Name="mSelector"
+                                Opacity="0"
+                                Width="15" Height="15"
+                                Margin="20 10"
+                                Background="{Binding DataContext.Assets.DivisionsSelectedIcon,RelativeSource={RelativeSource AncestorType={x:Type local:MainWindow}}}"/>
+                        <!-- Items -->
+                        <ContentPresenter DockPanel.Dock="Right"/>
+                    </DockPanel>
+                    <ControlTemplate.Triggers>
+                        <!-- On Hover-->
+                        <Trigger Property="IsMouseOver" Value="True">
+                            <Setter Property="Cursor" Value="Hand"/>
+                            <Setter TargetName="mHightlightColor" Property="Background" Value="#5c8f1a"/>
+                        </Trigger>
+                        <!-- On Selected -->
+                        <Trigger Property="IsSelected" Value="True">
+                            <Setter TargetName="mSelector" Property="Opacity" Value="1"/>
+                            <Setter Property="Foreground" Value="White"/>
+                        </Trigger>
+                    </ControlTemplate.Triggers>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+    <!-- Server Divisions list -->
+    <Style x:Key="ServerDivisionsListBox" TargetType="{x:Type ListBox}">
+        <Setter Property="BorderThickness" Value="0"/>
+        <Setter Property="Foreground" Value="White"/>
+        <Setter Property="Background" Value="Transparent"/>
+        <Setter Property="ItemContainerStyle" Value="{StaticResource ServerDivisionsListBoxItemStyle}"/>
+        <Setter Property="Template">
+            <Setter.Value>
+                <ControlTemplate TargetType="{x:Type ListBox}">
+                    <DockPanel LastChildFill="True"
+                               Background="{TemplateBinding Background}">
+                        <!-- Header -->
+                        <Grid DockPanel.Dock="Top"
+                              Margin="0 5 0 6">
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="50"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="*"/>
+                            </Grid.ColumnDefinitions>
+                            <TextBlock Grid.Column="1"
+                                       FontSize="{StaticResource FontSizeRegular}"
+                                       VerticalAlignment="Center"
+                                       FontWeight="DemiBold"
+                                       Text="Division"
+                                       Foreground="#FAE9B6"/>
+                            <TextBlock Grid.Column="2"
+                                       FontSize="{StaticResource FontSizeRegular}"
+                                       VerticalAlignment="Center"
+                                       FontWeight="DemiBold"
+                                       Text="Ping"
+                                       Foreground="#FAE9B6"/>
+                            <TextBlock Grid.Column="3"
+                                       FontSize="{StaticResource FontSizeRegular}"
+                                       VerticalAlignment="Center"
+                                       FontWeight="DemiBold"
+                                       Text="Status"
+                                       Foreground="#FAE9B6"/>
+                        </Grid>
+                        <!-- Items -->
+                        <ItemsPresenter/>
+                    </DockPanel>
+                </ControlTemplate>
+            </Setter.Value>
+        </Setter>
+            <Setter Property="ItemTemplate">
+            <Setter.Value>
+                <DataTemplate>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="*"/>
+                        </Grid.ColumnDefinitions>
+
+                        <TextBlock Grid.Column="0"
+                                   FontSize="{StaticResource FontSizeSmall}"
+                                   VerticalAlignment="Center"
+                                   Text="{Binding Name}"/>
+                        <TextBlock Grid.Column="1"
+                                   FontSize="{StaticResource FontSizeSmall}"
+                                   VerticalAlignment="Center"
+                                   Text="{Binding PingString}"/>
+                        <TextBlock Grid.Column="2"
+                                   FontSize="{StaticResource FontSizeSmall}"
+                                   VerticalAlignment="Center"
+                                   Text="{Binding PingStatus}"/>
+                    </Grid>
+                </DataTemplate>
+            </Setter.Value>
+        </Setter>
+    </Style>
+
     <!-- Language ListBox -->
     <Style x:Key="LanguageListBoxItemStyle" TargetType="{x:Type ListBoxItem}">
         <Setter Property="OverridesDefaultStyle" Value="True" />

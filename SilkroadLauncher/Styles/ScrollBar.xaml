@@ -173,7 +173,7 @@
     </Style>
 
     <ControlTemplate x:Key="VerticalScrollBar" TargetType="{x:Type ScrollBar}">
-        <Grid >
+        <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="18"/>
                 <RowDefinition Height="*"/>
@@ -276,14 +276,13 @@
             </Trigger>
         </Style.Triggers>
     </Style>
-
     <!-- Style for overall  ScrollViewer -->
     <Style x:Key="NoticeScrollViewer" TargetType="{x:Type ScrollViewer}">
         <Setter Property="OverridesDefaultStyle" Value="True"/>
         <Setter Property="Template">
             <Setter.Value>
                 <ControlTemplate TargetType="{x:Type ScrollViewer}">
-                    <Grid>
+                    <Grid Background="{TemplateBinding Background}">
                         <Grid.ColumnDefinitions>
                             <ColumnDefinition />
                             <ColumnDefinition Width="Auto"/>
@@ -315,6 +314,4 @@
             </Setter.Value>
         </Setter>
     </Style>
-
-
 </ResourceDictionary>
