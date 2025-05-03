@@ -1,8 +1,8 @@
-﻿using SilkroadCommon;
-using SilkroadCommon.Download;
-using SilkroadSecurityAPI;
-using SRO.PK2API;
+﻿using SilkroadSecurityAPI;
+using SRO.Data.Download;
+using SRO.Data.Gateway;
 
+using System;
 using System.Collections.Generic;
 
 namespace SilkroadLauncher.Network
@@ -158,13 +158,7 @@ namespace SilkroadLauncher.Network
                 {
                     Subject = p.ReadAscii(),
                     Article = p.ReadAscii(),
-                    Year = p.ReadUShort(),
-                    Month = p.ReadUShort(),
-                    Day = p.ReadUShort(),
-                    Hour = p.ReadUShort(),
-                    Minute = p.ReadUShort(),
-                    Second = p.ReadUShort(),
-                    MicroSecond = p.ReadUInt()
+                    Date = new DateTime(p.ReadUShort(), p.ReadUShort(), p.ReadUShort(), p.ReadUShort(), p.ReadUShort(), p.ReadUShort(), p.ReadInt() / 1000000)
                 }));
             }
             // Set the GUI

@@ -1,5 +1,5 @@
-﻿using SilkroadCommon.Download;
-using SilkroadSecurityAPI;
+﻿using SilkroadSecurityAPI;
+using SRO.Data.Download;
 using SRO.PK2API;
 
 using System;

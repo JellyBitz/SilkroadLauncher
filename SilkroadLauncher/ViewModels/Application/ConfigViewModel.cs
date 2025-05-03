@@ -1,11 +1,13 @@
-﻿using SilkroadLauncher.SilkroadCommon;
-using SilkroadLauncher.SilkroadCommon.Setting;
-using SilkroadLauncher.Utility;
+﻿using SilkroadLauncher.Utility;
+using SRO.Common;
+using SRO.Data;
+using SRO.Data.Setting;
 using SRO.PK2API;
 
 using System;
 using System.Collections.Generic;
 using System.IO;
+using System.Linq;
 using System.Runtime.InteropServices;
 using System.Text;
 using System.Text.RegularExpressions;
@@ -65,12 +67,12 @@ namespace SilkroadLauncher
         /// <summary>
         /// The basic config used to start the client
         /// </summary>
-        private SilkCfg m_SilkCfg;
+        private SilkCfg mSilkCfg = null;
         private readonly string PATH_SILKCFG = "SilkCfg.dat";
         /// <summary>
         /// Settings used by the client
         /// </summary>
-        private SROptionSet m_SROptionSet;
+        private SROptionSet mSROptionSet = null;
         private readonly string PATH_SROPTIONSET = "Setting\\SROptionSet.dat";
         /// <summary>
         /// The type file as raw of text
@@ -90,22 +92,20 @@ namespace SilkroadLauncher
         /// <summary>
         /// Config file version
         /// </summary>
-        public uint Version { get { return m_SilkCfg.Version; } }
+        public uint Version => mSilkCfg.Version;
         /// <summary>
         /// Game resolutions supported
         /// </summary>
-        public List<SilkCfg.WindowResolution> SupportedResolutions { get; }
+        public List<WindowResolution> SupportedResolutions { get; }
         /// <summary>
         /// Game resolution
         /// </summary>
-        public SilkCfg.WindowResolution Resolution
+        public WindowResolution Resolution
         {
-            get => m_SilkCfg.Resolution;
+            get => mSilkCfg.Resolution;
             set
             {
-                m_SilkCfg.Resolution = value;
-                m_SROptionSet.Options[SROptionSet.OptionID.Graphic01_Width] = value.Width;
-                m_SROptionSet.Options[SROptionSet.OptionID.Graphic01_Height] = value.Height;
+                mSilkCfg.Resolution = value;
                 OnPropertyChanged(nameof(Resolution));
             }
         }
@@ -119,11 +119,10 @@ namespace SilkroadLauncher
         /// </summary>
         public SilkCfg.Brightness Brightness
         {
-            get => m_SilkCfg.BrightnessType;
+            get => mSilkCfg.BrightnessType;
             set
             {
-                m_SilkCfg.BrightnessType = value;
-                m_SROptionSet.Options[SROptionSet.OptionID.Graphic01_Brightness] = (byte)value;
+                mSilkCfg.BrightnessType = value;
                 OnPropertyChanged(nameof(Brightness));
             }
         }
@@ -136,10 +135,10 @@ namespace SilkroadLauncher
         /// </summary>
         public SilkCfg.Graphic Graphics
         {
-            get => m_SilkCfg.GraphicType;
+            get => mSilkCfg.GraphicType1;
             set
             {
-                m_SilkCfg.GraphicType = value;
+                mSilkCfg.GraphicType1 = value;
                 OnPropertyChanged(nameof(Graphics));
             }
         }
@@ -148,10 +147,10 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsSoundEnabled
         {
-            get => m_SilkCfg.IsSoundEnabled;
+            get => mSilkCfg.IsSoundEnabled;
             set
             {
-                m_SilkCfg.IsSoundEnabled = value;
+                mSilkCfg.IsSoundEnabled = value;
                 OnPropertyChanged(nameof(IsSoundEnabled));
             }
         }
@@ -160,10 +159,10 @@ namespace SilkroadLauncher
         /// </summary>
         public bool IsWindowMode
         {
-            get => (bool)m_SROptionSet.Options[SROptionSet.OptionID.IsWindowMode];
+            get => (bool)mSROptionSet.Get(SROptionSet.ID.Video_WindowMode_isWindowMode);
             set
             {
-                m_SROptionSet.Options[SROptionSet.OptionID.IsWindowMode] = value;
+                mSROptionSet.Set(SROptionSet.ID.Video_WindowMode_isWindowMode, value);
                 OnPropertyChanged(nameof(IsWindowMode));
             }
         }
@@ -190,21 +189,15 @@ namespace SilkroadLauncher
         /// <summary>
         /// Language mask selected by user
         /// </summary>
-        public string Language
-        {
-            get { return LauncherSettings.CLIENT_LANGUAGE_SUPPORTED_MASK[SupportedLanguageIndex]; }
-        }
+        public string Language => LauncherSettings.CLIENT_LANGUAGE_SUPPORTED_MASK[SupportedLanguageIndex];
         #endregion
 
         #region Constructor
         public ConfigViewModel()
         {
-            // Set default SilkCfg.dat
-            m_SilkCfg = new SilkCfg();
-
             // Load available resolutions to display
-            SupportedResolutions = new List<SilkCfg.WindowResolution>();
-            DEVMODE mode = new DEVMODE();
+            SupportedResolutions = new List<WindowResolution>();
+            var mode = new DEVMODE();
             var minPixels = 800 * 600;
             for (int i = 0; EnumDisplaySettings(null, i, ref mode); i++)
             {
@@ -212,10 +205,11 @@ namespace SilkroadLauncher
                 if (mode.dmPelsWidth * mode.dmPelsHeight < minPixels)
                     continue;
                 // Add only one per resolution
-                var resolution = new SilkCfg.WindowResolution((uint)mode.dmPelsWidth, (uint)mode.dmPelsHeight);
+                var resolution = new WindowResolution((uint)mode.dmPelsWidth, (uint)mode.dmPelsHeight);
                 if (!SupportedResolutions.Contains(resolution))
                     SupportedResolutions.Add(resolution);
             }
+
             // Default brightness
             SupportedBrightness = new List<SilkCfg.Brightness>(){
                 SilkCfg.Brightness.VeryDark,
@@ -231,8 +225,17 @@ namespace SilkroadLauncher
                 SilkCfg.Graphic.Middle,
                 SilkCfg.Graphic.High
             };
-            // Set default SROptionSet.dat
-            m_SROptionSet = new SROptionSet();
+            // Set default configs & synchronize
+            mSilkCfg = new SilkCfg()
+            {
+                Resolution = SupportedResolutions.First()
+            };
+            mSROptionSet = new SROptionSet();
+
+            mSROptionSet.Set(SROptionSet.ID.Video_Graphic1_ResolutionWidth, mSilkCfg.Resolution.Width);
+            mSROptionSet.Set(SROptionSet.ID.Video_Graphic1_ResolutionHeight, mSilkCfg.Resolution.Height);
+            mSROptionSet.Set(SROptionSet.ID.Video_Graphic1_Brightness, (byte)mSilkCfg.BrightnessType);
+
             // Set languages supported
             SupportedLanguages = new List<string>(LauncherSettings.CLIENT_LANGUAGE_SUPPORTED_MASK);
         }
@@ -245,25 +248,29 @@ namespace SilkroadLauncher
         public void Load(Pk2Stream pk2Reader)
         {
             // Loads language from pk2
-            LoadTypeFile(pk2Reader);
+            TryLoadTypeFile(pk2Reader);
 
-            // Try to load configs or create a new one
-            bool createNew = false;
-            if (!LoadSilkCfg())
+            // If SROptionSet exists, try to update SilkCfg with those settings
+            if (TryLoadSROptionSet())
             {
-                m_SilkCfg = new SilkCfg();
-                createNew = true;
+                if (!ValidateSROptionSet())
+                    SaveSROptionSet();
+                // Try to load SilkCfg and fix it
+                if (TryLoadSilkCfg())
+                    ValidateSilkCfg();
+                SyncSilkCfg();
+                SaveSilkCfg();
             }
-            if (!LoadSROptionSet())
+            // Otherwise keep the original behavior, first Load SilkCfg, then SROptionSet
+            else
             {
-                m_SROptionSet = new SROptionSet();
-                createNew = true;
+                if (!TryLoadSilkCfg() || !ValidateSilkCfg())
+                    SaveSilkCfg();
+                // Create SROptionSet and save it
+                ValidateSROptionSet();
+                SyncSROptionSet();
+                SaveSROptionSet();
             }
-            BindConfigs();
-
-            // Save changes created
-            if (createNew)
-                Save();
         }
         /// <summary>
         /// Save the current settings
@@ -272,218 +279,228 @@ namespace SilkroadLauncher
         {
             SaveTypeFile();
             SaveSilkCfg();
+            SyncSROptionSet();
             SaveSROptionSet();
         }
         #endregion
 
         #region Private Helpers
         /// <summary>
-        /// Set launcher configs to reflect game settings
-        /// </summary>
-        private void BindConfigs()
-        {
-            m_SilkCfg.Resolution = new SilkCfg.WindowResolution((uint)m_SROptionSet.Options[SROptionSet.OptionID.Graphic01_Width], (uint)m_SROptionSet.Options[SROptionSet.OptionID.Graphic01_Height]);
-            m_SilkCfg.BrightnessType = (SilkCfg.Brightness)m_SROptionSet.Options[SROptionSet.OptionID.Graphic01_Brightness];
-        }
-        /// <summary>
         /// Try to load the SilkCfg file
         /// </summary>
-        private bool LoadSilkCfg()
+        private bool TryLoadSilkCfg()
         {
             if (File.Exists(PATH_SILKCFG))
             {
-                BinaryReader reader = null;
                 try
                 {
-                    reader = new BinaryReader(new FileStream(PATH_SILKCFG, FileMode.Open, FileAccess.Read));
-                    // Read config structure by version
-                    m_SilkCfg.Version = reader.ReadUInt32();
-                    if (m_SilkCfg.Version < 4)
-                    {
-                        m_SilkCfg.unkUint01 = reader.ReadUInt32();
-                        // Read game resolution and ignore if is not supported
-                        SilkCfg.WindowResolution w = new SilkCfg.WindowResolution(reader.ReadUInt32(), reader.ReadUInt32());
-                        if (SupportedResolutions.Contains(w))
-                            m_SilkCfg.Resolution = w;
-                        // Graphics #1
-                        SilkCfg.Graphic g = (SilkCfg.Graphic)reader.ReadByte();
-                        if (SupportedGraphics.Contains(g))
-                            m_SilkCfg.GraphicType = g;
-                        m_SilkCfg.unkByte01 = reader.ReadByte();
-                        // Sound 
-                        m_SilkCfg.IsSoundEnabled = reader.ReadBoolean();
-                        m_SilkCfg.unkByte02 = reader.ReadByte();
-                        if (m_SilkCfg.Version == 3)
-                        {
-                            // Read graphics #2
-                            SilkCfg.Graphic g2 = (SilkCfg.Graphic)reader.ReadByte();
-                            // Graphics choosen
-                            byte gIndex = reader.ReadByte();
-                            // Just handling one graphic from GUI
-                            if (gIndex == 2 && SupportedGraphics.Contains(g2))
-                                m_SilkCfg.GraphicType = g2;
-                        }
-                        m_SilkCfg.unkByte03 = reader.ReadByte();
-                    }
+                    var silkcfg = new SilkCfg();
+                    silkcfg.Load(new FileStream(PATH_SILKCFG, FileMode.Open, FileAccess.Read));
+                    mSilkCfg = silkcfg;
                     return true;
                 }
                 catch (Exception e)
                 {
                     System.Diagnostics.Debug.WriteLine(e.Message);
                 }
-                finally
-                {
-                    reader?.Close();
-                }
             }
             return false;
+        }
+        /// <summary>
+        /// Make sure <see cref="mSilkCfg"/> is fixed for the current user. Returns true if everything seems fine.
+        /// </summary>
+        private bool ValidateSilkCfg()
+        {
+            var result = true;
+
+            // Make adjustments for the current user if necessary
+            if (!SupportedResolutions.Contains(mSilkCfg.Resolution))
+            {
+                mSilkCfg.Resolution = SupportedResolutions.First();
+                result = false;
+            }
+            if (!SupportedGraphics.Contains(mSilkCfg.GraphicType1))
+            {
+                mSilkCfg.GraphicType1 = SilkCfg.Graphic.Middle;
+                result = false;
+            }
+            if (!SupportedBrightness.Contains(mSilkCfg.BrightnessType))
+            {
+                mSilkCfg.BrightnessType = SilkCfg.Brightness.Normal;
+                result = false;
+            }
+            if (mSilkCfg.GraphicTypeSelected != 1)
+            {
+                mSilkCfg.GraphicTypeSelected = 1;
+                result = false;
+            }
+
+            return result;
         }
         /// <summary>
         /// Save the SilkCfg setting
         /// </summary>
         private void SaveSilkCfg()
         {
-            BinaryWriter writer = null;
             try
             {
-                // Create location
-                string dir = Path.GetDirectoryName(PATH_SILKCFG);
-                if (dir != string.Empty && !Directory.Exists(dir))
+                // Create path
+                var dir = Path.GetDirectoryName(PATH_SILKCFG);
+                if (dir != string.Empty)
                     Directory.CreateDirectory(dir);
 
-                writer = new BinaryWriter(new FileStream(PATH_SILKCFG, FileMode.Create, FileAccess.Write));
-                // Write config structure by version
-                writer.Write(m_SilkCfg.Version);
-                if (m_SilkCfg.Version < 4)
-                {
-                    writer.Write(m_SilkCfg.unkUint01);
-                    // Game resolution
-                    writer.Write(m_SilkCfg.Resolution.Width);
-                    writer.Write(m_SilkCfg.Resolution.Height);
-                    // Graphics #1
-                    writer.Write((byte)m_SilkCfg.GraphicType);
-                    writer.Write(m_SilkCfg.unkByte01);
-                    // Sound
-                    writer.Write(m_SilkCfg.IsSoundEnabled);
-                    writer.Write(m_SilkCfg.unkByte02);
-                    if (m_SilkCfg.Version == 3)
-                    {
-                        // Graphics #2
-                        writer.Write((byte)m_SilkCfg.GraphicType);
-                        // Graphics choosen always set #1
-                        writer.Write((byte)1);
-                    }
-                    writer.Write(m_SilkCfg.unkByte03);
-                }
+                mSilkCfg.Save(new FileStream(PATH_SILKCFG, FileMode.Create, FileAccess.Write));
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
             }
-            finally
-            {
-                writer?.Close();
-            }
         }
+
         /// <summary>
         /// Try to load the SROptionSet file
         /// </summary>
-        private bool LoadSROptionSet()
+        private bool TryLoadSROptionSet()
         {
             if (File.Exists(PATH_SROPTIONSET))
             {
-                BinaryReader reader = null;
                 try
                 {
-                    reader = new BinaryReader(new FileStream(PATH_SROPTIONSET, FileMode.Open, FileAccess.Read));
-                    // Read config structure by version
-                    m_SROptionSet.Version = reader.ReadUInt32();
-                    m_SROptionSet.unkByte01 = reader.ReadByte();
-                    m_SROptionSet.unkUInt01 = reader.ReadUInt32();
-
-                    while (reader.BaseStream.Position < reader.BaseStream.Length)
-                    {
-                        SROptionSet.OptionID id = (SROptionSet.OptionID)reader.ReadUInt32();
-                        if (m_SROptionSet.Options.TryGetValue(id, out object value))
-                        {
-                            if (value is bool)
-                                value = reader.ReadBoolean();
-                            else if (value is byte)
-                                value = reader.ReadByte();
-                            else if (value is ushort)
-                                value = reader.ReadUInt16();
-                            else if (value is uint)
-                                value = reader.ReadUInt32();
-                            // Update the saved value
-                            m_SROptionSet.Options[id] = value;
-                        }
-                        else
-                        {
-                            System.Diagnostics.Debug.WriteLine($"SROptionSet: ID [{id}] not found, loading aborted!");
-                            break;
-                        }
-                    }
+                    var sroptionset = new SROptionSet();
+                    sroptionset.Load(new FileStream(PATH_SROPTIONSET, FileMode.Open, FileAccess.Read));
+                    mSROptionSet = sroptionset;
                     return true;
                 }
                 catch (Exception e)
                 {
                     System.Diagnostics.Debug.WriteLine(e.Message);
                 }
-                finally
-                {
-                    reader?.Close();
-                }
             }
             return false;
+        }
+        /// <summary>
+        /// Make sure <see cref="mSROptionSet"/> is fixed for the current user. Returns true if everything seems fine.
+        /// </summary>
+        private bool ValidateSROptionSet()
+        {
+            var result = true;
+
+            // Make adjustments for the current user if necessary
+            var graphic = (SilkCfg.Graphic)mSROptionSet.Get(SROptionSet.ID.Video_Graphic1_Type);
+            if (graphic != SilkCfg.Graphic.Unchanged && !SupportedGraphics.Contains(graphic))
+            {
+                mSROptionSet.Set(SROptionSet.ID.Video_Graphic1_Type, (byte)SilkCfg.Graphic.Middle);
+                result = false;
+            }
+            var brightness = (SilkCfg.Brightness)mSROptionSet.Get(SROptionSet.ID.Video_Graphic1_Brightness);
+            if (!SupportedBrightness.Contains(brightness))
+            {
+                mSROptionSet.Set(SROptionSet.ID.Video_Graphic1_Brightness, (byte)SilkCfg.Brightness.Normal);
+                result = false;
+            }
+            var wr = new WindowResolution((uint)mSROptionSet.Get(SROptionSet.ID.Video_Graphic1_ResolutionWidth), (uint)mSROptionSet.Get(SROptionSet.ID.Video_Graphic1_ResolutionHeight));
+            if (!SupportedResolutions.Contains(wr))
+            {
+                var r = SupportedResolutions.First();
+                mSROptionSet.Set(SROptionSet.ID.Video_Graphic1_ResolutionWidth, r.Width);
+                mSROptionSet.Set(SROptionSet.ID.Video_Graphic1_ResolutionHeight, r.Height);
+                result = false;
+            }
+            wr = new WindowResolution((uint)mSROptionSet.Get(SROptionSet.ID.Video_Graphic2_ResolutionWidth), (uint)mSROptionSet.Get(SROptionSet.ID.Video_Graphic2_ResolutionHeight));
+            if (!SupportedResolutions.Contains(wr))
+            {
+                var r = SupportedResolutions.Last();
+                mSROptionSet.Set(SROptionSet.ID.Video_Graphic2_ResolutionWidth, r.Width);
+                mSROptionSet.Set(SROptionSet.ID.Video_Graphic2_ResolutionHeight, r.Height);
+                result = false;
+            }
+
+            return result;
         }
         /// <summary>
         /// Save the SROptionSet setting
         /// </summary>
         private void SaveSROptionSet()
         {
-            BinaryWriter writer = null;
             try
             {
-                // Create location
-                string dir = Path.GetDirectoryName(PATH_SROPTIONSET);
-                if (dir != string.Empty && !Directory.Exists(dir))
+                // Create path
+                var dir = Path.GetDirectoryName(PATH_SROPTIONSET);
+                if (dir != string.Empty)
                     Directory.CreateDirectory(dir);
 
-                writer = new BinaryWriter(new FileStream(PATH_SROPTIONSET, FileMode.Create, FileAccess.Write));
-                // Write config structure by version
-                writer.Write(m_SROptionSet.Version);
-                writer.Write(m_SROptionSet.unkByte01);
-                writer.Write(m_SROptionSet.unkUInt01);
-                foreach (var k_v in m_SROptionSet.Options)
-                {
-                    // ID
-                    writer.Write((uint)k_v.Key);
-                    // Value
-                    if (k_v.Value is bool _bool)
-                        writer.Write(_bool);
-                    else if (k_v.Value is byte _byte)
-                        writer.Write(_byte);
-                    else if (k_v.Value is ushort _ushort)
-                        writer.Write(_ushort);
-                    else if (k_v.Value is uint _uint)
-                        writer.Write(_uint);
-                }
+                mSROptionSet.Save(new FileStream(PATH_SROPTIONSET, FileMode.Create, FileAccess.Write));
             }
             catch (Exception e)
             {
                 System.Diagnostics.Debug.WriteLine(e.Message);
             }
-            finally
+        }
+        /// <summary>
+        /// Make launcher configs (SilkCfg) reflect game settings (SROptionSet). Returns true if something has been synchronized.
+        /// </summary>
+        private bool SyncSilkCfg()
+        {
+            var result = false;
+
+            var wr = new WindowResolution((uint)mSROptionSet.Get(SROptionSet.ID.Video_Graphic1_ResolutionWidth), (uint)mSROptionSet.Get(SROptionSet.ID.Video_Graphic1_ResolutionHeight));
+            if(mSilkCfg.Resolution != wr)
             {
-                writer?.Close();
+                mSilkCfg.Resolution = wr;
+                result = true;
             }
+            var soundEnabled = (bool)mSROptionSet.Get(SROptionSet.ID.Audio_BackgroundVolume_BackgroundVolumeCheckbox) || (bool)mSROptionSet.Get(SROptionSet.ID.Audio_EnvironmentalVolume_EnvironmentalVolumeCheckbox) || (bool)mSROptionSet.Get(SROptionSet.ID.Audio_FXVolume_FXVolumeCheckBox);
+            if(mSilkCfg.IsSoundEnabled != soundEnabled)
+            {
+                mSilkCfg.IsSoundEnabled = soundEnabled;
+                result = true;
+            }
+            var brightness = (SilkCfg.Brightness)mSROptionSet.Get(SROptionSet.ID.Video_Graphic1_Brightness);
+            if (mSilkCfg.BrightnessType != brightness)
+            {
+                mSilkCfg.BrightnessType = brightness;
+                result = true;
+            }
+
+            return result;
+        }
+        /// <summary>
+        /// Make game settings (SROptionSet) reflect launcher settings (SilkCfg). Returns true if something has been synchronized.
+        /// </summary>
+        private bool SyncSROptionSet()
+        {
+            var result = false;
+
+            var wr = new WindowResolution((uint)mSROptionSet.Get(SROptionSet.ID.Video_Graphic1_ResolutionWidth), (uint)mSROptionSet.Get(SROptionSet.ID.Video_Graphic1_ResolutionHeight));
+            if (mSilkCfg.Resolution != wr)
+            {
+                mSROptionSet.Set(SROptionSet.ID.Video_Graphic1_ResolutionWidth, mSilkCfg.Resolution.Width);
+                mSROptionSet.Set(SROptionSet.ID.Video_Graphic1_ResolutionHeight, mSilkCfg.Resolution.Height);
+                result = true;
+            }
+            var soundEnabled = (bool)mSROptionSet.Get(SROptionSet.ID.Audio_BackgroundVolume_BackgroundVolumeCheckbox) || (bool)mSROptionSet.Get(SROptionSet.ID.Audio_EnvironmentalVolume_EnvironmentalVolumeCheckbox) || (bool)mSROptionSet.Get(SROptionSet.ID.Audio_FXVolume_FXVolumeCheckBox);
+            if (mSilkCfg.IsSoundEnabled != soundEnabled)
+            {
+                mSROptionSet.Set(SROptionSet.ID.Audio_BackgroundVolume_BackgroundVolumeCheckbox, mSilkCfg.IsSoundEnabled);
+                mSROptionSet.Set(SROptionSet.ID.Audio_EnvironmentalVolume_EnvironmentalVolumeCheckbox, mSilkCfg.IsSoundEnabled);
+                mSROptionSet.Set(SROptionSet.ID.Audio_FXVolume_FXVolumeCheckBox, mSilkCfg.IsSoundEnabled);
+                result = true;
+            }
+            var brightness = (SilkCfg.Brightness)mSROptionSet.Get(SROptionSet.ID.Video_Graphic1_Brightness);
+            if (mSilkCfg.BrightnessType != brightness)
+            {
+                mSROptionSet.Set(SROptionSet.ID.Video_Graphic1_Brightness, (byte)mSilkCfg.BrightnessType);
+                result = true;
+            }
+
+            return result;
         }
         /// <summary>
         /// Try to load the Type file from the Pk2
         /// </summary>
         /// <param name="Pk2Stream">Pk2 used to search</param>
         /// <returns>Return success</returns>
-        private bool LoadTypeFile(Pk2Stream Pk2Stream)
+        private bool TryLoadTypeFile(Pk2Stream Pk2Stream)
         {
             var temp = Pk2Stream.GetFileText("Type.txt");
             // Check if file has been found
@@ -522,13 +539,11 @@ namespace SilkroadLauncher
                 try
                 {
                     using (var pk2 = new Pk2Stream(LauncherSettings.CLIENT_MEDIA_PK2_PATH, LauncherSettings.CLIENT_BLOWFISH_KEY))
-                    {
                         pk2.AddFile("Type.txt", Encoding.UTF8.GetBytes(m_TypeFile));
-                    }
                 }
-                catch
+                catch (Exception e)
                 {
-
+                    System.Diagnostics.Debug.WriteLine(e.Message);
                 }
             }
         }

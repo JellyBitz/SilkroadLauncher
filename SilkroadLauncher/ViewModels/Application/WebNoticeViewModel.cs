@@ -1,10 +1,8 @@
-﻿using SilkroadCommon;
-
-using System;
+﻿using SRO.Data.Gateway;
 
 namespace SilkroadLauncher
 {
-    public class WebNoticeViewModel: BaseViewModel
+    public class WebNoticeViewModel : BaseViewModel
     {
         #region Public Properties
         /// <summary>
@@ -32,7 +30,7 @@ namespace SilkroadLauncher
             else
                 Article = WebNotice.Article;
 
-            Date = new DateTime(WebNotice.Year, WebNotice.Month, WebNotice.Day).ToString(LauncherSettings.APP_WEBNOTICE_TIME_FORMAT);
+            Date = WebNotice.Date.ToString(LauncherSettings.APP_WEBNOTICE_TIME_FORMAT);
         }
         #endregion
     }

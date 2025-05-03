@@ -70,7 +70,27 @@
             
             <!-- News & announcements -->
             <Grid Grid.Column="0"
-                  Margin="1">
+                  Visibility="{Binding CanStartGame,Converter={local:BooleanToVisibilityConverter}}">
+
+                <!-- Display Server divisions -->
+                <Grid VerticalAlignment="Top"
+                      Width="274" Height="121"
+                      Margin="0 10 0 0"
+                      Background="{Binding Assets.DivisionsBackground}"
+                      Visibility="{Binding HasManyDivisions,Converter={local:BooleanToVisibilityConverter}}">
+                    <!-- Options list -->
+                    <ScrollViewer Style="{StaticResource NoticeScrollViewer}"
+                                  Grid.Row="1"
+                                  Margin="2 22 2 2"
+                                  VerticalScrollBarVisibility="Auto"
+                                  HorizontalScrollBarVisibility="Hidden"
+                                  Background="#C0000000">
+                        <ListBox Style="{StaticResource ServerDivisionsListBox}"
+                                 ItemsSource="{Binding ServerDivisions}"
+                                 SelectedItem="{Binding SelectedServerDivision}"/>
+                    </ScrollViewer>
+                </Grid>
+                
             </Grid>
 
             <!-- Notices & Language -->
@@ -90,12 +110,14 @@
                     <!-- Subject -->
                     <Grid Grid.Row="0"
                           Margin="2 25 4 3">
-                        <ListBox Style="{StaticResource NoticeListBox}"
-                                 ItemsSource="{Binding WebNotices}"
-                                 SelectedItem="{Binding SelectedWebNotice}"
-                                 Foreground="#FAE9B6"
-                                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                                 ScrollViewer.HorizontalScrollBarVisibility="Hidden"/>
+                        <ScrollViewer Style="{StaticResource NoticeScrollViewer}"
+                                      VerticalScrollBarVisibility="Auto"
+                                      HorizontalScrollBarVisibility="Hidden">
+                            <ListBox Style="{StaticResource NoticeListBox}"
+                                     ItemsSource="{Binding WebNotices}"
+                                     SelectedItem="{Binding SelectedWebNotice}"
+                                     Foreground="#FAE9B6"/>
+                        </ScrollViewer>
                     </Grid>
 
                     <!-- Article -->
