@@ -1,5 +1,9 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
+using System.Net;
 using System.Net.NetworkInformation;
+using System.Net.Sockets;
+using System.Threading.Tasks;
 
 namespace SilkroadLauncher
 {
@@ -68,14 +72,14 @@ namespace SilkroadLauncher
         /// <summary>
         /// Check and update the lowest ping to host available
         /// </summary>
-        public void CalculatePing()
+        public async Task CalculatePing(int port)
         {
             mPing = long.MaxValue;
             HostIndex = 0;
-            for(var i = 0; i < mHosts.Count; i++)
+            for (var i = 0; i < mHosts.Count; i++)
             {
-                var ping = TestPing(mHosts[i]);
-                if(ping != -1 && ping < mPing)
+                var ping = await CheckPing(mHosts[i], port);
+                if (ping != -1 && ping < mPing)
                 {
                     mPing = ping;
                     HostIndex = i;
@@ -86,25 +90,44 @@ namespace SilkroadLauncher
         #endregion
 
         #region Private Helpers
-        /// <summary>
-        /// Ping to a host ip/address. Returns eco in miliseconds or (-1) if is not possible to reach.
-        /// </summary>
-        private long TestPing(string host)
+        private async Task<int> CheckPing(string host, int port, int timeoutMs = 9999)
         {
             try
             {
-                using (var pinger = new Ping())
+                var timeBegins = DateTime.Now;
+
+                // Resolve IP address
+                IPAddress[] addresses = await Dns.GetHostAddressesAsync(host);
+                if (addresses.Length == 0)
+                    return timeoutMs;
+
+                var remoteEP = new IPEndPoint(addresses[0], port);
+
+                using (var socket = new Socket(remoteEP.AddressFamily, SocketType.Stream, ProtocolType.Tcp))
                 {
-                    var reply = pinger.Send(host);
-                    if (reply.Status == IPStatus.Success)
-                        return reply.RoundtripTime;
+                    var connectTask = socket.ConnectAsync(remoteEP);
+                    // Start a delay task acting as our timeout
+                    var delayTask = Task.Delay(timeoutMs);
+                    var completedTask = await Task.WhenAny(connectTask, delayTask);
+
+                    // If the delay task finished first, it timed out
+                    if (completedTask == delayTask)
+                    {
+                        // Crucial: Close the socket immediately to abort the background connection attempt
+                        socket.Close();
+                        return timeoutMs;
+                    }
+
+                    // If we reach here, connectTask completed. We await it to propagate any errors (like connection refused)
+                    await connectTask;
+                    return (int)(DateTime.Now - timeBegins).TotalMilliseconds;
                 }
             }
-            catch
+            catch (Exception)
             {
-
+                // Catches SocketException (connection refused, host unreachable, etc.)
+                return timeoutMs;
             }
-            return -1;
         }
         #endregion
     }

@@ -25,8 +25,8 @@ namespace SilkroadLauncher
             Subject = WebNotice.Subject;
 
             // Fix if doesn't have html/html5 wrapper (to set correctly the CSS)
-            if (WebNotice.Article.Length < 14 || !WebNotice.Article.ToUpper().StartsWith("<!DOCTYPE HTML"))
-                Article = "<!DOCTYPE html><html><body>" + WebNotice.Article + "</body></html>";
+            if (!WebNotice.Article.ToUpperInvariant().StartsWith("<!DOCTYPE HTML"))
+                Article = "<!DOCTYPE html><html><body>" + WebNotice.Article.Replace("\r\n","<br>") + "</body></html>";
             else
                 Article = WebNotice.Article;
 

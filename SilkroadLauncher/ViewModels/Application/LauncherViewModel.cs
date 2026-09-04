@@ -6,6 +6,7 @@ using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Runtime.InteropServices;
+using System.Threading.Tasks;
 using System.Windows;
 using System.Windows.Input;
 
@@ -588,7 +589,7 @@ namespace SilkroadLauncher
         /// <summary>
         /// Check and loads the patch updates
         /// </summary>
-        public void CheckUpdatesAsync()
+        public async void CheckUpdatesAsync()
         {
             if (!IsLoaded)
                 return;
@@ -598,9 +599,10 @@ namespace SilkroadLauncher
             // Find best host in the division server selected
             ServerDivisionVM division = null;
             var divisionIdx = 0;
+
             for(var i = 0; i < mServerDivisions.Count; i++)
             {
-                mServerDivisions[i].CalculatePing();
+                await mServerDivisions[i].CalculatePing(m_Gateport);
                 if (division == null || mServerDivisions[i].Ping < division.Ping)
                 {
                     division = mServerDivisions[i];
@@ -655,9 +657,10 @@ namespace SilkroadLauncher
         /// </summary>
         private void Initialize()
         {
-            // Create mutex required to execute client
-            CreateMutex(IntPtr.Zero, false, "Silkroad Online Launcher");
-            CreateMutex(IntPtr.Zero, false, "Ready");
+            // Create mutex required to execute the sro_client.exe
+            foreach (var mutexName in LauncherSettings.MUTEX_LIST)
+                CreateMutex(IntPtr.Zero, false, mutexName);
+
             // Load Pk2 Data
             Pk2Stream pk2Stream = null;
             try
@@ -696,7 +699,7 @@ namespace SilkroadLauncher
             catch (Exception ex)
             {
                 Directory.CreateDirectory("Dump");
-                File.WriteAllText("Dump/error.log", DateTime.Now.ToString() + ":" + ex);
+                File.WriteAllText("Dump/silkroadlauncher.txt", DateTime.Now.ToString() + ":" + ex);
                 System.Diagnostics.Debug.WriteLine(ex);
                 // Forced shutdown
                 Application.Current.Shutdown();

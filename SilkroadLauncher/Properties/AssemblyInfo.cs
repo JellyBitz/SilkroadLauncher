@@ -12,7 +12,7 @@ using System.Windows;
 [assembly: AssemblyConfiguration("")]
 [assembly: AssemblyCompany("")]
 [assembly: AssemblyProduct("Silkroad Online Launcher")]
-[assembly: AssemblyCopyright("Copyright © JellyBitz 2020")]
+[assembly: AssemblyCopyright("Copyright © 2020–2026 JellyBitz")]
 [assembly: AssemblyTrademark("")]
 [assembly: AssemblyCulture("")]
 

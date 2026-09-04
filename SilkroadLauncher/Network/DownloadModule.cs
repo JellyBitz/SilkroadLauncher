@@ -84,7 +84,7 @@ namespace SilkroadLauncher.Network
                 // Get the Pk2 to be open
                 var pk2NameIndex = file.Path.IndexOf("\\");
                 var pk2Name = pk2NameIndex == -1 ? file.Path : file.Path.Remove(pk2NameIndex);
-                var pk2FileName = pk2Name.ToLower() + ".pk2";
+                var pk2FileName = pk2Name.ToLowerInvariant() + ".pk2";
                 // Open the Pk2 and insert the file
                 if (!mPk2Files.TryGetValue(pk2FileName, out var pk2))
                 {
@@ -217,7 +217,7 @@ namespace SilkroadLauncher.Network
         private static void UpdateSilkroadVersion()
         {
             // Check if it's already opened otherwise open it
-            if (!mPk2Files.TryGetValue(LauncherSettings.CLIENT_MEDIA_PK2_PATH.ToLower(), out var pk2))
+            if (!mPk2Files.TryGetValue(LauncherSettings.CLIENT_MEDIA_PK2_PATH.ToLowerInvariant(), out var pk2))
                 pk2 = new Pk2Stream(LauncherSettings.CLIENT_MEDIA_PK2_PATH, LauncherSettings.CLIENT_BLOWFISH_KEY);
 
             // Set the new version

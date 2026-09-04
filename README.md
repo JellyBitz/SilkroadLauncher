@@ -7,9 +7,10 @@ Customizable launcher written on C# (WPF) for Silkroad Online (vSRO 1.188)
 - Auto updater with self replacer
 - Client language switch support (Korean, Chinese Traditional, Chinese Simplified, Japanese, English, Turkish, Spanish, Portuguese, German, Russian, Vietnamese, Arabic) [read more..](README.LANGUAGES.md)
 - Settings
+- Support for multiples Server Divisions
 - Images loaded from media.pk2 (JPEG/PNG/BMP as .DAT)
-- Restrict it to work with your client only by verifying your host/port
-- Transparent background, gifs and videos, can be supported
+- Restrict it to work with your client only, by verifying host/port
+- Transparent background, gifs and videos, can also be supported
 
 ### Preview
 
@@ -21,5 +22,5 @@ Customizable launcher written on C# (WPF) for Silkroad Online (vSRO 1.188)
 > - DaxterSoul for his help with file structures
 >
 > ##### Created on Microsoft Visual Studio 2019
-> - .NET Framework 4.7.2
+> - .NET Framework 4.8
 > - [HTMLRenderer](https://github.com/ArthurHub/HTML-Renderer)

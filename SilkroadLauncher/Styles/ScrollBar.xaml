@@ -292,7 +292,10 @@
                             <RowDefinition Height="Auto"/>
                         </Grid.RowDefinitions>
 
-                        <ScrollContentPresenter Grid.Column="0" Grid.Row="0"/>
+                        <Border Grid.Column="0" Grid.Row="0"
+                                Padding="{TemplateBinding Padding}">
+                            <ScrollContentPresenter/>
+                        </Border>
 
                         <ScrollBar Style="{StaticResource NoticeScrollBar}"
                                    Name="PART_VerticalScrollBar"

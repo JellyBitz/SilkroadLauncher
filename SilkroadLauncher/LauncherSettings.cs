@@ -22,23 +22,25 @@
         // Languages availables
         public static string[]
             CLIENT_LANGUAGE_SUPPORTED = new string[]{
-                "Korean", // 1
-                "Chinese", // 4
-                "Japan", // 6
-                "English", // 7
-                "Turkey", // 11
-                "Spain", // 12
-                "Taiwan", // 5 (as Deutch)
-                "Russia", // 10
-                "Arabic", // 13
-                "Vietnam", // 8
-                "Thailand", // 9 (as Portuguese)
+                "Korean",       // 1
+                                // ?
+                                // ?
+                "Chinese",      // 4
+                "Japan",        // 6
+                "English",      // 7
+                "Turkey",       // 11
+                "Spain",        // 12
+                "Taiwan",       // 5 (as Deutch)
+                "Russia",       // 10
+                "Arabic",       // 13
+                "Vietnam",      // 8
+                "Thailand",     // 9 (as Portuguese)
             };
         public static string[]
             CLIENT_LANGUAGE_SUPPORTED_MASK = new string[]{
                 "한국어‫",
-                //"中文(繁體)", // Chinese (Traditional)
-                "中文(简体)", // Chinese (Simplified)
+                //"中文(繁體)",  // Chinese (Traditional)
+                "中文(简体)",    // Chinese (Simplified)
                 "日本語‫",
                 "English",
                 "Türkçe",
@@ -55,13 +57,19 @@
             CLIENT_EXECUTABLE = "sro_client.exe",
             CLIENT_BLOWFISH_KEY = "169841",
             CLIENT_MEDIA_PK2_PATH = "Media.pk2";
+        public static string[]
+            MUTEX_LIST = new string[]
+            {
+                "Silkroad Online Launcher",
+                "Ready",
+            };
 
         // Client restriction
         /// Restrict hosts used to connect (empty = disabled)
         public static string[]
             CLIENT_VERIFY_HOST = new string[] {
                 // Example:
-                //"127.0.0.1", // Launcher will work at local servers only
+                //"127.0.0.1", // Launcher will work at local server only
             };
         /// Restrict port used to connect (0 = disabled)
         public static ushort CLIENT_VERIFY_PORT = 0;

@@ -127,7 +127,8 @@
                         <ScrollViewer Style="{StaticResource NoticeScrollViewer}"
                                       Visibility="{Binding IsViewingConfig,Converter={local:BooleanToVisibilityConverter},ConverterParameter=True}"
                                       HorizontalScrollBarVisibility="Disabled"
-                                      VerticalScrollBarVisibility="Auto">
+                                      VerticalScrollBarVisibility="Auto"
+                                      Padding="0 1 0 0">
                             <!-- Notice Message (HTML) -->
                             <htmlrender:HtmlPanel Background="Transparent"
                                                   BaseStylesheet="body{color:#eee; font-size:12px; line-height:22px; font-family:arial;} a{color:#009e99;} b{color:#ffff00;}"
